@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
 
-import { collection, addDoc, query, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/config/firebase";
 
 export default function Bday() {
@@ -37,9 +37,7 @@ export default function Bday() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen text-center">
-      <h1 className="text-4xl font-bold mb-4">
-        ¡Bienvenido a la Página de Cumpleaños!
-      </h1>
+      <h1 className="text-4xl font-bold mb-4">¡Bienvenido posible invitado!</h1>
       <div className="mb-10 mt-5">
         <Countdown
           targetDate={targetDate}
@@ -65,7 +63,6 @@ export default function Bday() {
           <FaPaperPlane />
         </Link>
       </div>
-      <pre>{JSON.stringify(items, null, 2)}</pre>
     </div>
   );
 }

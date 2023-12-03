@@ -1,20 +1,43 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import InvitationText from "./InvitationText";
 import { Guest } from "@/types/Guest";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import InvitationButton from "./InvitationButton";
+import GroupedButtons from "./GroupedButtons";
 
 interface InvitationProps {
   guestData: Guest;
 }
 
 const Invitation: FC<InvitationProps> = ({ guestData }) => {
+  const [onRequestConfirm, setOnRequestConfirm] = useState<boolean>(false);
+  const [onRequestNoConfirm, setOnRequestNoConfirm] = useState<boolean>(false);
+
   const handleConfirm = async () => {
+    setOnRequestConfirm(true);
+
+    const confirmGuest = {
+      isDrity: true,
+      confirmed: true,
+    };
+
+    try {
+      const documentoRef = doc(db, "persons", guestData.id);
+      await updateDoc(documentoRef, confirmGuest);
+    } catch (error) {
+      console.error("Error al actualizar el documento:", error);
+    } finally {
+      setOnRequestConfirm(false);
+    }
+  };
+
+  const handleNoConfirm = async () => {
+    setOnRequestNoConfirm(true);
     const documentoRef = doc(db, "persons", guestData.id);
 
     const confirmGuest = {
       isDirty: true,
-      confirm: true,
     };
 
     try {
@@ -22,29 +45,22 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
       console.log("Documento actualizado con éxito");
     } catch (error) {
       console.error("Error al actualizar el documento:", error);
+    } finally {
+      setOnRequestNoConfirm(false);
     }
   };
 
   return (
     <>
       <h1 className="font-bold text-5xl mb-10">¡Hola {guestData.name}!</h1>
-
       <InvitationText />
-
-      <div className="flex justify-center mt-12 space-x-4">
-        <button
-          onClick={() => {}}
-          className="transition-transform transform hover:scale-105 duration-300 ease-in-out bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
-        >
-          Confirmar
-        </button>
-        <button
-          onClick={() => {}}
-          className="transition-transform transform hover:scale-105 duration-300 ease-in-out bg-gray-300 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
-        >
-          No Confirmar
-        </button>
-      </div>
+      <GroupedButtons
+        handleConfirm={handleConfirm}
+        onRequestConfirm={onRequestConfirm}
+        handleNoConfirm={handleNoConfirm}
+        onRequestNoConfirm={onRequestNoConfirm}
+        guestData={guestData}
+      />
     </>
   );
 };

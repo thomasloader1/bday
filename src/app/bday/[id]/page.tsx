@@ -1,28 +1,11 @@
 "use client";
-
 import Invitation from "@/components/Invitation";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import NoInvitation from "@/components/NoInvitation";
-import { getGuest } from "@/lib/firebase";
-import { Guest } from "@/types/Guest";
-import { useEffect, useState } from "react";
+import useGuest from "@/hooks/useGuestData";
 
 export default function Page({ params }: { params: { id: string } }) {
-  const [guestData, setGuestData] = useState<Guest>({
-    id: "",
-    name: "",
-    group: "",
-    place: "",
-    confirmed: false,
-    isDrity: false,
-  });
-
-  const [findGuest, setFindGuest] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getGuest(params.id, setFindGuest, setGuestData, setLoading);
-  }, [params.id]);
+  const {guestData,findGuest, loading} = useGuest(params)
 
   if (loading) {
     return <LoadingSpinner />;

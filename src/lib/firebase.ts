@@ -1,6 +1,6 @@
 import { db } from "@/config/firebase";
 import { Guest } from "@/types/Guest";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { Dispatch, SetStateAction } from "react";
 
 export const getGuest = async (
@@ -22,6 +22,39 @@ export const getGuest = async (
     }
   } catch (error) {
     console.error("Error al obtener el documento:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+export const addGuest = async (
+  guestData: Guest,
+  setLoading: Dispatch<SetStateAction<boolean>>
+) => {
+  try {
+    // Agrega el documento a la colección
+    const guestsCollectionRef = doc(db, "persons");
+    await setDoc(guestsCollectionRef, guestData);
+  } catch (error) {
+    console.error("Error al agregar el invitado:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+export const updateGuest = async (
+  guestId: string,
+  updatedGuestData: Guest,
+  setLoading: Dispatch<SetStateAction<boolean>>
+) => {
+  try {
+    // Referencia al documento del invitado en Firestore
+    const guestRef = doc(db, "persons", guestId);
+
+    await updateDoc(guestRef, updatedGuestData);
+
+  } catch (error) {
+    console.error("Error al actualizar el invitado:", error);
   } finally {
     setLoading(false);
   }

@@ -12,14 +12,12 @@ const useGuest = ({ id }: UseGuestProps) => {
         id: "",
         name: "",
         group: [],
-        place: [],
-        lunch: [21.0836907,-101.6887252],
-        confirmed: false,
+        isConfirmed: false,
         isDrity: false,
       });
     
       const [findGuest, setFindGuest] = useState(false);
-      const [loading, setLoading] = useState(false);
+      const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getGuestData = async () => {

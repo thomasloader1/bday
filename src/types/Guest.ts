@@ -2,8 +2,11 @@ export interface Guest {
   id: string;
   name: string;
   group: string[];
-  place: string[];
-  lunch: {_lat: number, _long: number};
-  confirmed: boolean;
+  lunch?: {_lat: number, _long: number};
+  after?: {_lat: number, _long: number};
+  isConfirmed: boolean;
+  isVoted?: boolean;
   isDrity: boolean;
+  votedFor?: string;
+
 }

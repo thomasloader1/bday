@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import LoadingSpinner from './LoadingSpinner';
+import L, { LatLngExpression } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 interface LocationButtonProps {
   latitude: number;
@@ -25,21 +26,27 @@ const LocationButton: FC<LocationButtonProps> = ({ latitude, longitude, loading 
     window.open(mapUrl, '_blank');
   };
 
+  const position: LatLngExpression = [latitude, longitude];
+
+  const customIcon = L.divIcon({
+    className: 'text-xl',
+    html: '<div>🥳</div>'
+  });
+
   return (
-    <div>
-      <MapContainer center={[latitude, longitude]} zoom={13} style={{ height: '400px', width: '100%' }}>
+    <div className='flex flex-col justify-center'>
+      <MapContainer center={position} zoom={13} style={{ height: '400px', width: '100%' }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-         <Marker position={[latitude, longitude]}>
+         <Marker position={position} icon={customIcon}>
           <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
+          asd
           </Popup>
         </Marker>
       </MapContainer>
 
-      <button onClick={handleOpenInMaps}>Abrir en Maps</button>
+      <button className='bg-green-500 text-white py-2 px-6 rounded-full my-3 ' onClick={handleOpenInMaps}>Abrir en Maps</button>
     </div>
   );
 };

@@ -51,14 +51,7 @@ const Countdown: React.FC<CountdownProps> = ({ targetDate, onComplete }) => {
         <div
           className="h-full bg-orange-500"
           style={{
-            width: `${
-              ((timeLeft.days * 24 * 60 * 60 +
-                timeLeft.hours * 60 * 60 +
-                timeLeft.minutes * 60 +
-                timeLeft.seconds) /
-                (targetDate.getTime() - new Date().getTime())) *
-              100
-            }%`,
+            width: `${Math.ceil(((timeLeft.days * 24 * 60 * 60 + timeLeft.hours * 60 * 60 + timeLeft.minutes * 60 + timeLeft.seconds) / (targetDate.getTime() - new Date().getTime())) * 100)}%`,
           }}
         ></div>
       </div>

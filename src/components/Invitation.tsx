@@ -3,7 +3,6 @@ import InvitationText from "./InvitationText";
 import { Guest } from "@/types/Guest";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebase";
-import InvitationButton from "./InvitationButton";
 import GroupedButtons from "./GroupedButtons";
 
 interface InvitationProps {
@@ -34,13 +33,14 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
 
   const handleNoConfirm = async () => {
     setOnRequestNoConfirm(true);
-    const documentoRef = doc(db, "persons", guestData.id);
 
     const confirmGuest = {
-      isDirty: true,
+      isDrity: true,
     };
 
     try {
+    const documentoRef = doc(db, "persons", guestData.id);
+
       await updateDoc(documentoRef, confirmGuest);
       console.log("Documento actualizado con éxito");
     } catch (error) {

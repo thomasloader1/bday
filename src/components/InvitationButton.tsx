@@ -22,9 +22,7 @@ const InvitationButton: FC<InvitationButtonProps> = ({
       disabled={onDisabled}
     >
       <span
-        className={`absolute left-0 top-0 w-full h-full ${colorClass}-600 rounded-full ${
-          onDisabled ? "animate-pulse" : "hidden"
-        }`}
+        className={`absolute left-0 top-0 w-full h-full ${colorClass}-600 rounded-full ${onDisabled ? "animate-pulse" : "hidden"}`}
       ></span>
       <span className={`relative z-10 ${onDisabled ? "text-3xl" : "text-sm"}`}>
         {onDisabled ? emoji : label}

@@ -6,6 +6,7 @@ import useGuest from "@/hooks/useGuestData";
 
 export default function Page({ params }: { params: { id: string } }) {
   const {guestData,findGuest, loading} = useGuest(params)
+  console.log({loading})
 
   if (loading) {
     return <LoadingSpinner />;

@@ -1,0 +1,272 @@
+{
+    "persons": [
+        {
+            "id": 1155011250,
+            "name": "Tomas",
+            "group": [
+                "friends",
+                "family",
+                "work"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1169549681,
+            "name": "Pipina",
+            "group": [
+                "family"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1161066906,
+            "name": "Mami",
+            "group": [
+                "family"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1149739821,
+            "name": "Tio",
+            "group": [
+                "family"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1149691555,
+            "name": "Lauri",
+            "group": [
+                "family"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1128924279,
+            "name": "PeloTuUdOoO (Lucas)",
+            "group": [
+                "family"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id":  1139054869,
+            "name": "Lupe",
+            "group": [
+                "family"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1161738495,
+            "name": "Figu",
+            "group": [
+                "family"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1161738495,
+            "name": "Vero Figu",
+            "group": [
+                "family"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1161738495,
+            "name": "Aylu Figu",
+            "group": [
+                "family"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1123263900,
+            "name": "Lukitas",
+            "group": [
+                "friends"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1136117119,
+            "name": "Gasty",
+            "group": [
+                "friends"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1169712952,
+            "name": "Lean",
+            "group": [
+                "friends"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },
+        {
+            "id": 1162286143,
+            "name": "Tender (Bouza)",
+            "group": [
+                "friends"
+            ],
+            "lunch": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "after": {
+                "latitude": -34.5971027,
+                "longitude": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        }
+        
+    ]
+}

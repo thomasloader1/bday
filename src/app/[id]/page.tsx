@@ -5,15 +5,14 @@ import NoInvitation from "@/components/NoInvitation";
 import useGuest from "@/hooks/useGuestData";
 
 export default function Page({ params }: { params: { id: string } }) {
-  const {guestData,findGuest, loading} = useGuest(params)
-  console.log({loading})
+  const { guestData, findGuest, loading } = useGuest(params);
 
   if (loading) {
     return <LoadingSpinner />;
   }
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen">
+    <main className="flex flex-col items-center justify-center h-screen container mx-auto">
       <div className="bg-white p-8 text-gray-800 rounded-lg shadow-md">
         {findGuest ? <Invitation guestData={guestData} /> : <NoInvitation />}
       </div>

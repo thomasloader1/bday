@@ -1,5 +1,5 @@
 import { db } from "@/config/firebase";
-import { Guest } from "@/types/Guest";
+import { Guest, UpdateGuest } from "@/types/Guest";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { Dispatch, SetStateAction } from "react";
 
@@ -7,7 +7,8 @@ export const getGuest = async (
   id: string,
   setFindGuest: Dispatch<SetStateAction<boolean>>,
   setGuestData: Dispatch<SetStateAction<Guest>>,
-  setLoading: Dispatch<SetStateAction<boolean>>
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setError: Dispatch<SetStateAction<boolean>>
 ) => {
   try {
     const documentoRef = doc(db, "persons", id);
@@ -19,9 +20,11 @@ export const getGuest = async (
       setGuestData({ ...data, id });
     } else {
       setFindGuest(false);
+      setError(true);
     }
   } catch (error) {
     console.error("Error al obtener el documento:", error);
+    setError(true);
   } finally {
     setLoading(false);
   }
@@ -44,7 +47,7 @@ export const addGuest = async (
 
 export const updateGuest = async (
   guestId: string,
-  updatedGuestData: Guest,
+  updatedGuestData: UpdateGuest,
   setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
   try {
@@ -52,7 +55,6 @@ export const updateGuest = async (
     const guestRef = doc(db, "persons", guestId);
 
     await updateDoc(guestRef, updatedGuestData);
-
   } catch (error) {
     console.error("Error al actualizar el invitado:", error);
   } finally {

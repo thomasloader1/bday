@@ -81,7 +81,6 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
       setOnRequestConfirm(false);
     }
   };
-  console.log({ env: process.env });
   return (
     <>
       <h1 className="font-bold text-5xl mb-10">¡Hola {guestData.name}!</h1>

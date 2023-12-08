@@ -6,6 +6,8 @@ import Link from "next/link";
 import tomiHouseImg from "../../../../public/tomihouse.png";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import confetti from "canvas-confetti";
+import { useEffect } from "react";
 
 export default function Page({ params }: { params: { id: number } }) {
   const { guestData, loading, error } = useGuest(params);
@@ -31,6 +33,12 @@ export default function Page({ params }: { params: { id: number } }) {
   if (error || (guestData.isDrity && guestData.isConfirmed === false)) {
     router.push(`/${params.id}`);
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+      confetti();
+    }, 1500);
+  }, []);
 
   return (
     <>

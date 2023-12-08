@@ -1,5 +1,5 @@
 export interface Guest {
-  id: string;
+  id: number;
   name: string;
   group: string[];
   lunch?: { _lat: number; _long: number };

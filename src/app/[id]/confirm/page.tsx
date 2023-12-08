@@ -7,7 +7,7 @@ import tomiHouseImg from "../../../../public/tomihouse.png";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { id: number } }) {
   const { guestData, loading, error } = useGuest(params);
   const router = useRouter();
 
@@ -28,7 +28,7 @@ export default function Page({ params }: { params: { id: string } }) {
     },
   ];
 
-  if (error) {
+  if (error || (guestData.isDrity && guestData.isConfirmed === false)) {
     router.push(`/${params.id}`);
   }
 
@@ -42,14 +42,11 @@ export default function Page({ params }: { params: { id: string } }) {
             <h1 className="text-3xl font-bold mb-10">
               ¡Que bien que vas a venir {guestData.name} 🥳!
             </h1>
-            <p className="mb-4 text-lg">
-              Para hacerla corta y sencilla voy a ir directo al grano
-            </p>
 
             {guestData.group.includes("family") && (
               <>
                 <h2 className="text-xl mb-3 font-bold">
-                  Estas invitado al almuerzo Familiar
+                  Estas invitado al almuerzo Familiar, apartir de las 13hs!
                 </h2>
                 <LocationButton
                   latitude={guestData?.lunch?._lat}
@@ -62,7 +59,7 @@ export default function Page({ params }: { params: { id: string } }) {
             {guestData.group.includes("work") && (
               <>
                 <h2 className="text-xl mb-3 font-bold">
-                  Estas invitad3 al after labor3l!
+                  Estas invitad3 al after labor3l! (Luego de las 18hs)
                 </h2>
                 <LocationButton
                   latitude={guestData?.after?._lat}
@@ -72,14 +69,32 @@ export default function Page({ params }: { params: { id: string } }) {
               </>
             )}
 
-            {guestData.group.includes("friends") &&
-              friendLocations.map((fl, index) => (
-                <LocationFriendsCard
-                  key={index}
-                  image={fl.image}
-                  name={fl.name}
-                />
-              ))}
+            {guestData.group.includes("friends") && (
+              <>
+                <p className="mb-3">
+                  La verdad que no tengo la mas puta idea de que hacer,
+                  simplemente quiero pasar mi dia junto a vos y ver que sale
+                  dentro de las posibilidades de todos
+                </p>
+
+                <p>PD: seguramente pidamos pizzas de Domenico</p>
+                <h2 className="font-bold text-1xl my-2 mb-2">Requisitos:</h2>
+                <ul className="ml-3 mb-4">
+                  <li>Vestimenta Sport</li>
+                  <li>Horario de 20hs a 00hs</li>
+                </ul>
+                <h2 className="font-bold text-2xl my-2 mb-4">
+                  Opciones que messirven:
+                </h2>
+                {friendLocations.map((fl, index) => (
+                  <LocationFriendsCard
+                    key={index}
+                    image={fl.image}
+                    name={fl.name}
+                  />
+                ))}
+              </>
+            )}
 
             <p className="mt-6 mb-4 text-lg">
               El regalo es tu presencia misma!, pero si queres hacerme un regalo

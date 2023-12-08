@@ -2,6 +2,7 @@ import { db } from "@/config/firebase";
 import { Guest, UpdateGuest } from "@/types/Guest";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { Dispatch, SetStateAction } from "react";
+import items from "@/data/guests.json";
 
 export const getGuest = async (
   id: string,
@@ -11,13 +12,18 @@ export const getGuest = async (
   setError: Dispatch<SetStateAction<boolean>>
 ) => {
   try {
-    const documentoRef = doc(db, "persons", id);
-    const documentoSnapshot = await getDoc(documentoRef);
+    const personFind = items.persons.find((person) => person.id === Number(id));
 
-    if (documentoSnapshot.exists()) {
-      const data = documentoSnapshot.data() as Guest;
+    if (personFind) {
+      const data = personFind;
+      const dataFirebase = await getGuestFirebase(id);
       setFindGuest(true);
-      setGuestData({ ...data, id });
+
+      if (dataFirebase) {
+        setGuestData({ ...dataFirebase, id: Number(id) });
+      } else {
+        setGuestData({ ...data, id: Number(id) });
+      }
     } else {
       setFindGuest(false);
       setError(true);
@@ -27,6 +33,22 @@ export const getGuest = async (
     setError(true);
   } finally {
     setLoading(false);
+  }
+};
+
+export const getGuestFirebase = async (id: string) => {
+  try {
+    const documentoRef = doc(db, "persons", id);
+    const documentoSnapshot = await getDoc(documentoRef);
+
+    if (documentoSnapshot.exists()) {
+      const data = documentoSnapshot.data() as Guest;
+      return data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error al obtener el documento:", error);
   }
 };
 

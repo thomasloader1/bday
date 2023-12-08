@@ -42,18 +42,10 @@ const Countdown: React.FC<CountdownProps> = ({ targetDate, onComplete }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="mr-2 text-3xl font-bold mb-3">
+      <div className="mr-2 text-3xl font-bold mb-2">
         {formatNumber(timeLeft.days)} dias {formatNumber(timeLeft.hours)} horas{" "}
         {formatNumber(timeLeft.minutes)} minutos
         {/* {formatNumber(timeLeft.seconds)}s */}
-      </div>
-      <div className="bg-gray-600 h-4 w-full rounded-md overflow-hidden">
-        <div
-          className="h-full bg-orange-500"
-          style={{
-            width: `${Math.ceil(((timeLeft.days * 24 * 60 * 60 + timeLeft.hours * 60 * 60 + timeLeft.minutes * 60 + timeLeft.seconds) / (targetDate.getTime() - new Date().getTime())) * 100)}%`,
-          }}
-        ></div>
       </div>
     </div>
   );

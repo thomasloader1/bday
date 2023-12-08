@@ -9,13 +9,14 @@
                 "work"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.6613331,
+                "_long": -58.5769367
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
+            "isConfirmed": false,
             "isDrity": false,
             "isVoted": false,
             "votedFor": ""
@@ -27,12 +28,12 @@
                 "family"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.6613331,
+                "_long": -58.5769367
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -46,12 +47,12 @@
                 "family"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.6613331,
+                "_long": -58.5769367
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -65,12 +66,12 @@
                 "family"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.6613331,
+                "_long": -58.5769367
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -84,12 +85,12 @@
                 "family"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.6613331,
+                "_long": -58.5769367
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -103,12 +104,12 @@
                 "family"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.6613331,
+                "_long": -58.5769367
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -122,12 +123,12 @@
                 "family"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.6613331,
+                "_long": -58.5769367
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -141,12 +142,12 @@
                 "family"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.6613331,
+                "_long": -58.5769367
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -154,18 +155,18 @@
             "votedFor": ""
         },
         {
-            "id": 1161738495,
-            "name": "Vero Figu",
+            "id": 1165428578,
+            "name": "Vero",
             "group": [
                 "family"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.6613331,
+                "_long": -58.5769367
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -173,18 +174,18 @@
             "votedFor": ""
         },
         {
-            "id": 1161738495,
-            "name": "Aylu Figu",
+            "id": 1135705911,
+            "name": "Aylu",
             "group": [
                 "family"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.6613331,
+                "_long": -58.5769367
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -198,12 +199,12 @@
                 "friends"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -217,12 +218,12 @@
                 "friends"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -236,12 +237,12 @@
                 "friends"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,
@@ -255,12 +256,12 @@
                 "friends"
             ],
             "lunch": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "after": {
-                "latitude": -34.5971027,
-                "longitude": -58.3876481
+                "_lat": -34.5971027,
+                "_long": -58.3876481
             },
             "isConfirmed": false,
             "isDrity": false,

@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import InvitationText from "./InvitationText";
 import { Guest } from "@/types/Guest";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import GroupedButtons from "./GroupedButtons";
 
@@ -15,15 +15,31 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
 
   const handleConfirm = async () => {
     setOnRequestConfirm(true);
+    const { id, ...person } = guestData;
 
     const confirmGuest = {
+      ...person,
       isDrity: true,
-      confirmed: true,
+      isConfirmed: true,
     };
 
+    const idPerson = id.toString();
+
     try {
-      const documentoRef = doc(db, "persons", guestData.id);
-      await updateDoc(documentoRef, confirmGuest);
+      const documentoRef = doc(db, "persons", idPerson);
+      const documentSnapshot = await getDoc(documentoRef);
+
+      if (documentSnapshot.exists()) {
+        // La persona ya existe, entonces actualizamos el documento
+        await updateDoc(documentoRef, confirmGuest);
+        console.log("Documento actualizado correctamente.");
+      } else {
+        // La persona no existe, así que la agregamos como nuevo documento
+        await setDoc(documentoRef, confirmGuest);
+        console.log("Documento agregado correctamente.");
+      }
+
+      window.location.href = `/${id}`;
     } catch (error) {
       console.error("Error al actualizar el documento:", error);
     } finally {
@@ -34,19 +50,35 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
   const handleNoConfirm = async () => {
     setOnRequestNoConfirm(true);
 
+    const { id, ...person } = guestData;
+
     const confirmGuest = {
+      ...person,
       isDrity: true,
+      isConfirmed: false,
     };
 
-    try {
-    const documentoRef = doc(db, "persons", guestData.id);
+    const idPerson = guestData.id.toString();
 
-      await updateDoc(documentoRef, confirmGuest);
-      console.log("Documento actualizado con éxito");
+    try {
+      const documentoRef = doc(db, "persons", idPerson);
+      const documentSnapshot = await getDoc(documentoRef);
+
+      if (documentSnapshot.exists()) {
+        // La persona ya existe, entonces actualizamos el documento
+        await updateDoc(documentoRef, confirmGuest);
+        console.log("Documento actualizado correctamente.");
+      } else {
+        // La persona no existe, así que la agregamos como nuevo documento
+        await setDoc(documentoRef, confirmGuest);
+        console.log("Documento agregado correctamente.");
+      }
+
+      window.location.href = `/${id}`;
     } catch (error) {
       console.error("Error al actualizar el documento:", error);
     } finally {
-      setOnRequestNoConfirm(false);
+      setOnRequestConfirm(false);
     }
   };
 
@@ -54,6 +86,7 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
     <>
       <h1 className="font-bold text-5xl mb-10">¡Hola {guestData.name}!</h1>
       <InvitationText />
+
       <GroupedButtons
         handleConfirm={handleConfirm}
         onRequestConfirm={onRequestConfirm}

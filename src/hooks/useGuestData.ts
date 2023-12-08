@@ -4,12 +4,12 @@ import { Guest } from "@/types/Guest";
 import { useEffect, useState } from "react";
 
 interface UseGuestProps {
-  id: string;
+  id: number;
 }
 
 const useGuest = ({ id }: UseGuestProps) => {
   const [guestData, setGuestData] = useState<Guest>({
-    id: "",
+    id: 0,
     name: "",
     group: [],
     isConfirmed: false,
@@ -22,8 +22,16 @@ const useGuest = ({ id }: UseGuestProps) => {
 
   useEffect(() => {
     const getGuestData = async () => {
+      const idPerson = id.toString();
+
       try {
-        await getGuest(id, setFindGuest, setGuestData, setLoading, setError);
+        await getGuest(
+          idPerson,
+          setFindGuest,
+          setGuestData,
+          setLoading,
+          setError
+        );
       } catch (error) {
         console.error({ error });
         setError(true);

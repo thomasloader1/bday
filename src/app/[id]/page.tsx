@@ -4,7 +4,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import NoInvitation from "@/components/NoInvitation";
 import useGuest from "@/hooks/useGuestData";
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { id: number } }) {
   const { guestData, findGuest, loading } = useGuest(params);
 
   if (loading) {

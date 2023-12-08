@@ -1,4 +1,5 @@
-import React from "react";
+import { Guest } from "@/types/Guest";
+import React, { FC } from "react";
 
 const InvitationText = () => {
   return (

@@ -590,6 +590,43 @@
             "isDrity": false,
             "isVoted": false,
             "votedFor": ""
+        },
+        {
+            "id": 1123932934,
+            "name": "Patoncio",
+            "group": [
+                "friends"
+            ],
+            "lunch": {
+                "_lat": -34.5971027,
+                "_long": -58.3876481
+            },
+            "after": {
+                "_lat": -34.5971027,
+                "_long": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
+        },{
+            "id": 1154811798,
+            "name": "lukitasCar",
+            "group": [
+                "friends"
+            ],
+            "lunch": {
+                "_lat": -34.5971027,
+                "_long": -58.3876481
+            },
+            "after": {
+                "_lat": -34.5971027,
+                "_long": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
         }
         
     ]

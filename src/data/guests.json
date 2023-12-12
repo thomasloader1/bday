@@ -627,6 +627,24 @@
             "isDrity": false,
             "isVoted": false,
             "votedFor": ""
+        },{
+            "id": 1156018184,
+            "name": "Mari",
+            "group": [
+                "family"
+            ],
+            "lunch": {
+                "_lat": -34.5971027,
+                "_long": -58.3876481
+            },
+            "after": {
+                "_lat": -34.5971027,
+                "_long": -58.3876481
+            },
+            "isConfirmed": false,
+            "isDrity": false,
+            "isVoted": false,
+            "votedFor": ""
         }
         
     ]

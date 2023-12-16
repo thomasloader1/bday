@@ -2,10 +2,14 @@
 import Countdown from "@/components/Countdown";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaPaperPlane } from "react-icons/fa";
+import { FaBirthdayCake, FaPaperPlane } from "react-icons/fa";
 
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import CakeBackground from "@/components/CakeBackground";
+import IconBackground from "@/components/CakeBackground";
+
+
 
 export default function Bday() {
   const [inviteNumber, setInviteNumber] = useState("");
@@ -35,8 +39,13 @@ export default function Bday() {
     });
   });
 
+  
+
   return (
+    <div className="relative">
+    <IconBackground icon={<FaBirthdayCake />} />
     <div className="flex flex-col items-center justify-center h-screen text-center">
+    
       <h1 className="text-4xl font-bold mb-4">¡Bienvenido posible invitado!</h1>
       <div className="mb-10 mt-5">
         <Countdown
@@ -64,5 +73,7 @@ export default function Bday() {
         </Link>
       </div>
     </div>
+    </div>
+    
   );
 }

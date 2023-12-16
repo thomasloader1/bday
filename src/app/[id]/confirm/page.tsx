@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import confetti from "canvas-confetti";
 import { useEffect } from "react";
-
+import IconBackground from "@/components/CakeBackground";
+import { GiPartyHat } from "react-icons/gi";
 export default function Page({ params }: { params: { id: number } }) {
   const { guestData, loading, error } = useGuest(params);
   const router = useRouter();
@@ -47,6 +48,7 @@ export default function Page({ params }: { params: { id: number } }) {
       ) : (
         <main className="flex flex-col items-center h-screen">
           <div className="bg-white p-8 text-gray-800 rounded-lg shadow-md">
+            
             <h1 className="text-3xl font-bold mb-10">
               ¡Que bien que vas a venir {guestData.name} 🥳!
             </h1>

@@ -45,7 +45,7 @@ const IconBackground: FC<IconBackgroundProps> = ({icon}) => {
 
     const intervalId = setInterval(() => {
       setPositions((prevPositions) => prevPositions.map(() => getRandomPosition()));
-    }, 300);
+    }, 700);
 
     return () => clearInterval(intervalId);
   }, []);

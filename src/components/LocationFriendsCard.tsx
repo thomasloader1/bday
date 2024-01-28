@@ -7,17 +7,14 @@ interface LocationFriendsCardProps {
 
 const LocationFriendsCard: FC<LocationFriendsCardProps> = ({ image, name }) => {
   return (
-    <div
-      className="rounded-lg border bg-card text-card-foreground shadow-sm my-2"
-      data-v0-t="card"
-      style={{ backgroundImage: `url(${image})` }}
-    >
-      <div className="flex flex-col items-center space-y-4 p-6 py-16">
-        <h2 className="text-2xl font-bold text-white bg-black px-4 py-2 rounded-lg">
-          {name}
-        </h2>
-      </div>
-    </div>
+    <figure className="relative max-w-sm transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0">
+    <a href="#">
+      <img className="rounded-lg" src={`${image}`} alt="image description" />
+    </a>
+    <figcaption className="absolute px-4 text-lg text-white bottom-6 bg-gray-800">
+        <p className="font-medium">{name}</p>
+    </figcaption>
+    </figure>
   );
 };
 

@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import LoadingSpinner from "./LoadingSpinner";
 import L, { LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import Button from "./Button";
 
 interface LocationButtonProps {
   latitude?: number;
@@ -37,23 +38,22 @@ const LocationButton: FC<LocationButtonProps> = ({
 
   return (
     <div className="flex flex-col justify-center">
-      <MapContainer
-        center={position}
-        zoom={13}
-        style={{ height: "400px", width: "100%" }}
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <Marker position={position} icon={customIcon}>
-          <Popup>asd</Popup>
-        </Marker>
-      </MapContainer>
+      <div className="h-48 mb-3">
+        <MapContainer
+          center={position}
+          zoom={13}
+          className="rounded-lg"
+          style={{ height: "100%", width: "100%" }}
+        >
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <Marker position={position} icon={customIcon}>
+            <Popup>asd</Popup>
+          </Marker>
+        </MapContainer>
+      </div>
+      
 
-      <button
-        className="bg-green-500 text-white py-2 px-6 rounded-full my-3 "
-        onClick={handleOpenInMaps}
-      >
-        Abrir en Maps
-      </button>
+      <Button text="Abrir en Maps" onClick={handleOpenInMaps}/>
     </div>
   );
 };

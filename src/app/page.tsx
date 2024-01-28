@@ -6,7 +6,6 @@ import { FaBirthdayCake, FaPaperPlane } from "react-icons/fa";
 
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/config/firebase";
-import CakeBackground from "@/components/CakeBackground";
 import IconBackground from "@/components/CakeBackground";
 
 
@@ -37,7 +36,7 @@ export default function Bday() {
 
       setItems(itemsArray);
     });
-  });
+  }, []);
 
   
 

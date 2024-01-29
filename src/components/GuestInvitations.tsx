@@ -18,12 +18,13 @@ const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded })
                 const isCommon = gdg.includes("family") || gdg.includes("work");
                 const invitationTitle = gdg.includes("family") ? familyInvitationJson.title : workInvitationJson.title;
                 const invitationDescription = gdg.includes("family") ? familyInvitationJson.description : workInvitationJson.description;
-
+                const invitationFood = gdg.includes("family") ? familyInvitationJson.food : undefined;
                 if (isCommon) {
                     return (
                         <InvitationInfo key={`${guestData.id}_${index}`}
                             text={invitationTitle}
                             description={invitationDescription}
+                            food={invitationFood}
                             lat={guestData?.lunch?._lat}
                             long={guestData?.lunch?._long}
                             loading={guestLoaded}

@@ -33,6 +33,10 @@ const Countdown: React.FC<CountdownProps> = ({ targetDate, onComplete }) => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
+    if(timeLeft.days === 0){
+      onComplete()
+    }
+
     return () => {
       clearInterval(timer);
     };
@@ -45,7 +49,6 @@ const Countdown: React.FC<CountdownProps> = ({ targetDate, onComplete }) => {
       <div className="mr-2 text-3xl font-bold mb-2">
         {formatNumber(timeLeft.days)} dias {formatNumber(timeLeft.hours)} horas{" "}
         {formatNumber(timeLeft.minutes)} minutos
-        {/* {formatNumber(timeLeft.seconds)}s */}
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ const PlacesToGo = () => {
     return (
         <div>
             <h2 className="font-bold text-3xl mb-3">Opciones que messirven:</h2>
-            <div className='flex flex-col gap-2'>
+            <div className='grid grid-cols-1 gap-5 md:grid-cols-2'>
                 {friendLocations.map((fl, index) => (
                     <LocationFriendsCard
                         key={index}

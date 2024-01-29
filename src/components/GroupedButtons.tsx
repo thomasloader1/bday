@@ -1,7 +1,8 @@
 import React, { FC } from "react";
-import InvitationButton from "./InvitationButton";
 import { Guest } from "@/types/Guest";
 import Link from "next/link";
+import Button from "./Button";
+import { useRouter } from 'next/navigation'
 
 interface GroupedButtonsProps {
   handleConfirm: () => void;
@@ -19,6 +20,7 @@ const GroupedButtons: FC<GroupedButtonsProps> = ({
   guestData,
 }) => {
   const { isDrity, isConfirmed } = guestData;
+  const router = useRouter()
 
   return (
     <div className="flex justify-center mt-12 space-x-4">
@@ -65,12 +67,8 @@ const GroupedButtons: FC<GroupedButtonsProps> = ({
       )}
 
       {isDrity && isConfirmed && (
-        <Link
-          href={`/${guestData.id}/confirm`}
-          className="bg-green-500 px-6 py-2 rounded-full text-xl text-white"
-        >
-          Mira las instrucciones 🥳
-        </Link>
+        
+        <Button text="Mira las instrucciones 🥳" onClick={()=>{router.push(`/${guestData.id}/confirm`)}} />
       )}
 
       {isDrity && !isConfirmed && (

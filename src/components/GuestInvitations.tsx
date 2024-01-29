@@ -17,11 +17,13 @@ const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded })
             {guestData.group.map((gdg,index) => {
                 const isCommon = gdg.includes("family") || gdg.includes("work");
                 const invitationTitle = gdg.includes("family") ? familyInvitationJson.title : workInvitationJson.title;
+                const invitationDescription = gdg.includes("family") ? familyInvitationJson.description : workInvitationJson.description;
 
                 if (isCommon) {
                     return (
                         <InvitationInfo key={`${guestData.id}_${index}`}
                             text={invitationTitle}
+                            description={invitationDescription}
                             lat={guestData?.lunch?._lat}
                             long={guestData?.lunch?._long}
                             loading={guestLoaded}

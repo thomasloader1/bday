@@ -17,8 +17,8 @@ export default function Page({ params }: { params: { id: number } }) {
     <div className="relative">
     <IconBackground icon={<GiPartyPopper />} />
 
-    <main className="flex flex-col items-center justify-center h-screen container mx-auto">
-      <div className="bg-white p-8 text-gray-800 rounded-lg shadow-md">
+    <main className="container h-screen mx-auto px-8 pt-10 md:flex md:justify-center md:items-center">
+      <div className="bg-white p-10 text-gray-800 rounded-lg shadow-md">
         {findGuest ? <Invitation guestData={guestData} /> : <NoInvitation />}
       </div>
     </main>

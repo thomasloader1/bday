@@ -3,11 +3,15 @@ import { atom } from 'nanostores';
 
 interface TimeState {
   targetDate: Date;
+  targetWorkDate: Date;
+  targetFamilyDate: Date;
   timeLeft: any;
 }
 
 export const $time = atom<TimeState>({
-    targetDate: new Date("2023-12-16T00:00:00"),
+    targetDate: new Date("2023-12-16T20:00:00"),
+    targetWorkDate: new Date("2023-12-21T18:00:00"),
+    targetFamilyDate: new Date("2023-12-16T13:00:00"),
     timeLeft: calculateTimeLeft(new Date("2023-12-16T00:00:00")),
   });
 
@@ -18,6 +22,7 @@ export const getTime = (): TimeState => {
 
 export const setTime = (targetDate: Date) => {
     $time.set({
+        ...$time.get(),
         targetDate,
         timeLeft: calculateTimeLeft(targetDate),
       });

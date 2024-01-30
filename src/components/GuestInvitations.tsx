@@ -29,11 +29,11 @@ const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded })
                 const invitationFood = gdg.includes("family") ? familyInvitationJson.food : undefined;
                 if (isCommon) {
                     return (
-                        <SwiperSlide className='bg-white'>
+                        <SwiperSlide className='bg-white relative' key={`${guestData.id}_${index}`}>
                             <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
                             <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#F9EFDB,transparent)]"></div>
                             </div>
-                            <InvitationInfo key={`${guestData.id}_${index}`}
+                            <InvitationInfo 
                                 text={invitationTitle}
                                 description={invitationDescription}
                                 food={invitationFood}
@@ -44,12 +44,12 @@ const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded })
                         </SwiperSlide>
                     )
                 } else {
-                    return (<SwiperSlide className='bg-white'>
+                    return (<SwiperSlide className='bg-white relative' key={`${guestData.id}_${index}`}>
                         <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
                             <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#FFEAA7,transparent)]"></div>
                             </div>
 
-                        <InvitationPersonalInfo key={`${guestData.id}_${index}`} />
+                        <InvitationPersonalInfo />
                     </SwiperSlide>
                     )
                 }

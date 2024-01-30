@@ -28,8 +28,6 @@ export default function Page({ params }: { params: { id: number } }) {
               ¡Que bien que vas a venir {guestData.name} 🥳!
             </h1>
 
-            <Badge text={`¡Tenes ${guestData.group.length} invitaciones!`} color="red" className="text-md" />
-
             <GuestInvitations guestData={guestData} guestLoaded={loading} />
           </div>
           <Footer />

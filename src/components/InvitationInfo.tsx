@@ -35,10 +35,10 @@ const InvitationInfo: FC<InvitationInfoProps> = ({ text, lat, long, loading, des
     
 
     return (
-        <div className='my-5'>
+        <div className='my-5 mb-10 px-3'>
             <div className='flex flex-wrap md:flex-nowrap gap-x-2'>
             <h2 className="text-3xl mb-3 font-bold">{text}</h2>
-            <Button text='Agregar al calendario 📅' onClick={saveTheDate} color='gray' />
+            <Button text='Agendar en calendario 📅' onClick={saveTheDate} color='gray' className='w-full md:w-auto' />
             </div>
             <p className='mb-8'>{description}</p>
             <div className="mb-8 flex flex-wrap md:flex-nowrap gap-2">

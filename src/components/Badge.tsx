@@ -4,14 +4,17 @@ import React, { FC } from 'react'
 interface BadgeProps{
     text: string;
     color?: string;
+    className?: string;
 }
 
-const Badge: FC<BadgeProps> = ({ text, color}) => {
+const Badge: FC<BadgeProps> = ({ text, color, className}) => {
 
     const getColor = (color: string) =>{
         switch(color){
         case 'yellow':
             return "bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400";
+         case 'orange':
+            return "bg-orange-100 text-orange-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-orange-400 border border-orange-400";
         case 'green':
             return "bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400";
         default:
@@ -20,7 +23,7 @@ const Badge: FC<BadgeProps> = ({ text, color}) => {
     }
 
   return (
-    <span className={getColor(color || 'default')}>{text}</span>
+    <span className={`${getColor(color || 'default')} ${className || ''}`}>{text}</span>
   )
 }
 

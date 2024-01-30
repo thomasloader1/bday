@@ -39,3 +39,13 @@ body {
   animation: progress 2s linear infinite;
 }
 
+.swiper {
+  max-width: 500px;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+}

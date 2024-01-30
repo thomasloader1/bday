@@ -22,6 +22,7 @@ const PlacesToGo = () => {
     return (
         <div>
             <h2 className="font-bold text-3xl mb-3">Opciones que messirven:</h2>
+            <p className='mb-8'>Es hora de decidir y sumar fuerzas. ¡Adelante, el destino aguarda elección y nuestra unión será la chispa que encienda la llama del éxito!</p>
             <div className='grid grid-cols-1 gap-5 md:grid-cols-2'>
                 {friendLocations.map((fl, index) => (
                     <LocationFriendsCard

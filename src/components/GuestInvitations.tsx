@@ -4,6 +4,9 @@ import { Guest } from '@/types/Guest';
 import InvitationPersonalInfo from './InvitationPersonalInfo';
 import workInvitationJson from "../data/__workInvitation.json";
 import familyInvitationJson from "../data/__familyInvitation.json";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCards } from 'swiper/modules';
+import Button from './Button';
 
 interface GuestIntitationsProps {
     guestData: Guest;
@@ -13,29 +16,46 @@ interface GuestIntitationsProps {
 const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded }) => {
 
     return (
-        <>
-            {guestData.group.map((gdg,index) => {
+        <Swiper
+            effect={'cards'}
+            grabCursor={true}
+            modules={[EffectCards]}
+            className="my-4 w-full md:max-w-sm"
+        >
+            {guestData.group.map((gdg, index) => {
                 const isCommon = gdg.includes("family") || gdg.includes("work");
                 const invitationTitle = gdg.includes("family") ? familyInvitationJson.title : workInvitationJson.title;
                 const invitationDescription = gdg.includes("family") ? familyInvitationJson.description : workInvitationJson.description;
                 const invitationFood = gdg.includes("family") ? familyInvitationJson.food : undefined;
                 if (isCommon) {
                     return (
-                        <InvitationInfo key={`${guestData.id}_${index}`}
-                            text={invitationTitle}
-                            description={invitationDescription}
-                            food={invitationFood}
-                            lat={guestData?.lunch?._lat}
-                            long={guestData?.lunch?._long}
-                            loading={guestLoaded}
-                        />
+                        <SwiperSlide className='bg-white'>
+                            <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
+                            <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#F9EFDB,transparent)]"></div>
+                            </div>
+                            <InvitationInfo key={`${guestData.id}_${index}`}
+                                text={invitationTitle}
+                                description={invitationDescription}
+                                food={invitationFood}
+                                lat={guestData?.lunch?._lat}
+                                long={guestData?.lunch?._long}
+                                loading={guestLoaded}
+                            />
+                        </SwiperSlide>
                     )
                 } else {
-                    return (<InvitationPersonalInfo key={`${guestData.id}_${index}`} />)
+                    return (<SwiperSlide className='bg-white'>
+                        <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
+                            <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#FFEAA7,transparent)]"></div>
+                            </div>
+
+                        <InvitationPersonalInfo key={`${guestData.id}_${index}`} />
+                    </SwiperSlide>
+                    )
                 }
 
             })}
-        </>
+        </Swiper>
     )
 }
 

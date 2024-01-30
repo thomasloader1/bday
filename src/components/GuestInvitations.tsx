@@ -20,7 +20,7 @@ const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded })
             effect={'cards'}
             grabCursor={true}
             modules={[EffectCards]}
-            className="my-4 w-full md:max-w-sm"
+            className="my-4 w-full px-4"
         >
             {guestData.group.map((gdg, index) => {
                 const isCommon = gdg.includes("family") || gdg.includes("work");

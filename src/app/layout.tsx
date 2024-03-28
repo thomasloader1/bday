@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Festejo de mis 30",
   description: "Aplicacion para invitarlos a un evento especial",
 };
-
+export const runtime = 'edge';
 export default function RootLayout({
   children,
 }: {
@@ -18,7 +18,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <main className="relative container px-2 mx-auto">
+          {children}
+        </main>  
+      </body>
     </html>
   );
 }

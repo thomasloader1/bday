@@ -17,7 +17,7 @@ export default function Bday() {
   };
 
   return (
-    <main className="relative container px-2">
+    <>
       <IconBackground icon={<FaBirthdayCake />} />
       <div className="flex flex-col items-center justify-center h-screen text-center">
       
@@ -30,7 +30,7 @@ export default function Bday() {
         </div>
         <SearchInvitation tryDemo={true}/>
       </div>
-    </main>
+    </>
     
   );
 }

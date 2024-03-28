@@ -5,8 +5,7 @@ import InvitationPersonalInfo from './InvitationPersonalInfo';
 import workInvitationJson from "../data/__workInvitation.json";
 import familyInvitationJson from "../data/__familyInvitation.json";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards } from 'swiper/modules';
-import Button from './Button';
+import { EffectCoverflow, Pagination } from 'swiper/modules';
 
 interface GuestIntitationsProps {
     guestData: Guest;
@@ -17,10 +16,20 @@ const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded })
 
     return (
         <Swiper
-            effect={'cards'}
+            className="my-4"
+            effect={'coverflow'}
             grabCursor={true}
-            modules={[EffectCards]}
-            className="my-4 w-full px-4"
+            centeredSlides={true}
+            slidesPerView={2}
+            coverflowEffect={{
+              rotate: 50,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows: true,
+            }}
+            pagination={true}
+            modules={[EffectCoverflow, Pagination]}
         >
             {guestData.group.map((gdg, index) => {
                 const isCommon = gdg.includes("family") || gdg.includes("work");

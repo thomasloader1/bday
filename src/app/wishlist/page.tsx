@@ -1,6 +1,7 @@
 import React from "react";
 import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
+import ProductCard2 from "@/components/ProductCard2";
 
 interface WishlistItem {
   name: string;
@@ -56,25 +57,33 @@ const Wishlist: React.FC = () => {
   ];
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen text-center bg-gray-100">
-      <h1 className="text-4xl font-semibold mb-6 bg-orange-500 px-6 py-3 rounded-lg">
-        Regalos deseados!
+    <section className="py-5 text-center">
+      <h1 className="text-5xl font-semibold mb-8 px-6 py-3 rounded-lg">
+        ¡Regalos deseados!
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="px-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
         {wishlistItems.map((item, index) => (
-          <ProductCard
+         /*  <ProductCard
             key={index}
             name={item.name}
             image={item.image}
             link={item.link}
             textColor={item.textColor}
+          /> */
+          <ProductCard2 
+          key={index}
+          name={item.name}
+          image={item.image}
+          link={item.link}
           />
         ))}
       </div>
-      <Link href={"/"} className="mt-5 bg-orange-500 px-4 py-2 rounded-full">
+      <div className="flex items-center justify-center">
+      <Link href={"/"} className="text-xl bg-orange-500 px-4 py-2 rounded-lg">
         Ir al inicio
       </Link>
-    </main>
+      </div>
+    </section>
   );
 };
 

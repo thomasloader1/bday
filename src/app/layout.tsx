@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import 'swiper/css';
 import 'swiper/css/effect-cards';
-import { AuthContextProvider } from "../context/AuthContext";
+import {AuthContextProvider} from "@/context/AuthContext";
+
 
 const inter = Inter({ subsets: ["latin"] });
 

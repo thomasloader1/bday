@@ -82,7 +82,7 @@ export default function UploadImage() {
 
     return (
         <div className="h-screen flex justify-center items-center bg-gray-900 px-2">
-            {!user ? (<Button onClick={handleLoginGoogle} text="Ingresar con Google" />) :(
+            {!user?.displayName ? (<Button onClick={handleLoginGoogle} text="Ingresar con Google" />) :(
                 <div className="block">
                     <p>¡Hola, {user.displayName}! </p>
                     <div className="flex mt-4 gap-x-2">

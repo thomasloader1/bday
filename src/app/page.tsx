@@ -39,7 +39,7 @@ export default function Bday() {
         </div>
         <SearchInvitation tryDemo={true}/>
        
-        {!user ? (<Button onClick={handleLoginGoogle} text="Ingresar con Google" />) :(
+        {!user?.displayName ? (<Button onClick={handleLoginGoogle} text="Ingresar con Google" />) :(
           <>
            <p>¡Hola, {user.displayName}! </p>
            <div className="flex mt-4 gap-x-2">

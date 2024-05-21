@@ -1,13 +1,18 @@
+import Link from 'next/link';
 import React, { FC } from 'react'
 
 interface ButtonProps{
     text: string;
-    onClick: () => void;
+    onClick?: () => void;
     className?: string;
     color?: string
+    disabled?: boolean;
+    isLink?: {
+      href: string;
+    }
 }
 
-const Button: FC<ButtonProps> = ({ text, onClick, className, color}) => {
+const Button: FC<ButtonProps> = ({ text, onClick, className, color, isLink, disabled}) => {
 
   const getColor = (color:string) => {
     const colorMap: any = {
@@ -22,8 +27,10 @@ const Button: FC<ButtonProps> = ({ text, onClick, className, color}) => {
   return colorMap[color] || colorMap['green'];
   }
 
+
   return (
-    <button type="button" onClick={onClick} className={`focus:outline-none text-white  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 ${getColor(color || "")} ${className || ""}`}>{text}</button>
+    isLink?.href ? <Link href={isLink.href} className={`focus:outline-none text-white  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 ${getColor(color || "")} ${className || ""}`}>{text}</Link> :
+    <button disabled={disabled} type="button" onClick={onClick} className={`focus:outline-none text-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:hover:bg-gray-700 ${getColor(color || "")} ${className || ""}`}>{text}</button>
 
   )
 }

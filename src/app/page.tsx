@@ -5,16 +5,25 @@ import IconBackground from "@/components/CakeBackground";
 import SearchInvitation from "@/components/SearchInvitation";
 import { useStore } from "@nanostores/react";
 import { $time, setTime } from "@/store/timeStore";
-
+import Button from "@/components/Button";
+import { UserAuth } from "@/context/AuthContext";
 
 export default function Bday() {
   const { targetDate } = useStore($time)
-  
+  const { user, googleSignIn, logOut} = UserAuth();
   const handleCountdownComplete = () => {
     const currentDate = new Date();
     targetDate.setFullYear(currentDate.getFullYear());
     setTime(targetDate)
   };
+
+  const handleLoginGoogle = async () => {
+    try{
+      await googleSignIn()
+    }catch(e){
+      console.log(e)
+    }
+  }
 
   return (
     <>
@@ -29,6 +38,17 @@ export default function Bday() {
           />
         </div>
         <SearchInvitation tryDemo={true}/>
+       
+        {!user ? (<Button onClick={handleLoginGoogle} text="Ingresar con Google" />) :(
+          <>
+           <p>¡Hola, {user.displayName}! </p>
+           <div className="flex mt-4 gap-x-2">
+            <Button onClick={logOut} text="Salir" color="red"  />
+            <Button isLink={{href:"/dashboard"}} color="blue" text="Dashboard" />
+           </div>
+          </>
+        )}
+        
       </div>
     </>
     

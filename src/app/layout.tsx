@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import 'swiper/css';
 import 'swiper/css/effect-cards';
+import { AuthContextProvider } from "../context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="es">
       <body className={inter.className}>
         <main className="relative container px-2 mx-auto">
-          {children}
+          <AuthContextProvider>
+            {children}
+          </AuthContextProvider>
         </main>  
       </body>
     </html>

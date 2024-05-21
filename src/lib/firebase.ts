@@ -4,6 +4,8 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { Dispatch, SetStateAction } from "react";
 import items from "@/data/guests.json";
 
+export const DB_NAME = "lupe-persons";
+
 export const getGuest = async (
   id: string,
   setFindGuest: Dispatch<SetStateAction<boolean>>,
@@ -38,7 +40,7 @@ export const getGuest = async (
 
 export const getGuestFirebase = async (id: string) => {
   try {
-    const documentoRef = doc(db, "persons", id);
+    const documentoRef = doc(db, DB_NAME, id);
     const documentoSnapshot = await getDoc(documentoRef);
 
     if (documentoSnapshot.exists()) {
@@ -58,7 +60,7 @@ export const addGuest = async (
 ) => {
   try {
     // Agrega el documento a la colección
-    const guestsCollectionRef = doc(db, "persons");
+    const guestsCollectionRef = doc(db, DB_NAME);
     await setDoc(guestsCollectionRef, guestData);
   } catch (error) {
     console.error("Error al agregar el invitado:", error);
@@ -74,7 +76,7 @@ export const updateGuest = async (
 ) => {
   try {
     // Referencia al documento del invitado en Firestore
-    const guestRef = doc(db, "persons", guestId);
+    const guestRef = doc(db, DB_NAME, guestId);
 
     await updateDoc(guestRef, updatedGuestData);
   } catch (error) {

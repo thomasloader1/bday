@@ -4,6 +4,7 @@ import { Guest } from "@/types/Guest";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import GroupedButtons from "./GroupedButtons";
+import {DB_NAME} from "@/lib/firebase";
 
 interface InvitationProps {
   guestData: Guest;
@@ -26,7 +27,7 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
     const idPerson = id.toString();
 
     try {
-      const documentoRef = doc(db, "persons", idPerson);
+      const documentoRef = doc(db, DB_NAME, idPerson);
       const documentSnapshot = await getDoc(documentoRef);
 
       if (documentSnapshot.exists()) {

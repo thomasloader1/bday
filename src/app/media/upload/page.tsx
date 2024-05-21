@@ -18,6 +18,8 @@ export default function UploadImage() {
     const [files, setFiles] = useState<FileWithPreview[]>([]);
     const [message, setMessage] = useState<string>('');
     const { user, googleSignIn, logOut} = UserAuth();
+
+    const authUser: {displayName?: string} = user;
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setImage(e.target.files[0]);
@@ -82,9 +84,9 @@ export default function UploadImage() {
 
     return (
         <div className="h-screen flex justify-center items-center bg-gray-900 px-2">
-            {!user?.displayName ? (<Button onClick={handleLoginGoogle} text="Ingresar con Google" />) :(
+            {!authUser?.displayName ? (<Button onClick={handleLoginGoogle} text="Ingresar con Google" />) :(
                 <div className="block">
-                    <p>¡Hola, {user.displayName}! </p>
+                    <p>¡Hola, {authUser.displayName}! </p>
                     <div className="flex mt-4 gap-x-2">
                         <Button onClick={logOut} text="Salir" color="red"  />
                         <Button isLink={{href:"/dashboard"}} color="blue" text="Dashboard" />

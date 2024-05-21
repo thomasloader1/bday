@@ -11,6 +11,8 @@ import { UserAuth } from "@/context/AuthContext";
 export default function Bday() {
   const { targetDate } = useStore($time)
   const { user, googleSignIn, logOut} = UserAuth();
+
+  const authUser:{displayName?:string} = user;
   const handleCountdownComplete = () => {
     const currentDate = new Date();
     targetDate.setFullYear(currentDate.getFullYear());
@@ -39,9 +41,9 @@ export default function Bday() {
         </div>
         <SearchInvitation tryDemo={true}/>
        
-        {!user?.displayName ? (<Button onClick={handleLoginGoogle} text="Ingresar con Google" />) :(
+        {!authUser?.displayName ? (<Button onClick={handleLoginGoogle} text="Ingresar con Google" />) :(
           <>
-           <p>¡Hola, {user.displayName}! </p>
+           <p>¡Hola, {authUser.displayName}! </p>
            <div className="flex mt-4 gap-x-2">
             <Button onClick={logOut} text="Salir" color="red"  />
             <Button isLink={{href:"/dashboard"}} color="blue" text="Dashboard" />

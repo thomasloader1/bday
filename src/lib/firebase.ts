@@ -15,7 +15,7 @@ export const getGuest = async (
 ) => {
   try {
     const personFind = items.persons.find((person) => person.id === Number(id));
-
+    console.log({personFind, id})
     if (personFind) {
       const data = personFind;
       const dataFirebase = await getGuestFirebase(id);
@@ -72,16 +72,20 @@ export const addGuest = async (
 export const updateGuest = async (
   guestId: string,
   updatedGuestData: UpdateGuest,
-  setLoading: Dispatch<SetStateAction<boolean>>
+  setLoading: Dispatch<SetStateAction<boolean>> | null
 ) => {
   try {
     // Referencia al documento del invitado en Firestore
     const guestRef = doc(db, DB_NAME, guestId);
 
-    await updateDoc(guestRef, updatedGuestData);
+    const docUpdated = await updateDoc(guestRef, updatedGuestData);
+
+    console.log({guestRef, docUpdated, updatedGuestData});
   } catch (error) {
     console.error("Error al actualizar el invitado:", error);
   } finally {
-    setLoading(false);
+    if(typeof setLoading === 'function'){
+      setLoading(false);
+    }
   }
 };

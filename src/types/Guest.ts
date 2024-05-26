@@ -2,12 +2,11 @@ export interface Guest {
   id: number;
   name: string;
   group: string[];
-  lunch?: { _lat: number; _long: number };
-  after?: { _lat: number; _long: number };
+  lupe: { _lat: number; _long: number };
   isConfirmed: boolean;
-  isVoted?: boolean;
   isDrity: boolean;
-  votedFor?: string;
+  email: null | string;
+  images: string[];
 }
 
 export interface UpdateGuest {

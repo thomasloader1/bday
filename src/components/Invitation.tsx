@@ -5,21 +5,30 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import GroupedButtons from "./GroupedButtons";
 import {DB_NAME} from "@/lib/firebase";
+import GuestFrom from "@/components/GuestFrom";
 
 interface InvitationProps {
   guestData: Guest;
+}
+
+export interface ConfirmationData{
+  attending: string;
+  email: string;
+  name: string;
+  phone: string;
 }
 
 const Invitation: FC<InvitationProps> = ({ guestData }) => {
   const [onRequestConfirm, setOnRequestConfirm] = useState<boolean>(false);
   const [onRequestNoConfirm, setOnRequestNoConfirm] = useState<boolean>(false);
 
-  const handleConfirm = async () => {
+  const handleConfirm = async (data:ConfirmationData) => {
     setOnRequestConfirm(true);
     const { id, ...person } = guestData;
 
     const confirmGuest = {
       ...person,
+      ...data,
       isDrity: true,
       isConfirmed: true,
     };
@@ -48,13 +57,14 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
     }
   };
 
-  const handleNoConfirm = async () => {
+  const handleNoConfirm = async (data: ConfirmationData) => {
     setOnRequestNoConfirm(true);
 
     const { id, ...person } = guestData;
 
     const confirmGuest = {
       ...person,
+      ...data,
       isDrity: true,
       isConfirmed: false,
     };
@@ -62,7 +72,7 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
     const idPerson = guestData.id.toString();
 
     try {
-      const documentoRef = doc(db, "persons", idPerson);
+      const documentoRef = doc(db, DB_NAME, idPerson);
       const documentSnapshot = await getDoc(documentoRef);
 
       if (documentSnapshot.exists()) {
@@ -87,13 +97,21 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
       <h1 className="font-bold text-5xl mb-10">¡Hola {guestData.name}!</h1>
       <InvitationText />
 
-      <GroupedButtons
-        handleConfirm={handleConfirm}
-        onRequestConfirm={onRequestConfirm}
-        handleNoConfirm={handleNoConfirm}
-        onRequestNoConfirm={onRequestNoConfirm}
-        guestData={guestData}
+      <GuestFrom
+          handleConfirm={(confirmData:ConfirmationData) => handleConfirm(confirmData)}
+          onRequestConfirm={onRequestConfirm}
+          handleNoConfirm={(noConfirmData:ConfirmationData) => handleNoConfirm(noConfirmData)}
+          onRequestNoConfirm={onRequestNoConfirm}
+          guestData={guestData}
       />
+
+      {/*<GroupedButtons
+          handleConfirm={handleConfirm}
+          onRequestConfirm={onRequestConfirm}
+          handleNoConfirm={handleNoConfirm}
+          onRequestNoConfirm={onRequestNoConfirm}
+          guestData={guestData}
+      />*/}
     </>
   );
 };

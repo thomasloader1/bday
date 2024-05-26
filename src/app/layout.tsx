@@ -4,7 +4,7 @@ import "./globals.css";
 import 'swiper/css';
 import 'swiper/css/effect-cards';
 import { AuthContextProvider } from "@/context/AuthContext";
-
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
   title: "Festejo de mis 30",
   description: "Aplicacion para invitarlos a un evento especial",
 };
+
 export const runtime = 'edge';
+
 export default function RootLayout({
   children,
 }: {
@@ -21,11 +23,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
-        <main className="relative container px-2 mx-auto">
+        <main className="relative container sm:px-2 mx-auto">
           <AuthContextProvider>
             {children}
           </AuthContextProvider>
-        </main>  
+        </main>
       </body>
     </html>
   );

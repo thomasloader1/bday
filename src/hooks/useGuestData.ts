@@ -2,6 +2,7 @@
 import { getGuest } from "@/lib/firebase";
 import { Guest } from "@/types/Guest";
 import { useEffect, useState } from "react";
+import {redirect} from "next/navigation";
 
 interface UseGuestProps {
   id: number;
@@ -14,6 +15,9 @@ const useGuest = ({ id }: UseGuestProps) => {
     group: [],
     isConfirmed: false,
     isDrity: false,
+    email: "",
+    images: [],
+    lupe: { _lat: 0, _long: 0 },
   });
 
   const [findGuest, setFindGuest] = useState(false);
@@ -32,6 +36,7 @@ const useGuest = ({ id }: UseGuestProps) => {
           setLoading,
           setError
         );
+
       } catch (error) {
         console.error({ error });
         setError(true);

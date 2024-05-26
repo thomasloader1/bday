@@ -9,10 +9,10 @@ interface TimeState {
 }
 
 export const $time = atom<TimeState>({
-    targetDate: new Date("2023-12-16T20:00:00"),
+    targetDate: new Date("2024-11-08T20:00:00"),
     targetWorkDate: new Date("2023-12-21T18:00:00"),
     targetFamilyDate: new Date("2023-12-16T13:00:00"),
-    timeLeft: calculateTimeLeft(new Date("2023-12-16T00:00:00")),
+    timeLeft: calculateTimeLeft(new Date("2024-11-08T00:00:00")),
   });
 
 

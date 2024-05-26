@@ -1,32 +1,39 @@
-import React, { useState } from 'react'
+import React, {FC, useState} from 'react'
 import RequirementList from './RequirementList';
-import PlacesToGo from './PlacesToGo';
 import Button from './Button';
-import { saveTheDate } from '@/lib/saveTheDate';
+import LocationButton from "@/components/LocationButton";
+import Badge from "@/components/Badge";
+import {useRouter} from "next/navigation";
+import {Guest} from "@/types/Guest";
 
-const InvitationPersonalInfo = () => {
+interface InvitationPersonalInfoProps {
+    guest: Guest;
+}
 
+const InvitationPersonalInfo: FC<InvitationPersonalInfoProps> = ({guest}) => {
+    const router = useRouter()
   const [requirements] = useState([{name:"Vestimenta", description:"Sport"},{name:"Horario", description:"20hs a 00hs"}])
 
   return (
-    <div className='px-2 py-4 md:px-5 rounded-md'>
-      <h2 className='text-3xl mb-5 font-bold'>Invitacion Personal</h2>
-         <div className='mb-10'>
-            <p>Honestamente, no tengo ni idea de qué hacer.</p>
-            <p  className="mb-5" >Simplemente quiero pasar el día contigo y ver qué onda, dentro de las posibilidades que tengamos.</p>
+      <div className='px-2 py-4 md:px-5 rounded-md'>
+          <RequirementList items={requirements}/>
 
-            <div className="p-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300" role="alert">
-            <span className="font-medium">PD:</span> Seguramente pidamos pizza
+          <div className="flex flex-col mb-8">
+              <h3 className="text-3xl font-bold mb-3">Menu</h3>
+              <Badge text='comida' color="blue"/>
           </div>
-         </div>
 
+          <div className="flex flex-col mb-8">
+              <h3 className="text-3xl font-bold mb-3">Galeria</h3>
+              <Button text={"Ir a media"} color="blue" onClick={()=> router.push(`/${guest.id}/media`)} />
+          </div>
 
-        <RequirementList items={requirements} />
-        <Button text='Agendar en calendario 📅' onClick={() => saveTheDate("", "")} color='gray' className='w-full mb-5' />
-
-        <Button text="Saber mas" onClick={()=>{}} className='text-xl w-full' />
-        {/* <PlacesToGo /> */}
-    </div>
+          <LocationButton
+              latitude={guest.lupe._lat}
+              longitude={guest.lupe._long}
+              loading={true}
+          />
+      </div>
   )
 }
 

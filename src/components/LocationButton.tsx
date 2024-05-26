@@ -4,6 +4,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import L, { LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import Button from "./Button";
+import {saveTheDate} from "@/lib/saveTheDate";
 
 interface LocationButtonProps {
   latitude?: number;
@@ -38,6 +39,8 @@ const LocationButton: FC<LocationButtonProps> = ({
 
   return (
     <div className="flex flex-col justify-center">
+      <h3 className="text-3xl font-bold mb-4">Lugar</h3>
+      <h4 className="text-lg mb-4">Jano's Eventos (Pilar)</h4>
       <div className="h-48 mb-3">
         <MapContainer
           center={position}
@@ -47,13 +50,16 @@ const LocationButton: FC<LocationButtonProps> = ({
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <Marker position={position} icon={customIcon}>
-            <Popup>asd</Popup>
+            {/* eslint-disable-next-line react/no-unescaped-entities */}
+            <Popup>Jano's Eventos (Pilar)</Popup>
           </Marker>
         </MapContainer>
       </div>
-      
 
-      <Button text="Abrir en Maps" onClick={handleOpenInMaps}/>
+      <div className="flex flex-col">
+        <Button text='Agendar en calendario 📅' onClick={() => saveTheDate("", "")} color='gray' className='w-full' />
+        <Button text="Abrir en Maps" onClick={handleOpenInMaps} className="w-full"/>
+      </div>
     </div>
   );
 };

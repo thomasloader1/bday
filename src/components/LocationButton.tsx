@@ -40,7 +40,7 @@ const LocationButton: FC<LocationButtonProps> = ({
   return (
     <div className="flex flex-col justify-center">
       <h3 className="text-3xl font-bold mb-4">Lugar</h3>
-      <h4 className="text-lg mb-4">Jano's Eventos (Pilar)</h4>
+      <h4 className="text-lg mb-4">Janos Eventos (Pilar)</h4>
       <div className="h-48 mb-3">
         <MapContainer
           center={position}
@@ -50,8 +50,7 @@ const LocationButton: FC<LocationButtonProps> = ({
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <Marker position={position} icon={customIcon}>
-            {/* eslint-disable-next-line react/no-unescaped-entities */}
-            <Popup>Jano's Eventos (Pilar)</Popup>
+            <Popup>Janos Eventos (Pilar)</Popup>
           </Marker>
         </MapContainer>
       </div>

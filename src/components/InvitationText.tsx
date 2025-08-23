@@ -1,4 +1,3 @@
-import { Guest } from "@/types/Guest";
 import React, { FC } from "react";
 
 const InvitationText = () => {

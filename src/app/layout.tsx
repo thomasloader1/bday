@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
-        <main className="relative container px-2 mx-auto">
+        <main className="relative mx-auto">
           {children}
         </main>  
       </body>

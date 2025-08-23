@@ -1,16 +1,14 @@
 import React from "react";
 import Button from "./Button";
-import { useRouter } from "next/navigation";
 
 const WhatsAppButton = () => {
   const numeroTelefono = "1155011250";
-  const router = useRouter();
   const abrirWhatsApp = () => {
     const url = `https://web.whatsapp.com/send?phone=${numeroTelefono}`;
     window.open(url, "_blank");
   };
   const goToHome = () => {
-   router.push("/")
+   window.location.href ="/"
   };
 
   return (

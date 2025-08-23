@@ -1,5 +1,5 @@
+'use client'
 import React,{useState, useEffect,FC, ReactNode} from 'react'
-import { FaBirthdayCake } from 'react-icons/fa';
 interface Position{
     left: string;
     top: string;

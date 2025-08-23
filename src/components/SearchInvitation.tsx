@@ -4,7 +4,6 @@ import SearchInvitationForm from './SearchInvitationForm';
 import { useStore } from '@nanostores/react';
 import { $time } from '@/store/timeStore';
 import Button from './Button';
-import { useRouter } from 'next/navigation';
 import { $fetch, setOnRequest } from '@/store/fetchingStore';
 
 interface SearchInvitationProps{
@@ -12,13 +11,14 @@ interface SearchInvitationProps{
 }
 
 const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo}) => {
-    const router = useRouter();
     const { timeLeft} = useStore($time)
     const { loading } = useStore($fetch)
+
     const isComing = timeLeft.days < 30;
+    
     const redirectToDemo = () =>{
         setOnRequest(true)
-        router.push("/1155011250");
+        window.location.href = "/1155011250";
         console.log({loading,$fetch: $fetch.get()})
     }
 
@@ -30,9 +30,7 @@ const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo}) => {
         
     </p>
         
-    {isComing && (<SearchInvitationForm />)}
-
-    {tryDemo && (
+    {tryDemo ? (
         <>
             <p className="text-md mb-3 mt-8">
                 Si te interesa saber mas del proyecto
@@ -40,8 +38,7 @@ const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo}) => {
 
             <Button text={loading ? 'Cargando ...' : 'Demo'} onClick={redirectToDemo} color='orange' className='text-xl font-bold' />
         </>
-    )}
-        
+    ): isComing && (<SearchInvitationForm />)}
     </>
   );
 }

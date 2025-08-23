@@ -16,7 +16,7 @@ const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded })
 
     return (
         <Swiper
-            className="my-4"
+            className="my-4 text-black"
             effect={'coverflow'}
             grabCursor={true}
             centeredSlides={true}
@@ -38,9 +38,9 @@ const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded })
                 const invitationFood = gdg.includes("family") ? familyInvitationJson.food : undefined;
                 if (isCommon) {
                     return (
-                        <SwiperSlide className='bg-white relative' key={`${guestData.id}_${index}`}>
-                            <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
-                            <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#F9EFDB,transparent)]"></div>
+                        <SwiperSlide className='bg-white relative ' key={`${guestData.id}_${index}`}>
+                            <div className="rounded-xl absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
+                            <div className=" rounded-xlabsolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#F9EFDB,transparent)]"></div>
                             </div>
                             <InvitationInfo 
                                 text={invitationTitle}
@@ -54,8 +54,8 @@ const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded })
                     )
                 } else {
                     return (<SwiperSlide className='bg-white relative' key={`${guestData.id}_${index}`}>
-                        <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
-                            <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#FFEAA7,transparent)]"></div>
+                        <div className="rounded-xl absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
+                            <div className=" rounded-xl absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#FFEAA7,transparent)]"></div>
                             </div>
 
                         <InvitationPersonalInfo />

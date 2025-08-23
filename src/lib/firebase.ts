@@ -38,6 +38,11 @@ export const getGuest = async (
 
 export const getGuestFirebase = async (id: string) => {
   try {
+    if (!db) {
+      console.warn("Firebase no está disponible en el servidor");
+      return null;
+    }
+    
     const documentoRef = doc(db, "persons", id);
     const documentoSnapshot = await getDoc(documentoRef);
 
@@ -49,6 +54,7 @@ export const getGuestFirebase = async (id: string) => {
     }
   } catch (error) {
     console.error("Error al obtener el documento:", error);
+    return null;
   }
 };
 
@@ -57,6 +63,11 @@ export const addGuest = async (
   setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
   try {
+    if (!db) {
+      console.warn("Firebase no está disponible en el servidor");
+      return;
+    }
+    
     // Agrega el documento a la colección
     const guestsCollectionRef = doc(db, "persons");
     await setDoc(guestsCollectionRef, guestData);
@@ -73,6 +84,11 @@ export const updateGuest = async (
   setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
   try {
+    if (!db) {
+      console.warn("Firebase no está disponible en el servidor");
+      return;
+    }
+    
     // Referencia al documento del invitado en Firestore
     const guestRef = doc(db, "persons", guestId);
 

@@ -2,52 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  @apply bg-neutral-50 text-neutral-900 antialiased;
 }
 
-@keyframes progress {
-  0% {
-    width: 0;
-  }
-  100% {
-    width: 100%;
-  }
-}
-
-.animate-progress {
-  animation: progress 2s linear infinite;
-}
-
- .swiper {
+.swiper {
   width: 100%;
   padding-top: 50px;
   padding-bottom: 50px;
-} 
+}
 
 .swiper-slide {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 18px;
+  @apply rounded-xl;
+}
+
+/* Reduced motion: kill non-essential decoration (cake drift). */
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift {
+    animation: none !important;
+  }
 }

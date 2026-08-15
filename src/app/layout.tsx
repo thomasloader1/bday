@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import 'swiper/css';
 import 'swiper/css/effect-cards';
 
-const inter = Inter({ subsets: ["latin"] });
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-display",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "Festejo de mis 30",
@@ -17,11 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
-      <body className={inter.className}>
-        <main className="relative container px-2 mx-auto">
+    <html lang="es" className={`${fraunces.variable} ${inter.variable}`}>
+      <body className="font-sans antialiased">
+        <main className="container mx-auto px-6 md:px-8 pb-16">
           {children}
-        </main>  
+        </main>
       </body>
     </html>
   );

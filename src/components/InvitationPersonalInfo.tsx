@@ -15,7 +15,7 @@ const InvitationPersonalInfo = () => {
             <p>Honestamente, no tengo ni idea de qué hacer.</p>
             <p  className="mb-5" >Simplemente quiero pasar el día contigo y ver qué onda, dentro de las posibilidades que tengamos.</p>
 
-            <div className="p-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300" role="alert">
+            <div className="p-4 text-sm text-gray-800 rounded-lg dark:text-gray-300" role="alert">
             <span className="font-medium">PD:</span> Seguramente pidamos pizza
           </div>
          </div>

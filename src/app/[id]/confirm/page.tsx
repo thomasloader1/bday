@@ -39,7 +39,7 @@ export default function Page({ params }: { params: { id: number } }) {
         animate="show"
         className="flex w-full justify-center py-8"
       >
-        <Card variant="paper" className="relative w-full max-w-3xl">
+        <Card variant="paper" className="relative w-full max-w-3xl border-0">
           <AuroraBackdrop />
           <div className="relative">
             <BlurTextTitle

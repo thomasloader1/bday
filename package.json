@@ -16,6 +16,7 @@
     "confetti-js": "^0.0.18",
     "emoji-mart": "^5.5.2",
     "firebase": "^10.7.0",
+    "gsap": "^3.15.0",
     "leaflet": "^1.9.4",
     "motion": "^13.1.0",
     "nanostores": "^0.9.5",

@@ -43,7 +43,7 @@ const CakeBackground: FC<CakeBackgroundProps> = ({ icon, count = 18 }) => {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      className="pointer-events-none absolute inset-0 overflow-hidden"
     >
       {items.map((item, index) => (
         <div

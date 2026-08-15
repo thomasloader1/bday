@@ -3,6 +3,7 @@ import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import 'swiper/css';
 import 'swiper/css/effect-cards';
+import BackgroundLayer from "@/components/BackgroundLayer";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${fraunces.variable} ${inter.variable}`}>
       <body className="font-sans antialiased">
+        <BackgroundLayer />
         <main className="container mx-auto px-6 md:px-8 pb-16">
           {children}
         </main>

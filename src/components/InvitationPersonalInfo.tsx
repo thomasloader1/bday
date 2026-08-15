@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import RequirementList from './RequirementList';
 import PlacesToGo from './PlacesToGo';
-import Button from './Button';
+import Button from './ui/Button';
+import { FaCalendar } from 'react-icons/fa6';
 import { saveTheDate } from '@/lib/saveTheDate';
 
 const InvitationPersonalInfo = () => {
@@ -22,9 +23,14 @@ const InvitationPersonalInfo = () => {
 
 
         <RequirementList items={requirements} />
-        <Button text='Agendar en calendario 📅' onClick={() => saveTheDate("", "")} color='gray' className='w-full mb-5' />
-
-        <Button text="Saber mas" onClick={()=>{}} className='text-xl w-full' />
+        <Button
+            variant="secondary"
+            fullWidth
+            icon={<FaCalendar />}
+            onClick={() => saveTheDate("", "")}
+        >
+            Agendar en calendario
+        </Button>
         {/* <PlacesToGo /> */}
     </div>
   )

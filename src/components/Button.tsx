@@ -1,5 +1,10 @@
 import React, { FC } from 'react'
 
+/**
+ * @deprecated Use `@/components/ui/Button` instead. Kept only because the
+ * locked `SearchInvitation` consumer still imports it; will be deleted at
+ * Slice 3 after that consumer migrates.
+ */
 interface ButtonProps{
     text: string;
     onClick: () => void;

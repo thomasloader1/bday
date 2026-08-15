@@ -1,6 +1,7 @@
 import React from "react";
-import Button from "./Button";
+import Button from "./ui/Button";
 import { useRouter } from "next/navigation";
+import { FaWhatsapp } from "react-icons/fa6";
 
 const WhatsAppButton = () => {
   const numeroTelefono = "1155011250";
@@ -14,9 +15,9 @@ const WhatsAppButton = () => {
   };
 
   return (
-    <div className="flex justify-end">
-      <Button text="Ir a inicio" onClick={goToHome} className="text-lg" color="bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" />
-      <Button text="WhatsApp" onClick={abrirWhatsApp} className="text-lg" />
+    <div className="flex flex-wrap justify-end gap-3">
+      <Button variant="secondary" onClick={goToHome}>Ir a inicio</Button>
+      <Button variant="primary" icon={<FaWhatsapp />} onClick={abrirWhatsApp}>WhatsApp</Button>
     </div>
   );
 };

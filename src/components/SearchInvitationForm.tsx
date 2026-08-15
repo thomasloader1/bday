@@ -1,15 +1,16 @@
 import { useRouter } from 'next/navigation'
 import React, { FormEvent, useState } from 'react'
-import { FaPaperPlane } from 'react-icons/fa'
+import { FaPaperPlane } from 'react-icons/fa6'
+import Button from './ui/Button'
 
 const SearchInvitationForm = () => {
     const router = useRouter()
   const [inviteNumber, setInviteNumber] = useState("");
-  
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInviteNumber(event.target.value);
   };
-  
+
   const handleSubmit = (e: FormEvent) =>{
         e.preventDefault()
         router.push(inviteNumber)
@@ -25,7 +26,14 @@ const SearchInvitationForm = () => {
                     </svg>
                 </div>
                 <input type="search" id="search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Buscar invitacion" required onChange={handleInputChange} value={inviteNumber} />
-                <button type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800"><FaPaperPlane /></button>
+                <Button
+                    type="submit"
+                    variant="primary"
+                    size="sm"
+                    icon={<FaPaperPlane />}
+                    aria-label="Buscar invitacion"
+                    className="absolute end-2.5 bottom-2.5"
+                />
             </div>
         </form>
 

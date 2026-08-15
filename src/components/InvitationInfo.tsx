@@ -1,7 +1,8 @@
 import React, { FC } from 'react'
 import LocationButton from './LocationButton'
 import Badge from './Badge';
-import Button from './Button';
+import Button from './ui/Button';
+import { FaCalendar } from 'react-icons/fa6';
 import { saveTheDate } from '@/lib/saveTheDate';
 
 interface InvitationInfoProps {
@@ -25,7 +26,15 @@ const InvitationInfo: FC<InvitationInfoProps> = ({ text, lat, long, loading, des
                 {food?.map(f => <Badge key={f} text={f} color='dark' />)}
 
             </div>
-            <Button text='Agendar en calendario 📅' onClick={() => saveTheDate(text, description)} color='gray' className='w-full mb-5' />
+            <Button
+                variant="secondary"
+                fullWidth
+                icon={<FaCalendar />}
+                className="mb-5"
+                onClick={() => saveTheDate(text, description)}
+            >
+                Agendar en calendario
+            </Button>
 
             <LocationButton
                 latitude={lat}

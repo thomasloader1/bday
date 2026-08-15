@@ -15,7 +15,8 @@ interface BlurTextTitleProps {
 /**
  * Client wrapper around react-bits BlurText for page hero titles.
  * Keeps real h1 heading semantics; under prefers-reduced-motion it renders
- * the plain static text (no blur/entrance animation).
+ * the plain static text (no blur/entrance animation). BlurText renders a
+ * <span> inside the h1 (never a <p> — flow content is invalid in headings).
  */
 const BlurTextTitle = ({ text, className, delay = 40 }: BlurTextTitleProps) => {
   const reducedMotion = useReducedMotion();
@@ -27,7 +28,7 @@ const BlurTextTitle = ({ text, className, delay = 40 }: BlurTextTitleProps) => {
 
   return (
     <h1 className={classes}>
-      <BlurText text={text} delay={delay} animateBy="words" />
+      <BlurText text={text} delay={delay} animateBy="words" as="span" />
     </h1>
   );
 };

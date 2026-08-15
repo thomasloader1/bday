@@ -16,6 +16,8 @@ type BlurTextProps = {
   easing?: Easing | Easing[];
   onAnimationComplete?: () => void;
   stepDuration?: number;
+  /** Wrapper element: <p> (default) or <span> (e.g. when nested inside a heading). */
+  as?: 'p' | 'span';
 };
 
 const buildKeyframes = (
@@ -43,11 +45,12 @@ const BlurText: React.FC<BlurTextProps> = ({
   animationTo,
   easing = (t: number) => t,
   onAnimationComplete,
-  stepDuration = 0.35
+  stepDuration = 0.35,
+  as = 'p'
 }) => {
   const elements = animateBy === 'words' ? text.split('') : text.split('');
   const [inView, setInView] = useState(false);
-  const ref = useRef<HTMLParagraphElement>(null);
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -89,35 +92,47 @@ const BlurText: React.FC<BlurTextProps> = ({
   const totalDuration = stepDuration * (stepCount - 1);
   const times = Array.from({ length: stepCount }, (_, i) => (stepCount === 1 ? 0 : i / (stepCount - 1)));
 
+  const segments = elements.map((segment, index) => {
+    const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
+
+    const spanTransition: Transition = {
+      duration: totalDuration,
+      times,
+      delay: (index * delay) / 1000,
+      ease: easing
+    };
+
+    return (
+      <motion.span
+        key={index}
+        initial={fromSnapshot}
+        animate={inView ? animateKeyframes : fromSnapshot}
+        transition={spanTransition}
+        onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
+        style={{
+          display: 'inline-block',
+          willChange: 'transform, filter, opacity'
+        }}
+      >
+        {segment === '' ? '' : segment}
+        {animateBy === 'words' && index < elements.length - 1 && ''}
+      </motion.span>
+    );
+  });
+
+  const sharedClassName = `blur-text ${className} flex flex-wrap`;
+
+  if (as === 'span') {
+    return (
+      <span ref={ref as React.Ref<HTMLSpanElement>} className={sharedClassName}>
+        {segments}
+      </span>
+    );
+  }
+
   return (
-    <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
-      {elements.map((segment, index) => {
-        const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
-
-        const spanTransition: Transition = {
-          duration: totalDuration,
-          times,
-          delay: (index * delay) / 1000,
-          ease: easing
-        };
-
-        return (
-          <motion.span
-            key={index}
-            initial={fromSnapshot}
-            animate={inView ? animateKeyframes : fromSnapshot}
-            transition={spanTransition}
-            onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
-            style={{
-              display: 'inline-block',
-              willChange: 'transform, filter, opacity'
-            }}
-          >
-            {segment === '' ? '' : segment}
-            {animateBy === 'words' && index < elements.length - 1 && ''}
-          </motion.span>
-        );
-      })}
+    <p ref={ref as React.Ref<HTMLParagraphElement>} className={sharedClassName}>
+      {segments}
     </p>
   );
 };

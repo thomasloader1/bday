@@ -1,5 +1,4 @@
 import React from "react";
-import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
 import ProductCard2 from "@/components/ProductCard2";
 import Button from "@/components/ui/Button";
@@ -64,13 +63,6 @@ const Wishlist: React.FC = () => {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
         {wishlistItems.map((item, index) => (
-         /*  <ProductCard
-            key={index}
-            name={item.name}
-            image={item.image}
-            link={item.link}
-            textColor={item.textColor}
-          /> */
           <ProductCard2 
           key={index}
           name={item.name}

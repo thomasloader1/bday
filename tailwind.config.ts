@@ -41,7 +41,7 @@ const config: Config = {
           cream: '#F9EFDB',
           yellow: '#FFEAA7',
         },
-        success: '#16A34A',
+        success: '#15803D',
         danger: '#475569',
         info: '#2563EB',
         warning: '#F59E0B',

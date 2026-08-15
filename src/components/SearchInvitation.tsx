@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import SearchInvitationForm from './SearchInvitationForm';
 import { useStore } from '@nanostores/react';
 import { $time } from '@/store/timeStore';
-import Button from './Button';
+import Button from './ui/Button';
 import { useRouter } from 'next/navigation';
 import { $fetch, setOnRequest } from '@/store/fetchingStore';
 
@@ -34,11 +34,19 @@ const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo}) => {
 
     {tryDemo && (
         <>
-            <p className="text-md mb-3 mt-8">
+            <p className="text-base mb-3 mt-8">
                 Si te interesa saber mas del proyecto
             </p>
 
-            <Button text={loading ? 'Cargando ...' : 'Demo'} onClick={redirectToDemo} color='orange' className='text-xl font-bold' />
+            <Button
+                variant="primary"
+                size="lg"
+                loading={loading}
+                onClick={redirectToDemo}
+                className="text-xl font-bold"
+            >
+                {loading ? 'Cargando ...' : 'Demo'}
+            </Button>
         </>
     )}
         

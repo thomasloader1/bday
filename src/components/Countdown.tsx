@@ -40,7 +40,7 @@ const Countdown: React.FC<CountdownProps> = ({ targetDate, onComplete }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="mr-2 text-3xl font-bold mb-2">
+      <div className="mb-2 font-display text-3xl font-bold tabular-nums text-neutral-800 md:text-4xl">
         {timeLeft === null
           ? "00 dias 00 horas 00 minutos"
           : timeLeft.isOver

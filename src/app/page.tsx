@@ -1,6 +1,7 @@
 "use client";
 import Countdown from "@/components/Countdown";
 import SearchInvitation from "@/components/SearchInvitation";
+import BlurTextTitle from "@/components/BlurTextTitle";
 import { useStore } from "@nanostores/react";
 import { $time, setEventDate } from "@/store/timeStore";
 import { getNextBirthday } from "@/lib/eventDate";
@@ -15,9 +16,12 @@ export default function Bday() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center h-screen text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center text-center">
       
-        <h1 className="text-5xl font-bold mb-4">¡Bienvenido posible invitado!</h1>
+        <BlurTextTitle
+          text="¡Bienvenido posible invitado!"
+          className="mb-4 text-4xl md:text-5xl"
+        />
         <div className="mb-10 mt-5">
           <Countdown
             targetDate={eventDate}

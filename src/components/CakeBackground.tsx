@@ -1,71 +1,66 @@
-import React,{useState, useEffect,FC, ReactNode} from 'react'
-import { FaBirthdayCake } from 'react-icons/fa';
-interface Position{
-    left: string;
-    top: string;
-  }
+import React, { FC, ReactNode, useMemo } from "react";
 
-interface IconBackgroundProps{
-    icon: ReactNode
+interface CakeBackgroundProps {
+  icon: ReactNode;
+  /** Number of decorative icons (design cap: 18). */
+  count?: number;
 }
-const IconBackground: FC<IconBackgroundProps> = ({icon}) => {
 
-    const iconCount = 20;
-  const [positions, setPositions] = useState<Position[]>([]);
+interface DriftItem {
+  left: string;
+  top: string;
+  color: string;
+  delay: number;
+  duration: number;
+}
 
-  const getRandomPosition = (): Position => {
-    const minDistance = 15;
-    let left: number, top: number;
+const DRIFT_COLORS = [
+  "text-primary-600/40",
+  "text-accent-500/40",
+  "text-festive-yellow/40",
+  "text-success/40",
+  "text-danger/40",
+  "text-warning/40",
+];
 
-    do {
-      left = Math.random() * (100 - minDistance);
-      top = Math.random() * (100 - minDistance);
-
-      // Asegurar que los valores no sean mayores a 100
-      left = Math.min(left, 100 - minDistance);
-      top = Math.min(top, 100 - minDistance);
-    } while (
-      positions.some(
-        (position) =>
-          Math.abs(left - parseFloat(position.left)) < minDistance &&
-          Math.abs(top - parseFloat(position.top)) < minDistance
-      )
-    );
-
-    return { left: `${left}vw`, top: `${top}vh` };
-  };
-
-  useEffect(() => {
-    const generateInitialPositions = (): void => {
-      const initialPositions = Array.from({ length: iconCount }, (_, index) => getRandomPosition());
-      setPositions(initialPositions);
-    };
-
-    generateInitialPositions();
-
-    const intervalId = setInterval(() => {
-      setPositions((prevPositions) => prevPositions.map(() => getRandomPosition()));
-    }, 700);
-
-    return () => clearInterval(intervalId);
-  }, []);
+const CakeBackground: FC<CakeBackgroundProps> = ({ icon, count = 18 }) => {
+  // Positions are generated ONCE at mount: no setState loop, no re-renders,
+  // no stale-closure teleport interval. Drift is pure CSS (GPU composited).
+  const items = useMemo<DriftItem[]>(() => {
+    const generated: DriftItem[] = [];
+    for (let i = 0; i < count; i += 1) {
+      generated.push({
+        left: `${Math.random() * 85}vw`,
+        top: `${Math.random() * 85}vh`,
+        color: DRIFT_COLORS[i % DRIFT_COLORS.length],
+        delay: -(i * 2.4),
+        duration: 14 + (i % 5) * 2,
+      });
+    }
+    return generated;
+  }, [count]);
 
   return (
-    <div className="absolute top-0 left-0 right-0 bottom-0 h-screen overflow-hidden -z-10">
-      {positions.map((position, index) => (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+    >
+      {items.map((item, index) => (
         <div
           key={index}
-          className="absolute cake-icon text-5xl text-gray-900"
+          className={`animate-drift absolute text-5xl ${item.color}`}
           style={{
-            left: position.left,
-            top: position.top,
+            left: item.left,
+            top: item.top,
+            animationDelay: `${item.delay}s`,
+            animationDuration: `${item.duration}s`,
           }}
         >
           {icon}
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default IconBackground
+export default CakeBackground;

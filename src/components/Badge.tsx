@@ -7,25 +7,25 @@ interface BadgeProps{
     className?: string;
 }
 
+/**
+ * Semantic badge colors, tokenized (CP-9 / design-system Badge mapping):
+ * yellow→warning, orange→primary, green→success, dark→neutral, default→info.
+ * Text is always a dark neutral (>= 4.5:1 on the tinted backgrounds); the
+ * semantic color is carried by the tint + border so contrast stays AA.
+ */
+const badgeColors: Record<string, string> = {
+  warning: "border-warning/60 bg-warning/10 text-neutral-800",
+  primary: "border-primary-300 bg-primary-50 text-primary-800",
+  success: "border-success/60 bg-success/10 text-neutral-800",
+  neutral: "border-neutral-300 bg-neutral-100 text-neutral-700",
+  info: "border-info/60 bg-info/10 text-neutral-800",
+};
+
+const getColor = (color?: string): string => badgeColors[color || "info"] ?? badgeColors.info;
+
 const Badge: FC<BadgeProps> = ({ text, color, className}) => {
-
-    const getColor = (color: string) =>{
-        switch(color){
-        case 'yellow':
-            return "bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400";
-         case 'orange':
-            return "bg-orange-100 text-orange-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-orange-400 border border-orange-400";
-        case 'green':
-            return "bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400";
-        case 'dark':
-            return "bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded gray:bg-gray-700 gray:text-gray-400 border border-gray-400";
-        default:
-            return "bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400";
-        }
-    }
-
   return (
-    <span className={`${getColor(color || 'default')} ${className || ''}`}>{text}</span>
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium me-2 ${getColor(color)} ${className || ''}`}>{text}</span>
   )
 }
 

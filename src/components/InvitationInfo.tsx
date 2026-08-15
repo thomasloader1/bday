@@ -18,7 +18,7 @@ const InvitationInfo: FC<InvitationInfoProps> = ({ text, lat, long, loading, des
 
     return (
         <div className='my-5 mb-10 px-3'>
-            <h2 className="text-3xl mb-3 font-bold">{text}</h2>
+            <h2 className="font-display text-2xl md:text-3xl mb-3 font-semibold">{text}</h2>
 
             <p className='mb-8'>{description}</p>
             <div className="mb-8 flex flex-wrap gap-2">

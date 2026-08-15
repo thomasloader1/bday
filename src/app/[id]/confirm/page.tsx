@@ -2,13 +2,19 @@
 import useGuest from "@/hooks/useGuestData";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { motion, useReducedMotion } from "motion/react";
 
 import GuestInvitations from "@/components/GuestInvitations";
 import Footer from "@/components/Footer";
+import Card from "@/components/ui/Card";
+import AuroraBackdrop from "@/components/AuroraBackdrop";
+import BlurTextTitle from "@/components/BlurTextTitle";
+import { pageEntrance } from "@/lib/motion";
 
 export default function Page({ params }: { params: { id: number } }) {
   const { guestData, loading, error } = useGuest(params);
   const router = useRouter();
+  const reducedMotion = useReducedMotion();
 
   if (error || (guestData.isDrity && guestData.isConfirmed === false)) {
     router.push(`/${params.id}`);
@@ -19,16 +25,26 @@ export default function Page({ params }: { params: { id: number } }) {
       {loading ? (
         <LoadingSpinner standalone />
       ) : (
-        <section className="container mx-auto px-8 pt-10">
-          <div className="p-5 px-4 text-gray-800 rounded-lg shadow-md bg-white bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
-            <h1 className="text-4xl font-bold mb-10">
-              ¡Que bien que vas a venir {guestData.name} 🥳!
-            </h1>
-
-            <GuestInvitations guestData={guestData} guestLoaded={loading} />
-          </div>
+        <>
+          <motion.div
+            variants={pageEntrance}
+            initial={reducedMotion ? false : "hidden"}
+            animate="show"
+            className="flex w-full justify-center py-8"
+          >
+            <Card variant="paper" className="relative w-full max-w-3xl">
+              <AuroraBackdrop />
+              <div className="relative">
+                <BlurTextTitle
+                  text={`¡Que bien que vas a venir ${guestData.name} 🥳!`}
+                  className="mb-10 text-4xl"
+                />
+                <GuestInvitations guestData={guestData} guestLoaded={loading} />
+              </div>
+            </Card>
+          </motion.div>
           <Footer />
-        </section>
+        </>
       )}
     </>
   );

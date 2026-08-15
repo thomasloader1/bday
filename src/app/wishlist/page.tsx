@@ -2,6 +2,7 @@ import React from "react";
 import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
 import ProductCard2 from "@/components/ProductCard2";
+import Button from "@/components/ui/Button";
 
 interface WishlistItem {
   name: string;
@@ -58,10 +59,10 @@ const Wishlist: React.FC = () => {
 
   return (
     <section className="py-5 text-center">
-      <h1 className="text-5xl font-semibold mb-8 px-6 py-3 rounded-lg">
+      <h1 className="font-display text-4xl font-bold md:text-5xl mb-8">
         ¡Regalos deseados!
       </h1>
-      <div className="px-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
         {wishlistItems.map((item, index) => (
          /*  <ProductCard
             key={index}
@@ -79,9 +80,9 @@ const Wishlist: React.FC = () => {
         ))}
       </div>
       <div className="flex items-center justify-center">
-      <Link href={"/"} className="text-xl bg-orange-500 px-4 py-2 rounded-lg">
-        Ir al inicio
-      </Link>
+        <Button asChild variant="primary">
+          <Link href={"/"}>Ir al inicio</Link>
+        </Button>
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import InvitationText from "./InvitationText";
+import BlurTextTitle from "./BlurTextTitle";
 import { Guest } from "@/types/Guest";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebase";
@@ -83,7 +84,7 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
   };
   return (
     <>
-      <h1 className="font-bold text-5xl mb-10">¡Hola {guestData.name}!</h1>
+      <BlurTextTitle text={`¡Hola ${guestData.name}!`} className="mb-10 text-4xl md:text-5xl" />
       <InvitationText />
 
       <GroupedButtons

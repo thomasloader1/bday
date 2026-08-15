@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import InvitationInfo from './InvitationInfo'
 import { Guest } from '@/types/Guest';
 import InvitationPersonalInfo from './InvitationPersonalInfo';
+import Card from './ui/Card';
 import workInvitationJson from "../data/__workInvitation.json";
 import familyInvitationJson from "../data/__familyInvitation.json";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -38,27 +39,27 @@ const GuestInvitations: FC<GuestIntitationsProps> = ({ guestData, guestLoaded })
                 const invitationFood = gdg.includes("family") ? familyInvitationJson.food : undefined;
                 if (isCommon) {
                     return (
-                        <SwiperSlide className='bg-white relative' key={`${guestData.id}_${index}`}>
-                            <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
-                            <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#F9EFDB,transparent)]"></div>
-                            </div>
-                            <InvitationInfo 
-                                text={invitationTitle}
-                                description={invitationDescription}
-                                food={invitationFood}
-                                lat={guestData?.lunch?._lat}
-                                long={guestData?.lunch?._long}
-                                loading={guestLoaded}
-                            />
+                        <SwiperSlide className="h-full" key={`${guestData.id}_${index}`}>
+                            <Card variant="paper" className="relative h-full overflow-hidden">
+                                <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-festive-yellow/50 blur-2xl"></div>
+                                <div aria-hidden="true" className="pointer-events-none absolute -bottom-10 -left-10 h-48 w-48 rounded-full bg-accent-500/10 blur-2xl"></div>
+                                <InvitationInfo 
+                                    text={invitationTitle}
+                                    description={invitationDescription}
+                                    food={invitationFood}
+                                    lat={guestData?.lunch?._lat}
+                                    long={guestData?.lunch?._long}
+                                    loading={guestLoaded}
+                                />
+                            </Card>
                         </SwiperSlide>
                     )
                 } else {
-                    return (<SwiperSlide className='bg-white relative' key={`${guestData.id}_${index}`}>
-                        <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
-                            <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#FFEAA7,transparent)]"></div>
-                            </div>
-
-                        <InvitationPersonalInfo />
+                    return (<SwiperSlide className="h-full" key={`${guestData.id}_${index}`}>
+                        <Card variant="default" className="relative h-full overflow-hidden">
+                            <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-accent-500/10 blur-2xl"></div>
+                            <InvitationPersonalInfo />
+                        </Card>
                     </SwiperSlide>
                     )
                 }

@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import LoadingSpinner from "./LoadingSpinner";
 import L, { LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import Button from "./Button";
+import Button from "./ui/Button";
 
 interface LocationButtonProps {
   latitude?: number;
@@ -17,7 +17,7 @@ const LocationButton: FC<LocationButtonProps> = ({
   loading,
 }) => {
   if (latitude === undefined || longitude === undefined) {
-    return <LoadingSpinner text="Cargando Mapa" isComponent={true} />;
+    return <LoadingSpinner size="sm" label="Cargando mapa" />;
   }
 
   const handleOpenInMaps = () => {
@@ -51,9 +51,10 @@ const LocationButton: FC<LocationButtonProps> = ({
           </Marker>
         </MapContainer>
       </div>
-      
 
-      <Button text="Abrir en Maps" onClick={handleOpenInMaps}/>
+      <Button variant="primary" fullWidth loading={loading} onClick={handleOpenInMaps}>
+        Abrir en Maps
+      </Button>
     </div>
   );
 };

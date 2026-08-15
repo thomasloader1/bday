@@ -1,15 +1,47 @@
 import React from "react";
+import { cn } from "@/lib/cn";
 
-const LoadingSpinner = ({text = "Buscando invitacion", isComponent = false}) => {
+interface LoadingSpinnerProps {
+  size?: "sm" | "md" | "lg";
+  label?: string;
+  /** Page-level mode: renders the full-viewport flex wrapper. Default (inline) never sizes to the viewport. */
+  standalone?: boolean;
+}
 
-  const sizeClass = isComponent ? "h-12 w-12" : "h-24 w-24";
+const sizeClasses = {
+  sm: "h-4 w-4",
+  md: "h-6 w-6",
+  lg: "h-12 w-12",
+};
 
-  return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className={`animate-spin rounded-full border-t-4 border-orange-500 border-solid ${sizeClass}`}></div>
-      <h2 className="mt-3">{text}</h2>
+const LoadingSpinner = ({
+  size = "md",
+  label = "Cargando",
+  standalone = false,
+}: LoadingSpinnerProps) => {
+  const spinner = (
+    <div role="status" className="flex items-center justify-center gap-3">
+      <span
+        className={cn(
+          "inline-block animate-spin rounded-full border-solid border-neutral-200 border-t-primary-600",
+          size === "lg" ? "border-4" : "border-2",
+          sizeClasses[size]
+        )}
+        aria-hidden="true"
+      />
+      <span className={standalone ? "text-neutral-600" : "sr-only"}>{label}</span>
     </div>
   );
+
+  if (standalone) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        {spinner}
+      </div>
+    );
+  }
+
+  return spinner;
 };
 
 export default LoadingSpinner;

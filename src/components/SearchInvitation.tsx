@@ -13,9 +13,9 @@ interface SearchInvitationProps{
 
 const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo}) => {
     const router = useRouter();
-    const { timeLeft} = useStore($time)
+    const { eventDate } = useStore($time)
     const { loading } = useStore($fetch)
-    const isComing = timeLeft.days < 30;
+    const isComing = eventDate.getTime() - Date.now() <= 30 * 86400000;
     const redirectToDemo = () =>{
         setOnRequest(true)
         router.push("/1155011250");
@@ -26,7 +26,7 @@ const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo}) => {
     <>
     
     <p className="text-lg mb-3 px-3">
-    {isComing ? 'Ingresa tu número de telefono y podras ver la invitación al cumpleaños.' : 'Aun no estan diponibles las entradas de este año'}
+    {isComing ? 'Ingresa tu número de telefono y podras ver la invitación al cumpleaños.' : 'Aun no estan disponibles las entradas de este año'}
         
     </p>
         

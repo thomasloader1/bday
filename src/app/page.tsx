@@ -4,16 +4,15 @@ import { FaBirthdayCake } from "react-icons/fa";
 import IconBackground from "@/components/CakeBackground";
 import SearchInvitation from "@/components/SearchInvitation";
 import { useStore } from "@nanostores/react";
-import { $time, setTime } from "@/store/timeStore";
+import { $time, setEventDate } from "@/store/timeStore";
+import { getNextBirthday } from "@/lib/eventDate";
 
 
 export default function Bday() {
-  const { targetDate } = useStore($time)
+  const { eventDate } = useStore($time)
   
   const handleCountdownComplete = () => {
-    const currentDate = new Date();
-    targetDate.setFullYear(currentDate.getFullYear());
-    setTime(targetDate)
+    setEventDate(getNextBirthday())
   };
 
   return (
@@ -24,7 +23,7 @@ export default function Bday() {
         <h1 className="text-5xl font-bold mb-4">¡Bienvenido posible invitado!</h1>
         <div className="mb-10 mt-5">
           <Countdown
-            targetDate={targetDate}
+            targetDate={eventDate}
             onComplete={handleCountdownComplete}
           />
         </div>

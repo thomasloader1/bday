@@ -1,6 +1,6 @@
 // components/Countdown.tsx
-import { calculateTimeLeft } from "@/lib/calculateTimeLeft";
-import React, { useState, useEffect } from "react";
+import { calculateTimeLeft, TimeLeft } from "@/lib/calculateTimeLeft";
+import React, { useState, useEffect, useRef } from "react";
 
 interface CountdownProps {
   targetDate: Date;
@@ -8,16 +8,28 @@ interface CountdownProps {
 }
 
 const Countdown: React.FC<CountdownProps> = ({ targetDate, onComplete }) => {
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(targetDate));
+  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
+  const prevOverRef = useRef<boolean | null>(null);
+  const onCompleteRef = useRef(onComplete);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(targetDate));
-    }, 1000);
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
-    if(timeLeft.days === 0){
-      onComplete()
-    }
+  useEffect(() => {
+    const initial = calculateTimeLeft(targetDate);
+    prevOverRef.current = initial.isOver;
+    setTimeLeft(initial);
+
+    const timer = setInterval(() => {
+      const next = calculateTimeLeft(targetDate);
+      setTimeLeft(next);
+      // Fire exactly once on the zero-crossing tick (false -> true transition).
+      if (prevOverRef.current === false && next.isOver) {
+        onCompleteRef.current();
+      }
+      prevOverRef.current = next.isOver;
+    }, 1000);
 
     return () => {
       clearInterval(timer);
@@ -29,8 +41,11 @@ const Countdown: React.FC<CountdownProps> = ({ targetDate, onComplete }) => {
   return (
     <div className="flex flex-col items-center">
       <div className="mr-2 text-3xl font-bold mb-2">
-        {formatNumber(timeLeft.days)} dias {formatNumber(timeLeft.hours)} horas{" "}
-        {formatNumber(timeLeft.minutes)} minutos
+        {timeLeft === null
+          ? "00 dias 00 horas 00 minutos"
+          : timeLeft.isOver
+          ? "La fiesta ya pasó"
+          : `${formatNumber(timeLeft.days)} dias ${formatNumber(timeLeft.hours)} horas ${formatNumber(timeLeft.minutes)} minutos`}
       </div>
     </div>
   );

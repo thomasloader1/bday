@@ -1,6 +1,13 @@
-export const calculateTimeLeft = (targetDate: Date) => {
-    const now = new Date().getTime();
-    const difference = targetDate.getTime() - now;
+export interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  isOver: boolean;
+}
+
+export const calculateTimeLeft = (targetDate: Date, now: Date = new Date()): TimeLeft => {
+    const difference = targetDate.getTime() - now.getTime();
 
     const days = Math.floor(difference / (1000 * 60 * 60 * 24));
     const hours = Math.floor(
@@ -10,9 +17,10 @@ export const calculateTimeLeft = (targetDate: Date) => {
     const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
     return {
-      days: Math.max(0, days),
-      hours: Math.max(0, hours),
-      minutes: Math.max(0, minutes),
-      seconds: Math.max(0, seconds),
+      days: Math.abs(days),
+      hours: Math.abs(hours),
+      minutes: Math.abs(minutes),
+      seconds: Math.abs(seconds),
+      isOver: difference < 0,
     };
   };

@@ -87,11 +87,19 @@ test.describe('mobile invitation deck', () => {
     await expectActiveDot(page, 1);
 
     // Slide 1 (family) renders the location map with interactive panning disabled.
-    const mapPane = page.locator('.leaflet-map-pane');
-    await expect(mapPane).toBeVisible();
+    // Note: the behind card also mounts a map, so scope to the active card.
+    // The map *pane* stays 0x0 until tiles load, so assert on the container
+    // (the pane transform is what must not change after the drag).
+    const mapContainer = page.locator('.deck-card .leaflet-container');
+    await expect(mapContainer).toBeVisible();
+    const mapPane = page.locator('.deck-card .leaflet-map-pane');
+    await expect(mapPane).toHaveCount(1);
     const styleBefore = await mapPane.getAttribute('style');
 
-    await dragFrom(page, mapPane, -200, 0, { pacing: 16 });
+    // On short viewports the map sits below the fold; pointer events on
+    // off-screen coordinates never reach the deck, so bring it on-screen.
+    await mapContainer.scrollIntoViewIfNeeded();
+    await dragFrom(page, mapContainer, -200, 0, { pacing: 16 });
 
     await expectActiveDot(page, 2);
     const styleAfter = await mapPane.getAttribute('style');
@@ -134,8 +142,14 @@ test.describe('mobile invitation deck', () => {
     );
     expect(scrollable).toBe(true);
 
-    await page.mouse.move(160, 240);
-    await page.mouse.wheel(0, 400);
+    try {
+      await page.mouse.move(160, 240);
+      await page.mouse.wheel(0, 400);
+    } catch {
+      // mouse.wheel is unsupported in mobile WebKit; keyboard scrolling is
+      // equally user-initiated.
+      await page.keyboard.press('End');
+    }
     await expect
       .poll(() => page.evaluate(() => window.scrollY), { timeout: 5000 })
       .toBeGreaterThan(0);

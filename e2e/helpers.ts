@@ -25,7 +25,9 @@ export async function openConfirmedDeck(page: Page, id = DECK_GUEST_ID): Promise
     await page.waitForURL((url) => url.pathname === `/${id}/confirm`);
   }
 
-  await page.locator('.deck-card').waitFor({ state: 'visible' });
+  // Desktop renders the coverflow swiper, mobile renders the deck. Wait for
+  // whichever surface is expected for the active project.
+  await page.waitForSelector('.deck-card, .swiper-slide-active', { state: 'visible' });
 }
 
 /**

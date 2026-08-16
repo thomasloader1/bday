@@ -4,13 +4,16 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { motion, useReducedMotion } from "motion/react";
-
-import GuestInvitations from "@/components/GuestInvitations";
 import Footer from "@/components/Footer";
 import Card from "@/components/ui/Card";
 import AuroraBackdrop from "@/components/AuroraBackdrop";
-import BlurTextTitle from "@/components/BlurTextTitle";
 import { pageEntrance } from "@/lib/motion";
+import CurvedLoop from './../../../components/CurvedLoop';
+import dynamic from "next/dynamic";
+
+// swiper accede a `window` a nivel de módulo y rompe el SSR edge (500 en hard reload)
+const GuestInvitations = dynamic(() => import("@/components/GuestInvitations"), { ssr: false });
+
 
 export default function Page({ params }: { params: { id: number } }) {
   const { guestData, findGuest, loading, error } = useGuest(params);
@@ -37,15 +40,22 @@ export default function Page({ params }: { params: { id: number } }) {
         variants={pageEntrance}
         initial={reducedMotion ? false : "hidden"}
         animate="show"
-        className="flex w-full justify-center py-8"
+        className="flex w-full justify-center overflow-x-clip pt-8 pb-[env(safe-area-inset-bottom)] md:pb-8"
       >
-        <Card variant="paper" className="relative w-full max-w-3xl border-0">
-          <AuroraBackdrop />
-          <div className="relative">
-            <BlurTextTitle
-              text={`¡Que bien que vas a venir ${guestData.name} 🥳!`}
-              className="mb-10 text-4xl"
-            />
+       
+        <Card variant="paper" className="relative w-full border-0 px-0">
+          <AuroraBackdrop className="" />
+           
+          <div className="relative pt-32 md:pt-56">
+            <CurvedLoop 
+                marqueeText={`Que✦bien✦que✦vas✦a✦venir✦${guestData.name}✦`}
+                speed={1}
+                curveAmount={200}
+                direction="right"
+                interactive
+                className="absolute left-1/2 -top-24 z-20 w-[120%] -translate-x-1/2"
+              />
+      
             <GuestInvitations guestData={guestData} guestLoaded={loading} />
           </div>
         </Card>

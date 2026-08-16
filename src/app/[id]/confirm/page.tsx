@@ -6,7 +6,6 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import { motion, useReducedMotion } from "motion/react";
 import Footer from "@/components/Footer";
 import Card from "@/components/ui/Card";
-import AuroraBackdrop from "@/components/AuroraBackdrop";
 import { pageEntrance } from "@/lib/motion";
 import CurvedLoop from './../../../components/CurvedLoop';
 import dynamic from "next/dynamic";
@@ -43,9 +42,8 @@ export default function Page({ params }: { params: { id: number } }) {
         className="flex w-full justify-center overflow-x-clip pt-8 pb-[env(safe-area-inset-bottom)] md:pb-8"
       >
        
-        <Card variant="paper" className="relative w-full border-0 px-0">
-          <AuroraBackdrop className="" />
-           
+<Card variant="paper" className="relative w-full border-0 px-0">
+            
           <div className="relative pt-32 md:pt-56">
             <CurvedLoop 
                 marqueeText={`Que✦bien✦que✦vas✦a✦venir✦${guestData.name}✦`}

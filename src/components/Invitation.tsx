@@ -13,6 +13,7 @@ interface InvitationProps {
 const Invitation: FC<InvitationProps> = ({ guestData }) => {
   const [onRequestConfirm, setOnRequestConfirm] = useState<boolean>(false);
   const [onRequestNoConfirm, setOnRequestNoConfirm] = useState<boolean>(false);
+  const invitationId = `invitation-${guestData.id}`;
 
   const handleConfirm = async () => {
     setOnRequestConfirm(true);
@@ -31,11 +32,9 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
       const documentSnapshot = await getDoc(documentoRef);
 
       if (documentSnapshot.exists()) {
-        // La persona ya existe, entonces actualizamos el documento
         await updateDoc(documentoRef, confirmGuest);
         console.log("Documento actualizado correctamente.");
       } else {
-        // La persona no existe, así que la agregamos como nuevo documento
         await setDoc(documentoRef, confirmGuest);
         console.log("Documento agregado correctamente.");
       }
@@ -66,11 +65,9 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
       const documentSnapshot = await getDoc(documentoRef);
 
       if (documentSnapshot.exists()) {
-        // La persona ya existe, entonces actualizamos el documento
         await updateDoc(documentoRef, confirmGuest);
         console.log("Documento actualizado correctamente.");
       } else {
-        // La persona no existe, así que la agregamos como nuevo documento
         await setDoc(documentoRef, confirmGuest);
         console.log("Documento agregado correctamente.");
       }
@@ -82,11 +79,14 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
       setOnRequestConfirm(false);
     }
   };
+
   return (
-    <>
+    <section aria-labelledby={invitationId}>
+      <h1 id={invitationId} className="sr-only">
+        Invitación para {guestData.name}
+      </h1>
       <BlurTextTitle text={`¡Hola ${guestData.name}!`} className="mb-10 text-4xl md:text-5xl" />
       <InvitationText />
-
       <GroupedButtons
         handleConfirm={handleConfirm}
         onRequestConfirm={onRequestConfirm}
@@ -94,7 +94,7 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
         onRequestNoConfirm={onRequestNoConfirm}
         guestData={guestData}
       />
-    </>
+    </section>
   );
 };
 

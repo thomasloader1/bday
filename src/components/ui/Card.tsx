@@ -1,29 +1,40 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { cn } from "@/lib/cn";
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "paper" | "elevated";
+export type CardVariant = "default" | "paper" | "elevated";
+export type CardElement = "article" | "section" | "div";
+
+interface CardProps extends React.HTMLAttributes<HTMLElement> {
+  variant?: CardVariant;
+  /** Semantic HTML element. Defaults to "article" for content cards, "section" for layout. */
+  as?: CardElement;
 }
 
-const variantClasses = {
-  default: "bg-white",
-  paper: "bg-festive-cream",
-  elevated: "bg-white shadow-md",
+const variantClasses: Record<CardVariant, string> = {
+  default: "bg-card-default",
+  paper: "bg-card-paper",
+  elevated: "bg-card-elevated shadow-md",
 };
 
-const Card = ({ variant = "default", className, children, ...rest }: CardProps) => {
-  return (
-    <div
-      className={cn(
-        "rounded-xl border border-neutral-200 p-6",
-        variantClasses[variant],
-        className
-      )}
-      {...rest}
-    >
-      {children}
-    </div>
-  );
-};
+const Card = forwardRef<HTMLElement, CardProps>(
+  ({ variant = "default", as = "article", className, children, ...rest }, ref) => {
+    const Component = as;
+    return (
+      <Component
+        ref={ref as React.Ref<any>}
+        className={cn(
+          "rounded-xl border border-neutral-200 p-6",
+          variantClasses[variant],
+          className
+        )}
+        {...rest}
+      >
+        {children}
+      </Component>
+    );
+  }
+);
+
+Card.displayName = "Card";
 
 export default Card;

@@ -8,12 +8,15 @@ interface LocationButtonProps {
   latitude?: number;
   longitude?: number;
   loading: boolean;
+  /** Title/description for accessibility (e.g., "Fiesta Familiar") */
+  locationTitle?: string;
 }
 
 const LocationButton: FC<LocationButtonProps> = ({
   latitude,
   longitude,
   loading,
+  locationTitle = "Ubicación",
 }) => {
   const hasCoords = latitude !== undefined && longitude !== undefined;
 
@@ -45,24 +48,34 @@ const LocationButton: FC<LocationButtonProps> = ({
     <div className="flex flex-col justify-center">
       {hasCoords && (
         <div className="h-44 md:h-48 mb-3">
-          <MapContainer
-            center={position}
-            zoom={13}
-            dragging={false}
-            touchZoom={false}
-            scrollWheelZoom={false}
-            doubleClickZoom={false}
+          <div
+            role="application"
+            aria-label={`Mapa interactivo de ${locationTitle}. Desplazamiento y zoom deshabilitados.`}
             className="rounded-lg"
             style={{ height: "100%", width: "100%" }}
           >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={position} icon={customIcon}>
-              <Popup>asd</Popup>
-            </Marker>
-          </MapContainer>
+            <MapContainer
+              center={position}
+              zoom={13}
+              dragging={false}
+              touchZoom={false}
+              scrollWheelZoom={false}
+              doubleClickZoom={false}
+              className="h-full w-full rounded-lg"
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              <Marker position={position} icon={customIcon}>
+                <Popup>
+                  {locationTitle}
+                </Popup>
+              </Marker>
+            </MapContainer>
+          </div>
         </div>
       )}
-
       <Button variant="primary" fullWidth loading={loading} onClick={handleOpenInMaps}>
         Abrir en Maps
       </Button>

@@ -58,7 +58,9 @@ const GroupedButtons: FC<GroupedButtonsProps> = ({
       )}
 
       {isDrity && !isConfirmed && (
-        <div>Alla le vamos a hacer el festejo, hij3 de le gorr3, 🖕</div>
+        <div className="text-center text-neutral-500 py-4">
+          No has confirmado tu asistencia.
+        </div>
       )}
     </div>
   );

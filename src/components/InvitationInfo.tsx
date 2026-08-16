@@ -36,11 +36,12 @@ const InvitationInfo: FC<InvitationInfoProps> = ({ text, lat, long, loading, des
                 Agendar en calendario
             </Button>
 
-            <LocationButton
+<LocationButton
                 latitude={lat}
                 longitude={long}
                 loading={loading}
-            />
+                locationTitle={text}
+              />
         </div>
     )
 }

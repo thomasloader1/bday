@@ -22,7 +22,7 @@ export default function Page({ params }: { params: { id: number } }) {
       animate="show"
       className="flex w-full justify-center py-8 md:items-center"
     >
-      <Card variant="elevated" className="w-full max-w-2xl">
+      <Card variant="elevated" as="article" className="w-full max-w-2xl">
         {findGuest ? <Invitation guestData={guestData} /> : <NoInvitation />}
       </Card>
     </motion.div>

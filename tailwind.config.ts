@@ -41,6 +41,11 @@ const config: Config = {
           cream: '#F9EFDB',
           yellow: '#FFEAA7',
         },
+        card: {
+          default: '#ffffff',
+          paper: '#F9EFDB',
+          elevated: '#ffffff',
+        },
         success: '#15803D',
         danger: '#475569',
         info: '#2563EB',

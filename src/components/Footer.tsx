@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import React, { FC } from 'react'
+import Link from "next/link";
+import React, { FC } from "react";
 
 const Footer: FC = () => {
   return (
@@ -7,33 +7,35 @@ const Footer: FC = () => {
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <p className="text-sm font-medium text-neutral-500">
           El regalo es tu presencia misma!, pero si queres hacerme un regalo
-          podes ver{" "}
-          <Link className="text-primary-600 hover:text-primary-700" href={"/wishlist"}>
+          {" "}
+          <Link className="text-primary-600 hover:text-primary-700" href="/wishlist">
             Lista de deseados
           </Link>{" "}
           👀
         </p>
 
-        <ul className="flex flex-wrap items-center gap-4 text-sm font-medium text-neutral-500">
-          <li>
-            <a href="/" className="hover:underline hover:text-neutral-700">
-              Inicio
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://gomeztomasgonzalo.com.ar"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:underline hover:text-neutral-700"
-            >
-              El Cumplañero
-            </a>
-          </li>
-        </ul>
+        <nav aria-label="Navegación principal">
+          <ul className="flex flex-wrap items-center gap-4 text-sm font-medium text-neutral-500">
+            <li>
+              <Link href="/" className="hover:underline hover:text-neutral-700">
+                Inicio
+              </Link>
+            </li>
+            <li>
+              <a
+                href="https://gomeztomasgonzalo.com.ar"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:underline hover:text-neutral-700"
+              >
+                El Cumplañero
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

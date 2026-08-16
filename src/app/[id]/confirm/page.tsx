@@ -42,7 +42,7 @@ export default function Page({ params }: { params: { id: number } }) {
         className="flex w-full justify-center overflow-x-clip pt-8 pb-[env(safe-area-inset-bottom)] md:pb-8"
       >
        
-<Card variant="paper" className="relative w-full border-0 px-0">
+<Card variant="paper" as="section" className="relative w-full border-0 px-0">
             
           <div className="relative pt-32 md:pt-56">
             <CurvedLoop 

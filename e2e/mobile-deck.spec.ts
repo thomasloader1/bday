@@ -134,6 +134,35 @@ test.describe('mobile invitation deck', () => {
     await expectActiveDot(page, 0);
   });
 
+  test('deck wraps: swiping past the last slide returns to the first', async ({ page }) => {
+    await openConfirmedDeck(page);
+    await expectActiveDot(page, 0);
+
+    // The family slide (1) is tall on short viewports; bring the card on-screen
+    // before each drag so the pointer starts inside the viewport (same pattern
+    // as the map swipe test).
+    async function swipeCard() {
+      await page.locator('.deck-card').scrollIntoViewIfNeeded();
+      await dragFrom(page, page.locator('.deck-card'), -260, 0, { pacing: 16 });
+    }
+
+    // 0 -> 1 -> 2 -> back to 0 (circular).
+    await swipeCard();
+    await expectActiveDot(page, 1);
+    await swipeCard();
+    await expectActiveDot(page, 2);
+    await swipeCard();
+    await expectActiveDot(page, 0);
+    expect(new URL(page.url()).pathname).toBe(`/${DECK_GUEST_ID}/confirm`);
+  });
+
+  test('no navigation chevrons render on mobile', async ({ page }) => {
+    await openConfirmedDeck(page);
+
+    await expect(page.getByRole('button', { name: /anterior invitación/i })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /siguiente invitación/i })).toHaveCount(0);
+  });
+
   test('page still scrolls vertically on small screens', async ({ page }) => {
     await openConfirmedDeck(page);
 

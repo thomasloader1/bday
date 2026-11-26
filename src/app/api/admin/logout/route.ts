@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { isSecureRequest, SESSION_COOKIE } from "@/lib/session";
 
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
   try {
     // Clear the admin session cookie

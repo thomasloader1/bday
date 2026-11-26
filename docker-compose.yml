@@ -5,7 +5,9 @@ services:
       context: .
       target: runner
     image: next-bday:prod
-    env_file: .env
+    env_file:
+      - path: .env
+        required: false
     ports:
       - "${WEB_PORT:-3000}:3000"
     volumes:
@@ -21,7 +23,9 @@ services:
       context: .
       target: dev
     image: next-bday:dev
-    env_file: .env
+    env_file:
+      - path: .env
+        required: false
     environment:
       WATCHPACK_POLLING: "true"
     ports:

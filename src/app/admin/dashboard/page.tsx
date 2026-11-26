@@ -12,16 +12,27 @@ import { audienceOf } from "@/lib/config/visibility";
 import { getNextBirthday, getTurningAge, formatPartyLine } from "@/lib/eventDate";
 import { needsServerResolve, parseGoogleMapsCoords } from "@/lib/mapsUrl";
 
-type Tab = "festejo" | "textos" | "eventos" | "invitados" | "regalos";
+type Tab = "festejo" | "textos" | "eventos" | "invitados" | "solicitudes" | "regalos";
 const TABS: { id: Tab; label: string }[] = [
   { id: "festejo", label: "Festejo" },
   { id: "textos", label: "Textos" },
   { id: "eventos", label: "Eventos" },
   { id: "invitados", label: "Invitados" },
+  { id: "solicitudes", label: "Solicitudes" },
   { id: "regalos", label: "Regalos" },
 ];
 
 type Rsvp = { isConfirmed?: boolean; isDrity?: boolean };
+type InviteRequest = {
+  id: string;
+  phone: number;
+  name: string;
+  message: string;
+  createdAt: string;
+  status: "pending" | "approved" | "rejected";
+  resolvedAt: string | null;
+  guestName: string | null;
+};
 type Status = { kind: "idle" } | { kind: "saving" } | { kind: "saved" } | { kind: "error"; message: string; issues?: { path: string; message: string }[] };
 
 const inputClass =
@@ -117,6 +128,7 @@ export default function AdminDashboardPage() {
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [rsvp, setRsvp] = useState<Record<string, Rsvp>>({});
   const [query, setQuery] = useState("");
+  const [requests, setRequests] = useState<InviteRequest[]>([]);
   // Remounts the fields that keep raw text after a load, save or discard.
   const [formKey, setFormKey] = useState(0);
 
@@ -140,6 +152,15 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     load();
   }, [load]);
+
+  const loadRequests = useCallback(async () => {
+    const response = await fetch("/api/admin/invite-requests", { cache: "no-store" });
+    if (response.ok) setRequests((await response.json()) as InviteRequest[]);
+  }, []);
+
+  useEffect(() => {
+    loadRequests();
+  }, [loadRequests]);
 
   // Confirmation state lives in Firestore; read it to show who answered.
   useEffect(() => {
@@ -175,7 +196,10 @@ export default function AdminDashboardPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(draft),
     });
-    const data = await response.json().catch(() => ({}));
+    const data = (await response.json().catch(() => ({}))) as {
+      error?: string;
+      issues?: { path: string; message: string }[];
+    };
     if (response.ok) {
       setSaved(data as AppConfig);
       setDraft(data as AppConfig);
@@ -216,6 +240,7 @@ export default function AdminDashboardPage() {
   }
 
   const age = getTurningAge(draft.party, getNextBirthday(draft.party));
+  const pendingRequests = requests.filter((r) => r.status === "pending").length;
 
   return (
     <div className="pb-32 pt-10">
@@ -249,6 +274,9 @@ export default function AdminDashboardPage() {
             }`}
           >
             {t.label}
+            {t.id === "solicitudes" && pendingRequests > 0 && (
+              <span className="ml-2 rounded-full bg-spot px-2 py-0.5 text-xs font-bold text-spot-ink">{pendingRequests}</span>
+            )}
           </button>
         ))}
       </div>
@@ -258,6 +286,16 @@ export default function AdminDashboardPage() {
         {tab === "textos" && <TextsTab draft={draft} update={update} />}
         {tab === "eventos" && <EventsTab draft={draft} update={update} />}
         {tab === "invitados" && <GuestsTab draft={draft} update={update} rsvp={rsvp} query={query} setQuery={setQuery} />}
+        {tab === "solicitudes" && (
+          <RequestsTab
+            config={saved ?? draft}
+            dirty={dirty}
+            requests={requests}
+            onResolved={async () => {
+              await Promise.all([load(), loadRequests()]);
+            }}
+          />
+        )}
         {tab === "regalos" && <GiftsTab draft={draft} update={update} />}
       </div>
 
@@ -1118,5 +1156,208 @@ function GiftsTab({ draft, update }: TabProps) {
         Agregar regalo
       </Button>
     </div>
+  );
+}
+
+/* ---------- Solicitudes ---------- */
+
+const formatWhen = (iso: string) =>
+  new Date(iso).toLocaleString("es-AR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+
+/**
+ * Requests from the "oops" page. Approving writes the saved config on the server
+ * (a new guest, or the number linked to a guest already on the list), so it waits
+ * until the draft has no unsaved changes and reloads it afterwards.
+ */
+function RequestsTab({
+  config,
+  dirty,
+  requests,
+  onResolved,
+}: {
+  config: AppConfig;
+  dirty: boolean;
+  requests: InviteRequest[];
+  onResolved: () => Promise<void>;
+}) {
+  const pending = requests.filter((r) => r.status === "pending");
+  const resolved = requests.filter((r) => r.status !== "pending").slice(0, 20);
+
+  return (
+    <div className="grid gap-8">
+      <section>
+        <h2 className="text-title text-ink">
+          {pending.length} {pending.length === 1 ? "solicitud pendiente" : "solicitudes pendientes"}
+        </h2>
+        <p className="mt-1 text-ink-2">
+          Gente que buscó su número, no estaba en la lista y pidió la invitación. Aprobala como invitado nuevo o vinculá el número a
+          alguien que ya está en la lista.
+        </p>
+        {dirty && (
+          <p role="status" className="mt-3 font-medium text-spot-deep">
+            Guardá o descartá tus cambios antes de aprobar: aprobar guarda la lista de invitados.
+          </p>
+        )}
+      </section>
+
+      {pending.length === 0 ? (
+        <p className="text-muted">No hay solicitudes pendientes.</p>
+      ) : (
+        <ul className="grid gap-4">
+          {pending.map((request) => (
+            <li key={request.id}>
+              <RequestCard request={request} config={config} disabled={dirty} onResolved={onResolved} />
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {resolved.length > 0 && (
+        <section>
+          <h3 className="font-display text-lg text-ink">Resueltas</h3>
+          <ul className="mt-3 divide-y divide-rule border-y border-rule text-sm">
+            {resolved.map((r) => (
+              <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
+                <span className="text-ink">
+                  {r.name} · <span className="tabular-nums text-ink-2">{r.phone}</span>
+                </span>
+                <span className={r.status === "approved" ? "text-ink" : "text-muted"}>
+                  {r.status === "approved" ? `Aprobada${r.guestName ? ` → ${r.guestName}` : ""}` : "Rechazada"}
+                  {r.resolvedAt && <span className="text-muted"> · {formatWhen(r.resolvedAt)}</span>}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
+  );
+}
+
+function RequestCard({
+  request,
+  config,
+  disabled,
+  onResolved,
+}: {
+  request: InviteRequest;
+  config: AppConfig;
+  disabled: boolean;
+  onResolved: () => Promise<void>;
+}) {
+  const id = useId();
+  const [mode, setMode] = useState<"new" | "link">("new");
+  const [name, setName] = useState(request.name);
+  const [groups, setGroups] = useState<string[]>([]);
+  const [linkTo, setLinkTo] = useState<number | "">("");
+  const [busy, setBusy] = useState<"approve" | "reject" | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const send = async (body: object, kind: "approve" | "reject") => {
+    setBusy(kind);
+    setError(null);
+    const response = await fetch(`/api/admin/invite-requests/${request.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (response.ok) {
+      await onResolved();
+      return;
+    }
+    const data = (await response.json().catch(() => ({}))) as { error?: string; issues?: { message: string }[] };
+    setError([data.error || "No se pudo resolver.", ...(data.issues ?? []).slice(0, 2).map((i) => i.message)].join(" "));
+    setBusy(null);
+  };
+
+  const approve = () =>
+    send(mode === "new" ? { action: "approve", mode, name, groups } : { action: "approve", mode, guestId: linkTo }, "approve");
+
+  const canApprove = !disabled && busy === null && (mode === "new" ? name.trim().length > 0 : linkTo !== "");
+  const guests = [...config.guests].sort((a, b) => a.name.localeCompare(b.name, "es"));
+
+  return (
+    <Card as="article" className="grid gap-4">
+      <header className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 className="font-display text-xl text-ink">{request.name}</h3>
+        <span className="text-sm text-muted">{formatWhen(request.createdAt)}</span>
+      </header>
+      <p className="text-ink-2">
+        Teléfono <span className="font-semibold tabular-nums text-ink">{request.phone}</span>
+      </p>
+      {request.message && <p className="rounded-input bg-paper-2 p-3 text-ink">“{request.message}”</p>}
+
+      <fieldset className="grid gap-3">
+        <legend className="mb-2 text-sm font-medium text-ink">Al aprobar</legend>
+        <label className="inline-flex items-center gap-2">
+          <input type="radio" name={`${id}-mode`} checked={mode === "new"} onChange={() => setMode("new")} className="h-4 w-4 accent-[var(--color-accent)]" />
+          Agregar como invitado nuevo
+        </label>
+        {mode === "new" && (
+          <div className="grid gap-3 pl-6">
+            <div>
+              <label htmlFor={`${id}-name`} className="mb-1 block text-sm text-ink-2">
+                Nombre en la lista
+              </label>
+              <input id={`${id}-name`} value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
+            </div>
+            {config.groups.length > 0 && (
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                <span className="text-ink-2">Grupos:</span>
+                {config.groups.map((group) => (
+                  <label key={group.id} className="inline-flex items-center gap-1.5">
+                    <input
+                      type="checkbox"
+                      checked={groups.includes(group.id)}
+                      onChange={(e) => setGroups((g) => (e.target.checked ? [...g, group.id] : g.filter((x) => x !== group.id)))}
+                      className="h-4 w-4 accent-[var(--color-accent)]"
+                    />
+                    {group.name}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        <label className="inline-flex items-center gap-2">
+          <input type="radio" name={`${id}-mode`} checked={mode === "link"} onChange={() => setMode("link")} className="h-4 w-4 accent-[var(--color-accent)]" />
+          Vincular el número a alguien de la lista
+        </label>
+        {mode === "link" && (
+          <div className="pl-6">
+            <label htmlFor={`${id}-link`} className="mb-1 block text-sm text-ink-2">
+              Invitado (su número pasa a ser {request.phone})
+            </label>
+            <select
+              id={`${id}-link`}
+              value={linkTo}
+              onChange={(e) => setLinkTo(e.target.value ? Number(e.target.value) : "")}
+              className={inputClass}
+            >
+              <option value="">Elegí un invitado…</option>
+              {guests.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.name} ({g.id})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </fieldset>
+
+      {error && (
+        <p role="alert" className="text-sm font-medium text-spot-deep">
+          {error}
+        </p>
+      )}
+      <div className="flex flex-wrap gap-2">
+        <Button size="sm" disabled={!canApprove} loading={busy === "approve"} onClick={approve}>
+          {mode === "new" ? "Aprobar y agregar" : "Aprobar y vincular"}
+        </Button>
+        <Button variant="secondary" size="sm" disabled={busy !== null} loading={busy === "reject"} onClick={() => send({ action: "reject" }, "reject")}>
+          Rechazar
+        </Button>
+      </div>
+    </Card>
   );
 }

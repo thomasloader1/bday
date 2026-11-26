@@ -1,17 +1,15 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { z } from "zod";
-import { CONFIG_PATH, readConfig } from "@/lib/config/store";
+import { readConfig } from "@/lib/config/store";
 import type { AppConfig, GiftConfig } from "@/lib/config/schema";
+import { readStoreString, writeStoreString } from "@/lib/kvStore";
 
 /**
  * Server-only persistence for wishlist group-gift votes ("vaquita").
- * Stored beside config.json (same Docker volume in prod, ./data in dev) so
- * guest votes never conflict with dashboard config version numbers.
+ * Uses Cloudflare KV (`BDAY_KV`) when bound, with an in-memory fallback.
+ * Stored under its own key so guest votes never conflict with dashboard config versions.
  */
 
-export const VOTES_PATH =
-  process.env.WISHLIST_VOTES_PATH || path.join(path.dirname(CONFIG_PATH), "wishlist-votes.json");
+const VOTES_KV_KEY = "bday:wishlist-votes";
 
 const VotesFileSchema = z.object({
   version: z.literal(1),
@@ -45,22 +43,15 @@ const firstNameOf = (fullName: string): string => {
 };
 
 async function readVotesFile(): Promise<VotesFile> {
-  try {
-    const raw = JSON.parse(await fs.readFile(VOTES_PATH, "utf8"));
-    return VotesFileSchema.parse(raw);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return { version: 1, votes: {} };
-    }
-    throw error;
+  const rawText = await readStoreString(VOTES_KV_KEY);
+  if (!rawText) {
+    return { version: 1, votes: {} };
   }
+  return VotesFileSchema.parse(JSON.parse(rawText));
 }
 
-async function writeVotesAtomic(data: VotesFile): Promise<void> {
-  await fs.mkdir(path.dirname(VOTES_PATH), { recursive: true });
-  const tmp = `${VOTES_PATH}.${process.pid}.${Date.now()}.tmp`;
-  await fs.writeFile(tmp, JSON.stringify(data, null, 2) + "\n", "utf8");
-  await fs.rename(tmp, VOTES_PATH);
+async function writeVotesFile(data: VotesFile): Promise<void> {
+  await writeStoreString(VOTES_KV_KEY, JSON.stringify(data));
 }
 
 export interface GiftVoteSummary {
@@ -159,6 +150,6 @@ export const toggleWishlistVote = (
       },
     };
 
-    await writeVotesAtomic(next);
+    await writeVotesFile(next);
     return buildVotesSnapshot(config, next, guest.id);
   });

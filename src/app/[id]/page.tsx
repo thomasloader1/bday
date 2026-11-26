@@ -21,7 +21,7 @@ export default function Page({ params }: { params: { id: number } }) {
       animate="show"
       className="py-12 md:py-20"
     >
-      {findGuest ? <Invitation guestData={guestData} /> : <NoInvitation />}
+      {findGuest ? <Invitation guestData={guestData} /> : <NoInvitation phone={String(params.id)} />}
     </motion.div>
   );
 }

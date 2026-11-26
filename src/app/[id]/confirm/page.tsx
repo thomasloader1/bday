@@ -44,8 +44,8 @@ export default function Page({ params }: { params: { id: number } }) {
 <section className="relative w-full">
           <h1 className="sr-only">{`Invitaciones de ${guestData.name}`}</h1>
             
-          {/* The ribbon's lower edge sits at ~24vw; cards start a little above it so the ribbon overlaps their top (19px at 320, 31px at 1440). */}
-          <div className="relative pt-[calc(24vw-min(3rem,6vw))]">
+          {/* The ribbon's lower edge sits at ~24vw; cards start above it, over the band's lower part but below its text (23px at 390; from md up 7.5vw - 10px, which keeps them under the text: 52px at 820, 98px at 1440). */}
+          <div className="relative pt-[calc(24vw-min(3rem,6vw))] md:pt-[calc(24vw-7.5vw+10px)]">
             {/* Full-bleed band (asked for): spans the viewport and clips the ribbon, whose curve starts past both edges,
                 so nothing past the edge adds to the page's scroll width. It sits under the cards (asked for). */}
             <div className="absolute left-1/2 top-0 z-0 w-screen -translate-x-1/2 overflow-x-clip">

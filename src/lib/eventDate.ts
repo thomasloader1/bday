@@ -17,6 +17,43 @@ export const getNextBirthday = (party: PartyWhen, now: Date = new Date()): Date 
 export const getTurningAge = (party: Pick<PartyConfig, "birthYear">, eventDate: Date): number =>
   eventDate.getFullYear() - party.birthYear;
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+/** How long after the party moment the new age is celebrated (confetti, number fully in). */
+export const CELEBRATION_MS = DAY_MS;
+/** The next age starts rising this many days before the party (spread over a whole year it would barely move). */
+export const RISE_DAYS = 60;
+
+export interface AgeProgress {
+  /** The age being left behind (e.g. 32). */
+  from: number;
+  /** The age being reached (e.g. 33). */
+  to: number;
+  /** 0 until RISE_DAYS before the party, 1 on the day: how far `to` has risen into place. */
+  progress: number;
+  /** True during the CELEBRATION_MS after the party moment. */
+  celebrating: boolean;
+}
+
+/**
+ * Where the year stands between two birthdays. During the celebration window
+ * the number just turned is shown in full; after it the next one starts rising.
+ */
+export const getAgeProgress = (party: PartyWhen & Pick<PartyConfig, "birthYear">, now: Date = new Date()): AgeProgress => {
+  const next = getNextBirthday(party, now);
+  const last = new Date(next);
+  last.setFullYear(next.getFullYear() - 1);
+  const sinceLast = now.getTime() - last.getTime();
+
+  if (sinceLast < CELEBRATION_MS) {
+    const age = getTurningAge(party, last);
+    return { from: age - 1, to: age, progress: 1, celebrating: true };
+  }
+
+  const to = getTurningAge(party, next);
+  const progress = Math.min(1, Math.max(0, 1 - (next.getTime() - now.getTime()) / (RISE_DAYS * DAY_MS)));
+  return { from: to - 1, to, progress, celebrating: false };
+};
+
 const MONTHS = [
   "enero", "febrero", "marzo", "abril", "mayo", "junio",
   "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",

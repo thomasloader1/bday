@@ -28,10 +28,14 @@ const toBase64Url = (bytes: ArrayBuffer): string => {
   return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 };
 
-const fromBase64Url = (value: string): Uint8Array => {
+const fromBase64Url = (value: string): Uint8Array<ArrayBuffer> => {
   const padded = value.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((value.length + 3) % 4);
   const binary = atob(padded);
-  return Uint8Array.from(binary, (c) => c.charCodeAt(0));
+  const bytes = new Uint8Array(new ArrayBuffer(binary.length));
+  for (let i = 0; i < binary.length; i += 1) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
 };
 
 const importKey = (secret: string) =>

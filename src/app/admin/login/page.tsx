@@ -22,7 +22,7 @@ export default function AdminLoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
-      const data = await response.json().catch(() => ({}));
+      const data = (await response.json().catch(() => ({}))) as { error?: string };
 
       if (!response.ok) {
         setError(response.status === 401 ? "Contraseña incorrecta." : data.error || "No se pudo iniciar sesión.");

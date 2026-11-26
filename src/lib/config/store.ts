@@ -1,17 +1,16 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { AppConfig, ConfigSchema } from "./schema";
 import { buildSeedConfig } from "./seed";
 import { migrateConfig } from "./migrate";
+import { readStoreString, writeStoreString } from "@/lib/kvStore";
 
 /**
- * Server-only persistence for the app config: one JSON file, by default
- * <cwd>/data/config.json (a Docker volume in production, ./data in dev).
- * Writes are validated, version-checked and atomic (temp file + rename), and
- * serialised inside the process so two saves never interleave.
+ * Server-only persistence for the app config.
+ * Uses Cloudflare KV (`BDAY_KV` binding) when deployed on Cloudflare Pages,
+ * falling back to an in-memory store seeded from buildSeedConfig() otherwise.
+ * Edge-runtime compatible (no Node `fs` imports).
  */
 
-export const CONFIG_PATH = process.env.CONFIG_PATH || path.join(process.cwd(), "data", "config.json");
+const CONFIG_KV_KEY = "bday:config";
 
 export class VersionConflictError extends Error {
   constructor(public readonly current: number) {
@@ -19,7 +18,6 @@ export class VersionConflictError extends Error {
   }
 }
 
-let cache: { mtimeMs: number; config: AppConfig } | null = null;
 let queue: Promise<unknown> = Promise.resolve();
 
 const serialise = <T>(task: () => Promise<T>): Promise<T> => {
@@ -28,37 +26,24 @@ const serialise = <T>(task: () => Promise<T>): Promise<T> => {
   return run;
 };
 
-async function writeAtomic(config: AppConfig): Promise<void> {
-  await fs.mkdir(path.dirname(CONFIG_PATH), { recursive: true });
-  const tmp = `${CONFIG_PATH}.${process.pid}.${Date.now()}.tmp`;
-  await fs.writeFile(tmp, JSON.stringify(config, null, 2) + "\n", "utf8");
-  await fs.rename(tmp, CONFIG_PATH);
-  cache = null;
-}
-
-async function readFromDisk(): Promise<AppConfig> {
-  try {
-    const stat = await fs.stat(CONFIG_PATH);
-    if (cache && cache.mtimeMs === stat.mtimeMs) return cache.config;
-    const { config: raw, migrated } = migrateConfig(JSON.parse(await fs.readFile(CONFIG_PATH, "utf8")));
+async function readCurrent(): Promise<AppConfig> {
+  const rawText = await readStoreString(CONFIG_KV_KEY);
+  if (rawText) {
+    const { config: raw, migrated } = migrateConfig(JSON.parse(rawText));
     const config = ConfigSchema.parse(raw);
     if (migrated) {
-      // Older file (fixed personal/family/work cards): store it once in the current shape.
-      await writeAtomic(config);
-      return config;
+      await writeStoreString(CONFIG_KV_KEY, JSON.stringify(config));
     }
-    cache = { mtimeMs: stat.mtimeMs, config };
     return config;
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
-    // First run: create the file from what the app shipped with.
-    const seed = ConfigSchema.parse(buildSeedConfig());
-    await writeAtomic(seed);
-    return seed;
   }
+
+  // First run: seed from the defaults bundled with the app.
+  const seed = ConfigSchema.parse(buildSeedConfig());
+  await writeStoreString(CONFIG_KV_KEY, JSON.stringify(seed));
+  return seed;
 }
 
-export const readConfig = (): Promise<AppConfig> => serialise(readFromDisk);
+export const readConfig = (): Promise<AppConfig> => serialise(readCurrent);
 
 /**
  * Replaces the whole config. `expectedVersion` is the version the editor
@@ -67,9 +52,9 @@ export const readConfig = (): Promise<AppConfig> => serialise(readFromDisk);
  */
 export const writeConfig = (next: unknown, expectedVersion: number): Promise<AppConfig> =>
   serialise(async () => {
-    const current = await readFromDisk();
+    const current = await readCurrent();
     if (current.version !== expectedVersion) throw new VersionConflictError(current.version);
     const validated = ConfigSchema.parse({ ...(next as object), version: current.version + 1 });
-    await writeAtomic(validated);
+    await writeStoreString(CONFIG_KV_KEY, JSON.stringify(validated));
     return validated;
   });

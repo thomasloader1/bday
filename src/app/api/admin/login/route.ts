@@ -1,14 +1,20 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { timingSafeEqual } from "crypto";
 import { createSessionToken, getSessionSecret, isSecureRequest, SESSION_COOKIE, SESSION_TTL_SECONDS } from "@/lib/session";
 
 export const runtime = "nodejs";
 
-const sameSecret = (a: string, b: string) => {
-  const left = Buffer.from(a);
-  const right = Buffer.from(b);
-  return left.length === right.length && timingSafeEqual(left, right);
+const encoder = new TextEncoder();
+
+const sameSecret = (a: string, b: string): boolean => {
+  const left = encoder.encode(a);
+  const right = encoder.encode(b);
+  if (left.length !== right.length) return false;
+  let diff = 0;
+  for (let i = 0; i < left.length; i += 1) {
+    diff |= left[i] ^ right[i];
+  }
+  return diff === 0;
 };
 
 export async function POST(request: NextRequest) {
@@ -20,7 +26,7 @@ export async function POST(request: NextRequest) {
 
   let password: unknown;
   try {
-    ({ password } = await request.json());
+    ({ password } = (await request.json()) as { password?: unknown });
   } catch {
     return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }

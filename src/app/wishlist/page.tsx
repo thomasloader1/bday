@@ -6,6 +6,7 @@ import { readConfig } from "@/lib/config/store";
 import { getWishlistVotes, giftKeyFor } from "@/lib/wishlist/votesStore";
 
 // Gifts and guest votes change live; rendered per request so updates show at once.
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const Wishlist = async () => {

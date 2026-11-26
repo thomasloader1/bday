@@ -1,5 +1,6 @@
 node_modules
 .next
+.vercel
 .git
 .env
 .env*.local
@@ -10,6 +11,7 @@ e2e
 openspec
 opendesign
 .atl
+.hallmark
 *.md
 !README.md
 Dockerfile

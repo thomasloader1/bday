@@ -1,0 +1,7 @@
+name = "bday"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+# Bind a KV namespace named BDAY_KV in Cloudflare Pages (Settings -> Bindings)
+# to persist dashboard config edits and wishlist votes across deploys.

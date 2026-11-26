@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/prebuild.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "pages:build": "BUILD_TARGET=cloudflare npx @cloudflare/next-on-pages"
   },
   "dependencies": {
     "@nanostores/react": "^0.7.1",

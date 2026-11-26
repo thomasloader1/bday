@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { z } from "zod";
 import { readConfig, writeConfig } from "@/lib/config/store";
 import type { AppConfig } from "@/lib/config/schema";
@@ -82,7 +81,8 @@ export const createInviteRequest = (input: { phone: number; name: string; messag
     }
 
     const request: InviteRequest = {
-      id: randomUUID(),
+      // Web Crypto: available in Node 20 and on the Edge runtime alike.
+      id: globalThis.crypto.randomUUID(),
       phone: input.phone,
       name: input.name,
       message: input.message,

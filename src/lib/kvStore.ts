@@ -1,6 +1,5 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { getRequestContext } from "@cloudflare/next-on-pages";
+import { readFileValue, writeFileValue } from "@/lib/storage/fileStore";
 
 /**
  * Minimal KV interface matching Cloudflare Workers KVNamespace.
@@ -28,46 +27,13 @@ function getCloudflareKv(): KvLike | null {
   return null;
 }
 
-/**
- * Without KV, each key lives in a JSON file under <cwd>/data (a Docker volume
- * in production, ./data in dev), so dashboard edits survive restarts.
- */
-const CONFIG_PATH = process.env.CONFIG_PATH || path.join(process.cwd(), "data", "config.json");
-const FILE_PATHS: Record<string, string> = {
-  "bday:config": CONFIG_PATH,
-  "bday:wishlist-votes":
-    process.env.WISHLIST_VOTES_PATH || path.join(path.dirname(CONFIG_PATH), "wishlist-votes.json"),
-  "bday:invite-requests": path.join(path.dirname(CONFIG_PATH), "invite-requests.json"),
-};
-
-const filePathFor = (key: string): string =>
-  FILE_PATHS[key] ?? path.join(path.dirname(CONFIG_PATH), `${key.replace(/[^a-z0-9-]/gi, "_")}.json`);
-
-async function readFile(key: string): Promise<string | null> {
-  try {
-    return await fs.readFile(filePathFor(key), "utf8");
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
-    throw error;
-  }
-}
-
-/** Atomic write: temp file + rename, so a crash never leaves half a JSON file. */
-async function writeFile(key: string, value: string): Promise<void> {
-  const target = filePathFor(key);
-  await fs.mkdir(path.dirname(target), { recursive: true });
-  const tmp = `${target}.${process.pid}.${Date.now()}.tmp`;
-  // Pretty-printed like the files the app wrote before, so they stay readable by hand.
-  await fs.writeFile(tmp, JSON.stringify(JSON.parse(value), null, 2) + "\n", "utf8");
-  await fs.rename(tmp, target);
-}
-
+/** KV on Cloudflare; otherwise JSON files on disk (Docker, dev) or memory (Cloudflare without KV). */
 export async function readStoreString(key: string): Promise<string | null> {
   const kv = getCloudflareKv();
   if (kv) {
     return kv.get(key);
   }
-  return readFile(key);
+  return readFileValue(key);
 }
 
 export async function writeStoreString(key: string, value: string): Promise<void> {
@@ -76,5 +42,5 @@ export async function writeStoreString(key: string, value: string): Promise<void
     await kv.put(key, value);
     return;
   }
-  await writeFile(key, value);
+  await writeFileValue(key, value);
 }

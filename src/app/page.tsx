@@ -55,7 +55,7 @@ export default function Bday() {
       {/* Starts below the ribbon: its top (11.25rem) + its height (200/1440 of the viewport) + 1rem - the section's padding. */}
       <div className="flex min-w-0 flex-col gap-8 md:pt-[calc(10.25rem+13.9vw)]">
         <Countdown targetDate={eventDate} onComplete={roll} caption={formatPartyLine(party)} />
-        <SearchInvitation tryDemo={true} />
+        <SearchInvitation tryDemo={true} eventDate={eventDate} />
       </div>
     </section>
   );

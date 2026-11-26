@@ -22,6 +22,18 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 export const CELEBRATION_MS = DAY_MS;
 /** The next age starts rising this many days before the party (spread over a whole year it would barely move). */
 export const RISE_DAYS = 60;
+/** How many days before the party invitations open (and the demo link hides). */
+export const INVITATION_WINDOW_DAYS = 60;
+
+/**
+ * True from INVITATION_WINDOW_DAYS before `eventDate` until the party moment.
+ * Once the birthday passes (and `eventDate` rolls to next year), returns false
+ * until 60 days before the next birthday.
+ */
+export const isInvitationWindow = (eventDate: Date, now: Date = new Date()): boolean => {
+  const remaining = eventDate.getTime() - now.getTime();
+  return remaining > 0 && remaining <= INVITATION_WINDOW_DAYS * DAY_MS;
+};
 
 export interface AgeProgress {
   /** The age being left behind (e.g. 32). */

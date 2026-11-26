@@ -28,7 +28,7 @@ export default function Bday() {
             onComplete={handleCountdownComplete}
           />
         </div>
-        <SearchInvitation tryDemo={true}/>
+        <SearchInvitation tryDemo={false}/>
       </div>
     </>
     

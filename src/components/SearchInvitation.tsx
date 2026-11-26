@@ -5,16 +5,20 @@ import { useParty } from './ConfigProvider';
 import Button from './ui/Button';
 import { useRouter } from 'next/navigation';
 import { $fetch, setOnRequest } from '@/store/fetchingStore';
+import { isInvitationWindow } from '@/lib/eventDate';
 
 interface SearchInvitationProps{
     tryDemo: boolean;
+    eventDate?: Date;
 }
 
-const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo}) => {
+const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo, eventDate: eventDateProp }) => {
     const router = useRouter();
-    const { party, eventDate } = useParty()
+    const { party, eventDate: partyEventDate } = useParty();
+    const eventDate = eventDateProp ?? partyEventDate;
     const { loading } = useStore($fetch)
-    const isComing = eventDate.getTime() - Date.now() <= 30 * 86400000;
+    const isComing = isInvitationWindow(eventDate);
+    const showDemo = tryDemo && !isComing;
     const redirectToDemo = () =>{
         setOnRequest(true)
         router.push("/1155011250");
@@ -29,7 +33,7 @@ const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo}) => {
 
       {isComing && (<SearchInvitationForm />)}
 
-      {tryDemo && (
+      {showDemo && (
         <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-ink-2">
           Si te interesa saber más del proyecto
           <Button

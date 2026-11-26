@@ -5,7 +5,7 @@ import path from "path";
  * Storage on disk, used when there is no Cloudflare KV (Docker, next dev): each key is a
  * JSON file under <cwd>/data (a Docker volume in production, ./data in dev), so dashboard
  * edits survive restarts. The Cloudflare build swaps this module for fileStore.edge.ts
- * (see next.config.js), since the Edge runtime has no file system.
+ * (see next.config.js), since a Worker has no persistent file system.
  */
 
 const CONFIG_PATH = process.env.CONFIG_PATH || path.join(process.cwd(), "data", "config.json");

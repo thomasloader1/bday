@@ -1,4 +1,4 @@
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { readFileValue, writeFileValue } from "@/lib/storage/fileStore";
 
 /**
@@ -10,19 +10,20 @@ interface KvLike {
 }
 
 /**
- * Returns the Cloudflare KV binding (`BDAY_KV`) when running on Cloudflare Pages
- * with a KV namespace attached; returns null in local dev / Docker / build.
+ * Returns the Cloudflare KV binding (`BDAY_KV`) when running on Cloudflare Workers
+ * (OpenNext) with a KV namespace attached; returns null in local dev / Docker / build.
  */
 function getCloudflareKv(): KvLike | null {
   try {
-    const ctx = getRequestContext();
+    // Throws outside a Worker request (next dev / Docker / build): those use the disk store.
+    const ctx = getCloudflareContext();
     const env = ctx?.env as Record<string, unknown> | undefined;
     const binding = env?.BDAY_KV as KvLike | undefined;
     if (binding && typeof binding.get === "function" && typeof binding.put === "function") {
       return binding;
     }
   } catch {
-    // Not running inside a Cloudflare Pages request context (e.g. Docker / next dev / build).
+    // Not running inside a Cloudflare Workers request context (e.g. Docker / next dev / build).
   }
   return null;
 }

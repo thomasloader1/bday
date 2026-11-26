@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/prebuild.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test:e2e": "playwright test",
-    "pages:build": "BUILD_TARGET=cloudflare npx @cloudflare/next-on-pages"
+    "cf:build": "BUILD_TARGET=cloudflare opennextjs-cloudflare build",
+    "cf:preview": "npm run cf:build && opennextjs-cloudflare preview",
+    "cf:deploy": "npm run cf:build && opennextjs-cloudflare deploy",
+    "cf:typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@nanostores/react": "^0.7.1",
@@ -20,19 +22,19 @@
     "leaflet": "^1.9.4",
     "motion": "^12.43.0",
     "nanostores": "^0.9.5",
-    "next": "14.0.3",
+    "next": "^14.2.35",
     "ogl": "^1.0.11",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^4.12.0",
     "react-leaflet": "^4.2.1",
-    "swiper": "^11.0.5",
+    "swiper": "^14.4.0",
     "tailwind-merge": "^3.6.0",
-    "zod": "^3.23.8"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.12",
-    "@cloudflare/workers-types": "^4.20260702.1",
+    "@cloudflare/workers-types": "^5.20261123.1",
+    "@opennextjs/cloudflare": "~1.15.1",
     "@playwright/test": "^1.49.1",
     "@types/leaflet": "^1.9.8",
     "@types/node": "^20",
@@ -40,12 +42,12 @@
     "@types/react-dom": "^18",
     "@types/swiper": "^6.0.0",
     "autoprefixer": "^10.0.1",
+    "esbuild": "0.25.4",
     "eslint": "^8",
-    "eslint-config-next": "14.0.3",
+    "eslint-config-next": "^14.2.35",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5",
-    "vercel": "39.3.0",
-    "wrangler": "^3.114.17"
+    "wrangler": "^4.168.0"
   }
 }

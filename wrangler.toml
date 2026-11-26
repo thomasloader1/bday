@@ -1,7 +1,20 @@
+# Cloudflare Workers config for the OpenNext build (`npm run cf:build`, then cf:preview / cf:deploy).
 name = "bday"
-compatibility_date = "2024-09-23"
-compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = ".vercel/output/static"
+main = ".open-next/worker.js"
+compatibility_date = "2026-01-20"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 
-# Bind a KV namespace named BDAY_KV in Cloudflare Pages (Settings -> Bindings)
-# to persist dashboard config edits and wishlist votes across deploys.
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+# Lets OpenNext call back into this same Worker (route caching / revalidation).
+[[services]]
+binding = "WORKER_SELF_REFERENCE"
+service = "bday"
+
+# Persists dashboard config, wishlist votes and invite requests across deploys.
+# Namespace "BDAY_KV" (created with `npx wrangler kv namespace create BDAY_KV`).
+[[kv_namespaces]]
+binding = "BDAY_KV"
+id = "d11209cc43b248ad932fc9a4b7210300"

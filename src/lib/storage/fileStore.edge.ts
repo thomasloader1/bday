@@ -1,6 +1,6 @@
 /**
- * Edge stand-in for fileStore.ts, swapped in by next.config.js for the Cloudflare build
- * (the Edge runtime has no file system). On Cloudflare the data lives in the BDAY_KV
+ * In-memory stand-in for fileStore.ts, swapped in by next.config.js for the Cloudflare build
+ * (a Worker has no persistent file system). On Cloudflare the data lives in the BDAY_KV
  * binding; this only runs when that binding is missing, and keeps values in memory
  * for the life of the isolate (lost on restart, as on a preview without KV).
  */

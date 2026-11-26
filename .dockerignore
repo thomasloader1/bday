@@ -17,3 +17,6 @@ opendesign
 Dockerfile
 docker-compose.yml
 data
+.open-next
+.wrangler
+.dev.vars*

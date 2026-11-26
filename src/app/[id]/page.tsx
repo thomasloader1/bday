@@ -19,7 +19,7 @@ export default function Page({ params }: { params: { id: number } }) {
       variants={pageEntrance}
       initial={reducedMotion ? false : "hidden"}
       animate="show"
-      className="py-12 md:py-20"
+      className={findGuest ? "py-12 md:py-20" : "py-6 md:py-10"}
     >
       {findGuest ? <Invitation guestData={guestData} /> : <NoInvitation phone={String(params.id)} />}
     </motion.div>

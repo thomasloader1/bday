@@ -19,6 +19,9 @@ interface CurvedLoopProps {
   inkColor?: string;
 }
 
+/** Screen pixels per second at speed 1 (what speed 1 gave on a 1440px desktop at 60 Hz). */
+const BASE_PX_PER_SECOND = 60;
+
 const CurvedLoop: FC<CurvedLoopProps> = ({
   marqueeText = '',
   speed = 2,
@@ -41,7 +44,6 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
   const textPathRef = useRef<SVGTextPathElement | null>(null);
   const pathRef = useRef<SVGPathElement | null>(null);
   const [spacing, setSpacing] = useState(0);
-  const [offset, setOffset] = useState(0);
   const uid = useId();
   const pathId = `curve-${uid}`;
   // One wide curve by default; with `wave`, a sine-like run of quadratic segments centred on y=0.
@@ -91,7 +93,6 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
     if (textPathRef.current) {
       const initial = -spacing;
       textPathRef.current.setAttribute('startOffset', initial + 'px');
-      setOffset(initial);
     }
   }, [spacing]);
 
@@ -99,16 +100,24 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
     // Reduced motion: render the marquee static (no rAF loop).
     if (!spacing || !ready || reduce) return;
     let frame = 0;
-    const step = () => {
-      if (!dragRef.current && !hoverRef.current && textPathRef.current) {
-        const delta = dirRef.current === 'right' ? speed : -speed;
+    let last = performance.now();
+    const step = (now: number) => {
+      // Time-based (same pace at 60 and 120 Hz) and in screen pixels: the path is drawn in a 1440-wide
+      // viewBox, so on a 390px phone one unit is ~0.27px and a per-unit speed would barely crawl.
+      const dt = Math.min(now - last, 100);
+      last = now;
+      const svg = textPathRef.current?.ownerSVGElement;
+      if (!dragRef.current && !hoverRef.current && textPathRef.current && svg) {
+        const unitsPerPx = 1440 / Math.max(svg.getBoundingClientRect().width, 1);
+        const pxPerMs = (speed * BASE_PX_PER_SECOND) / 1000;
+        const delta = (dirRef.current === 'right' ? 1 : -1) * pxPerMs * dt * unitsPerPx;
         const currentOffset = parseFloat(textPathRef.current.getAttribute('startOffset') || '0');
         let newOffset = currentOffset + delta;
         const wrapPoint = spacing;
         if (newOffset <= -wrapPoint) newOffset += wrapPoint;
         if (newOffset > 0) newOffset -= wrapPoint;
+        // Written straight to the DOM: a React state update per frame re-rendered the whole ribbon 60 times a second.
         textPathRef.current.setAttribute('startOffset', newOffset + 'px');
-        setOffset(newOffset);
       }
       frame = requestAnimationFrame(step);
     };
@@ -135,7 +144,6 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
     if (newOffset <= -wrapPoint) newOffset += wrapPoint;
     if (newOffset > 0) newOffset -= wrapPoint;
     textPathRef.current.setAttribute('startOffset', newOffset + 'px');
-    setOffset(newOffset);
   };
 
   const endDrag = () => {
@@ -153,7 +161,8 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}
-      onPointerEnter={() => { hoverRef.current = true; }}
+      // Only a mouse pauses it: on a phone a touch "enters" and would leave it stopped.
+      onPointerEnter={(e) => { if (e.pointerType === 'mouse') hoverRef.current = true; }}
       onPointerLeave={() => { hoverRef.current = false; endDrag(); }}
       onFocus={() => { hoverRef.current = true; }}
       onBlur={() => { hoverRef.current = false; }}
@@ -183,7 +192,7 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
               style={{ stroke: ribbonColor }}
             />
             <text xmlSpace="preserve" aria-hidden="true" dominantBaseline={wave ? 'central' : undefined} style={{ fill: inkColor }}>
-              <textPath ref={textPathRef} href={`#${pathId}`} startOffset={offset + 'px'} xmlSpace="preserve">
+              <textPath ref={textPathRef} href={`#${pathId}`} xmlSpace="preserve">
                 {totalText}
               </textPath>
             </text>

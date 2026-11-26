@@ -2,7 +2,6 @@ import { db } from "@/config/firebase";
 import { Guest, UpdateGuest } from "@/types/Guest";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { Dispatch, SetStateAction } from "react";
-import items from "@/data/guests.json";
 
 export const getGuest = async (
   id: string,
@@ -12,18 +11,30 @@ export const getGuest = async (
   setError: Dispatch<SetStateAction<boolean>>
 ) => {
   try {
-    const personFind = items.persons.find((person) => person.id === Number(id));
+    // The guest list lives on the server (dashboard config); ask for this one number only.
+    const response = await fetch(`/api/guests/${encodeURIComponent(id)}`, { cache: "no-store" });
 
-    if (personFind) {
-      const data = personFind;
+    if (response.ok) {
+      const person = (await response.json()) as Pick<Guest, "id" | "name" | "group" | "events">;
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem("bday:guestId", String(person.id));
+        } catch {
+          // Storage may be blocked in private browsing; ignore.
+        }
+      }
       const dataFirebase = await getGuestFirebase(id);
       setFindGuest(true);
-
-      if (dataFirebase) {
-        setGuestData({ ...dataFirebase, id: Number(id) });
-      } else {
-        setGuestData({ ...data, id: Number(id) });
-      }
+      // Name and groups come from the config (editable); Firestore only holds the RSVP state.
+      setGuestData({
+        isConfirmed: false,
+        isDrity: false,
+        ...(dataFirebase ?? {}),
+        name: person.name,
+        group: person.group,
+        events: person.events ?? [],
+        id: Number(id),
+      });
     } else {
       setFindGuest(false);
       setError(true);

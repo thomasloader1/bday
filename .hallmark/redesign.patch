@@ -1,0 +1,1968 @@
+diff -ruN src/app/base.css ../../src/app/base.css
+--- a/src/app/base.css	1969-12-31 21:00:00.000000000 -0300
++++ b/src/app/base.css	2026-11-25 12:45:37.052909518 -0300
+@@ -0,0 +1,27 @@
++*, *::before, *::after { box-sizing: border-box; }
++html, body { overflow-x: clip; }
++html { scrollbar-color: var(--color-muted) var(--color-paper); scroll-padding-top: var(--space-3xl); }
++body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); font-size: var(--text-md); line-height: 1.55; -webkit-font-smoothing: antialiased; caret-color: var(--color-accent); }
++::selection { background: color-mix(in oklab, var(--color-accent) 30%, transparent); }
++:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
++a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
++h1, h2, h3 { margin: 0; font-family: var(--font-display); font-weight: var(--display-weight, 700); font-synthesis: none; letter-spacing: var(--tracking-display); line-height: 1.05; overflow-wrap: break-word; min-width: 0; text-wrap: balance; }
++h1 { max-width: 20ch; font-size: var(--text-display); } h2 { max-width: 30ch; font-size: var(--text-section); } h3 { max-width: 40ch; font-size: var(--text-title); line-height: 1.2; }
++.lead { font-size: var(--text-lead); line-height: 1.45; max-width: 52ch; }
++p { margin: 0; text-wrap: pretty; }
++p:not([class]) { max-width: 65ch; }
++img, video { max-width: 100%; height: auto; display: block; }
++svg { display: block; }
++[hidden] { display: none !important; }
++button, input, select, textarea { font: inherit; }
++.container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); box-sizing: border-box; }
++.num, .figure, td.num { font-variant-numeric: tabular-nums; }
++.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
++[data-slot] { position: relative; overflow: hidden; background: linear-gradient(160deg, var(--color-paper-2, var(--color-paper)), var(--color-paper-3, var(--color-paper))); }
++[data-slot] > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
++[data-slot]:has(> img) > :not(img):not([data-keep]) { display: none !important; }
++@media (max-width: 60rem) { :root { --gutter: 24px; --section-gap-s: 80px; --section-gap: 96px; --section-gap-l: 120px; } }
++@media (max-width: 40rem) { :root { --gutter: 16px; --section-gap-s: 56px; --section-gap: 72px; --section-gap-l: 96px; --gap-columns: 16px; } }
++@media (prefers-reduced-motion: reduce) { *:not(.keep-motion), *:not(.keep-motion)::before, *:not(.keep-motion)::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
++/* photographs: natural vib=25 sat=10 con=6 */
++[data-slot] > img { filter: saturate(1.1) contrast(1.06); }
+diff -ruN src/app/globals.css ../../src/app/globals.css
+--- a/src/app/globals.css	2026-11-25 12:46:59.910447979 -0300
++++ b/src/app/globals.css	2026-11-25 12:52:43.433611249 -0300
+@@ -1,45 +1,128 @@
+-/* Hallmark · polish (audit 2026-11-25) · genre: playful · system: opendesign "Party Suave", kept */
+-/* Hallmark · dropped onPointerLeave={endDrag} · CurvedLoop now wraps it so leaving the marquee also releases the hover pause; endDrag still runs */
+-/* Hallmark · dismissed 54 · Invitation.tsx sr-only p names the invitation section for screen readers; it is invisible, and a heading there would duplicate the visible h1 */
+-@tailwind base;
+-@tailwind components;
+-@tailwind utilities;
+-
+-:root {
+-  /* Decorative surfaces, projected from the Tailwind theme so no literal lives in a component. */
+-  --color-cube-face: theme('colors.primary.700');
+-  --color-cube-edge: theme('colors.neutral.50 / 40%');
+-  --color-ribbon: theme('colors.card.default');
+-  --color-ribbon-shadow: theme('colors.neutral.900 / 15%');
+-  --color-marquee-ink: theme('colors.neutral.900');
+-  /* Swiper reads this for its pagination bullets (default is iOS blue). */
+-  --swiper-theme-color: theme('colors.primary.700');
+-  --swiper-pagination-bullet-inactive-color: theme('colors.neutral.400');
+-}
+-
+-html,
+-body {
+-  overflow-x: clip;
+-}
+-
+-body {
+-  @apply bg-neutral-50 text-neutral-900 antialiased;
+-}
+-
+-.swiper {
+-  width: 100%;
+-}
+-
+-.swiper-slide {
+-  display: flex;
+-  align-items: center;
+-  justify-content: center;
+-  @apply rounded-xl;
+-}
+-
+-/* Reduced motion: kill non-essential decoration (cake drift). */
+-@media (prefers-reduced-motion: reduce) {
+-  .animate-drift {
+-    animation: none !important;
+-  }
+-}
++/* Hallmark · shape: kept routes, recomposed (Counter home, Letter invite, Deck, Grid) · genre: playful · theme: Halftone (deal 2/3, seed invitaci-fiesta-amigo-buscar-5f10·ba644c84·2026-11-25·r0) · redesign: full
++ * hero: Counter (/), Letter split (/[id]) · nav: slab, the wordmark and one link · footer: statement · imagery: none (type-led; wishlist keeps the owner's product photos) · signature: the 30 knocked out of the vermilion · halftone: cream
++ * axes: light/slab-serif/warm · posture: committed · contrast: pass · fold: pass · v2.0.0 */
++/* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V4 · weakest: P, a birthday invite argues little; leaned on the one real number (30) and the date instead of greetings */
++/* Hallmark · dropped onPointerLeave={endDrag} · CurvedLoop now wraps it so leaving the marquee also releases the hover pause; endDrag still runs */
++/* Hallmark · dismissed 54 · Invitation.tsx sr-only p names the invitation section for screen readers; it is invisible, and a heading there would duplicate the visible h1 */
++@import "./tokens.css";
++
++@tailwind base;
++@tailwind components;
++@tailwind utilities;
++
++/* Hallmark base (scaffold base.css), inside Tailwind's base layer so it lands after Preflight and under the utilities.
++   Next's CSS pipeline reads `@import ... layer(base)` as a media query and drops it, so the rules live here. */
++@layer base {
++  *, *::before, *::after { box-sizing: border-box; }
++  html, body { overflow-x: clip; }
++  html { scrollbar-color: var(--color-muted) var(--color-paper); scroll-padding-top: var(--space-3xl); }
++  body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); font-size: var(--text-md); line-height: 1.55; -webkit-font-smoothing: antialiased; caret-color: var(--color-accent); }
++  ::selection { background: color-mix(in oklab, var(--color-accent) 30%, transparent); }
++  :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
++  a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
++  h1, h2, h3 { margin: 0; font-family: var(--font-display); font-weight: var(--display-weight, 700); font-synthesis: none; letter-spacing: var(--tracking-display); line-height: 1.05; overflow-wrap: break-word; min-width: 0; text-wrap: balance; }
++  h1 { max-width: 20ch; font-size: var(--text-display); } h2 { max-width: 30ch; font-size: var(--text-section); } h3 { max-width: 40ch; font-size: var(--text-title); line-height: 1.2; }
++  .lead { font-size: var(--text-lead); line-height: 1.45; max-width: 52ch; }
++  p { margin: 0; text-wrap: pretty; }
++  p:not([class]) { max-width: 65ch; }
++  img, video { max-width: 100%; height: auto; display: block; }
++  svg { display: block; }
++  [hidden] { display: none !important; }
++  button, input, select, textarea { font: inherit; }
++  .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); box-sizing: border-box; }
++  .num, .figure, td.num { font-variant-numeric: tabular-nums; }
++  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
++  [data-slot] { position: relative; overflow: hidden; background: linear-gradient(160deg, var(--color-paper-2, var(--color-paper)), var(--color-paper-3, var(--color-paper))); }
++  [data-slot] > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
++  [data-slot]:has(> img) > :not(img):not([data-keep]) { display: none !important; }
++  @media (max-width: 60rem) { :root { --gutter: 24px; --section-gap-s: 80px; --section-gap: 96px; --section-gap-l: 120px; } }
++  @media (max-width: 40rem) { :root { --gutter: 16px; --section-gap-s: 56px; --section-gap: 72px; --section-gap-l: 96px; --gap-columns: 16px; } }
++  @media (prefers-reduced-motion: reduce) { *:not(.keep-motion), *:not(.keep-motion)::before, *:not(.keep-motion)::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
++  /* photographs: natural vib=25 sat=10 con=6 */
++  [data-slot] > img { filter: saturate(1.1) contrast(1.06); }
++}
++
++:root {
++  /* Marquee and Cubes surfaces, all on the one ink */
++  --color-cube-face: var(--color-accent);
++  --color-cube-edge: var(--color-paper);
++  --color-ribbon: var(--color-accent);
++  --color-ribbon-shadow: var(--color-accent-deep);
++  --color-marquee-ink: var(--color-accent-ink);
++  /* Swiper reads these for its pagination bullets */
++  --swiper-theme-color: var(--color-accent);
++  --swiper-pagination-bullet-inactive-color: var(--color-ink);
++  --swiper-pagination-bullet-inactive-opacity: 0.25;
++  --swiper-pagination-bullet-size: 10px;
++}
++
++@layer components {
++  /* The one number, set as a poster */
++  .poster {
++    font-family: var(--font-display);
++    font-weight: var(--display-weight);
++    font-size: clamp(8rem, 19vw, 17rem);
++    line-height: 0.9;
++    letter-spacing: -0.02em;
++    font-variant-numeric: tabular-nums;
++  }
++
++  /* The screen: spot dots fading from solid to nothing, never under type */
++  .halftone {
++    position: relative;
++    isolation: isolate;
++  }
++  .halftone::before {
++    content: "";
++    position: absolute;
++    inset: 0;
++    z-index: -1;
++    pointer-events: none;
++    background: radial-gradient(var(--color-dot) var(--halftone-dot), transparent calc(var(--halftone-dot) + 0.5px)) 0 0 / var(--halftone-size) var(--halftone-size);
++  }
++  .halftone--down::before { mask: linear-gradient(180deg, transparent 0%, var(--color-ink) 100%); }
++  .halftone--knock::before {
++    background: radial-gradient(var(--color-paper) var(--halftone-dot), transparent calc(var(--halftone-dot) + 0.5px)) 0 0 / var(--halftone-size) var(--halftone-size);
++    mask: linear-gradient(200deg, var(--color-ink) 0%, transparent 55%);
++  }
++
++  /* A well: the one boxed surface, square, ink border, nothing boxed inside */
++  .well {
++    border: var(--rule-bar) solid var(--color-ink);
++    background: var(--color-paper-2);
++  }
++
++  /* The label as a panel: a bar on top, hairlines between rows */
++  .ruled { border-top: var(--rule-bar) solid var(--color-ink); }
++  .ruled > * { border-bottom: var(--rule-hair) solid var(--color-rule); }
++
++  /* Links in ink with a spot underline */
++  .link {
++    color: var(--color-ink);
++    text-decoration: underline;
++    text-decoration-color: var(--color-accent);
++    text-decoration-thickness: 2px;
++    text-underline-offset: 0.2em;
++    transition: color var(--dur-short) var(--ease-out), text-decoration-color var(--dur-short) var(--ease-out);
++  }
++  .link:hover { color: var(--color-accent-deep); text-decoration-color: var(--color-accent-deep); }
++}
++
++.swiper {
++  width: 100%;
++  padding-bottom: var(--space-2xl) !important;
++}
++
++.swiper-slide {
++  display: flex;
++  align-items: stretch;
++  justify-content: center;
++  height: auto !important;
++}
++
++/* Reduced motion: kill non-essential decoration (cake drift). */
++@media (prefers-reduced-motion: reduce) {
++  .animate-drift {
++    animation: none !important;
++  }
++}
+diff -ruN src/app/[id]/confirm/page.tsx ../../src/app/[id]/confirm/page.tsx
+--- a/src/app/[id]/confirm/page.tsx	2026-11-25 12:46:59.910678943 -0300
++++ b/src/app/[id]/confirm/page.tsx	2026-11-25 13:08:20.661539897 -0300
+@@ -38,20 +38,20 @@
+         variants={pageEntrance}
+         initial={reducedMotion ? false : "hidden"}
+         animate="show"
+-        className="flex w-full justify-center overflow-x-clip pt-8 pb-[env(safe-area-inset-bottom)] md:pb-8"
++        className="flex w-full justify-center overflow-x-clip pt-4 sm:pt-8 pb-[env(safe-area-inset-bottom)] md:pb-8"
+       >
+        
+-<section className="relative w-full bg-card-paper py-6">
++<section className="relative w-full">
+           <h1 className="sr-only">{`Invitaciones de ${guestData.name}`}</h1>
+             
+-          <div className="relative pt-32 md:pt-56">
++          <div className="relative pt-[calc(min(30vw,24.5rem)+3.5rem)] sm:pt-[calc(min(30vw,24.5rem)+5rem)]">
+             <CurvedLoop 
+                 marqueeText={`Que✦bien✦que✦vas✦a✦venir✦${guestData.name}✦`}
+                 speed={1}
+                 curveAmount={200}
+                 direction="right"
+                 interactive
+-                className="absolute left-1/2 -top-24 z-20 w-[120%] -translate-x-1/2"
++                className="absolute left-1/2 top-0 z-20 w-[120%] -translate-x-1/2"
+               />
+       
+             <GuestInvitations guestData={guestData} guestLoaded={loading} />
+diff -ruN src/app/[id]/page.tsx ../../src/app/[id]/page.tsx
+--- a/src/app/[id]/page.tsx	2026-11-25 12:46:59.910711443 -0300
++++ b/src/app/[id]/page.tsx	2026-11-25 12:54:29.045077938 -0300
+@@ -1,30 +1,27 @@
+-"use client";
+-import { motion, useReducedMotion } from "motion/react";
+-import Card from "@/components/ui/Card";
+-import Invitation from "@/components/Invitation";
+-import LoadingSpinner from "@/components/LoadingSpinner";
+-import NoInvitation from "@/components/NoInvitation";
+-import useGuest from "@/hooks/useGuestData";
+-import { pageEntrance } from "@/lib/motion";
+-
+-export default function Page({ params }: { params: { id: number } }) {
+-  const { guestData, findGuest, loading } = useGuest(params);
+-  const reducedMotion = useReducedMotion();
+-
+-  if (loading) {
+-    return <LoadingSpinner standalone />;
+-  }
+-
+-  return (
+-    <motion.div
+-      variants={pageEntrance}
+-      initial={reducedMotion ? false : "hidden"}
+-      animate="show"
+-      className="flex w-full justify-center py-8 md:items-center"
+-    >
+-      <Card variant="elevated" as="article" className="w-full max-w-2xl">
+-        {findGuest ? <Invitation guestData={guestData} /> : <NoInvitation />}
+-      </Card>
+-    </motion.div>
+-  );
+-}
++"use client";
++import { motion, useReducedMotion } from "motion/react";
++import Invitation from "@/components/Invitation";
++import LoadingSpinner from "@/components/LoadingSpinner";
++import NoInvitation from "@/components/NoInvitation";
++import useGuest from "@/hooks/useGuestData";
++import { pageEntrance } from "@/lib/motion";
++
++export default function Page({ params }: { params: { id: number } }) {
++  const { guestData, findGuest, loading } = useGuest(params);
++  const reducedMotion = useReducedMotion();
++
++  if (loading) {
++    return <LoadingSpinner standalone />;
++  }
++
++  return (
++    <motion.div
++      variants={pageEntrance}
++      initial={reducedMotion ? false : "hidden"}
++      animate="show"
++      className="py-12 md:py-20"
++    >
++      {findGuest ? <Invitation guestData={guestData} /> : <NoInvitation />}
++    </motion.div>
++  );
++}
+diff -ruN src/app/layout.tsx ../../src/app/layout.tsx
+--- a/src/app/layout.tsx	2026-11-25 12:46:59.910475209 -0300
++++ b/src/app/layout.tsx	2026-11-25 13:04:03.595080919 -0300
+@@ -1,25 +1,28 @@
+ import type { Metadata, Viewport } from "next";
+-import { Fraunces, Inter } from "next/font/google";
++import Link from "next/link";
++import { Chivo, Ultra } from "next/font/google";
+ import "./globals.css";
+ import 'swiper/css';
+ import 'swiper/css/pagination';
+ import BackgroundLayer from "@/components/BackgroundLayer";
+ 
+-const fraunces = Fraunces({
++const ultra = Ultra({
+   subsets: ["latin"],
+-  weight: ["600", "700"],
+-  variable: "--font-display",
++  weight: "400",
++  variable: "--font-ultra",
++  display: "swap",
+ });
+ 
+-const inter = Inter({
++const chivo = Chivo({
+   subsets: ["latin"],
+-  weight: ["400", "500", "600", "700"],
+-  variable: "--font-inter",
++  weight: ["400", "500", "700"],
++  variable: "--font-chivo",
++  display: "swap",
+ });
+ 
+ export const metadata: Metadata = {
+   title: "Festejo de mis 30",
+-  description: "Aplicacion para invitarlos a un evento especial",
++  description: "Aplicación para invitarlos a un evento especial",
+ };
+ export const viewport: Viewport = {
+   width: "device-width",
+@@ -33,10 +36,29 @@
+   children: React.ReactNode;
+ }) {
+   return (
+-    <html lang="es" className={`${fraunces.variable} ${inter.variable}`}>
++    <html lang="es" className={`${ultra.variable} ${chivo.variable}`}>
+       <body className="font-sans antialiased">
++        <a
++          href="#contenido"
++          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-spot focus:px-4 focus:py-2 focus:font-bold focus:text-spot-ink"
++        >
++          Saltar al contenido
++        </a>
+         <BackgroundLayer />
+-        <main className="container mx-auto px-6 md:px-8 py-6">
++        {/* Slab: the wordmark and one destination, on a 3px ink bar */}
++        <header className="relative z-10 border-b-bar border-ink bg-paper">
++          <div className="container flex h-16 items-center justify-between gap-6">
++            <Link href="/" aria-label="Festejo de mis 30, inicio" className="whitespace-nowrap font-display text-lg leading-none text-ink sm:text-xl">
++              {/* Under 640px the full wordmark and the link do not fit on one line at 320. */}
++              <span className="sm:hidden">Mis 30</span>
++              <span className="hidden sm:inline">Festejo de mis 30</span>
++            </Link>
++            <Link href="/wishlist" className="link whitespace-nowrap text-sm font-medium">
++              Lista de deseados
++            </Link>
++          </div>
++        </header>
++        <main id="contenido" className="container">
+           {children}
+         </main>
+       </body>
+diff -ruN src/app/page.tsx ../../src/app/page.tsx
+--- a/src/app/page.tsx	2026-11-25 12:46:59.910502240 -0300
++++ b/src/app/page.tsx	2026-11-25 12:58:56.224790219 -0300
+@@ -6,31 +6,28 @@
+ import { $time, setEventDate } from "@/store/timeStore";
+ import { getNextBirthday } from "@/lib/eventDate";
+ 
+-
+ export default function Bday() {
+-  const { eventDate } = useStore($time)
+-  
++  const { eventDate } = useStore($time);
++
+   const handleCountdownComplete = () => {
+-    setEventDate(getNextBirthday())
++    setEventDate(getNextBirthday());
+   };
+ 
+   return (
+-    <>
+-      <div className="flex min-h-screen flex-col items-center justify-center text-center">
+-      
+-        <BlurTextTitle
+-          text="¡Hola posible invitado!"
+-          className="mb-4 text-4xl md:text-5xl"
+-        />
+-        <div className="mb-10 mt-5">
+-          <Countdown
+-            targetDate={eventDate}
+-            onComplete={handleCountdownComplete}
+-          />
+-        </div>
+-        <SearchInvitation tryDemo={true}/>
++    <section className="grid min-h-[calc(100svh-4rem)] items-center gap-8 py-6 md:grid-cols-[5fr_7fr] md:gap-16 md:py-12">
++      {/* Signature: the one real number, knocked out of the vermilion, the screen fading in from the top corner. */}
++      <div
++        aria-hidden="true"
++        className="halftone halftone--knock flex h-40 w-full items-end overflow-hidden bg-spot px-6 pb-4 sm:h-72 sm:p-6 md:aspect-[4/5] md:h-auto md:max-h-[calc(100svh-8rem)] md:p-10"
++      >
++        <span className="poster text-spot-ink">30</span>
++      </div>
++
++      <div className="flex min-w-0 flex-col gap-8">
++        <BlurTextTitle text="¡Hola posible invitado!" className="text-display-s text-ink 2xl:text-display" />
++        <Countdown targetDate={eventDate} onComplete={handleCountdownComplete} />
++        <SearchInvitation tryDemo={true} />
+       </div>
+-    </>
+-    
++    </section>
+   );
+ }
+diff -ruN src/app/tokens.css ../../src/app/tokens.css
+--- a/src/app/tokens.css	1969-12-31 21:00:00.000000000 -0300
++++ b/src/app/tokens.css	2026-11-25 12:47:37.597755498 -0300
+@@ -0,0 +1,21 @@
++:root {
++  color-scheme: light;
++  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
++  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.25rem; --text-xl: 1.5625rem; --text-2xl: 1.953rem; --text-3xl: 2.441rem;
++  --text-display-s: clamp(2.25rem, 4vw + 0.5rem, 3.75rem); --text-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);
++  --text-section: clamp(2rem, 2.5vw + 1rem, 3.5rem); --text-title: clamp(1.25rem, 0.75vw + 0.875rem, 1.625rem); --text-lead: clamp(1.125rem, 0.35vw + 1rem, 1.375rem);
++  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
++  --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
++  --color-error: oklch(52% 0.19 27); --color-success: oklch(50% 0.12 150);
++  --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
++  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
++  --color-paper: oklch(96.2% 0.032 94); --color-paper-2: oklch(92.6% 0.046 92); --color-paper-3: oklch(87.5% 0.058 90);
++  --color-ink: oklch(23% 0.040 38); --color-ink-2: oklch(33% 0.045 40); --color-muted: oklch(44% 0.048 44);
++  --color-rule: oklch(82% 0.042 82);
++  --color-accent: oklch(54.5% 0.215 33); --color-accent-deep: oklch(46% 0.19 31); --color-accent-ink: oklch(97% 0.022 94); --color-focus: oklch(46% 0.19 31);
++  --color-dot: var(--color-accent); --halftone-size: 12px; --halftone-dot: 3px;
++  --font-display: var(--font-ultra), "Ultra", ui-serif, Georgia, serif; --font-body: var(--font-chivo), "Chivo", ui-sans-serif, sans-serif;
++  --radius-card: 0; --radius-input: 3px; --radius-pill: 999px; --rule-hair: 1px; --rule-bar: 3px;
++  --shadow-card: none;
++  --tracking-display: 0.005em; --display-weight: 400;
++}
+diff -ruN src/app/wishlist/page.tsx ../../src/app/wishlist/page.tsx
+--- a/src/app/wishlist/page.tsx	2026-11-25 12:46:59.910566331 -0300
++++ b/src/app/wishlist/page.tsx	2026-11-25 12:59:53.713334959 -0300
+@@ -57,22 +57,23 @@
+   ];
+ 
+   return (
+-    <section className="py-5 text-center">
+-      <h1 className="font-display text-4xl font-bold md:text-5xl mb-8">
++    <section className="py-12 md:py-20">
++      <h1 className="text-display text-ink">
+         ¡Regalos deseados!
+       </h1>
+-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
++      <div className="mt-16 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+         {wishlistItems.map((item, index) => (
+           <ProductCard2 
+           key={index}
+           name={item.name}
+           image={item.image}
+           link={item.link}
++          priority={index === 0}
+           />
+         ))}
+       </div>
+-      <div className="flex items-center justify-center">
+-        <Button asChild variant="primary">
++      <div className="mt-20 border-t-bar border-ink pt-8">
++        <Button asChild variant="secondary">
+           <Link href={"/"}>Ir al inicio</Link>
+         </Button>
+       </div>
+diff -ruN src/components/BackgroundLayer.tsx ../../src/components/BackgroundLayer.tsx
+--- a/src/components/BackgroundLayer.tsx	2026-11-25 12:46:59.910890207 -0300
++++ b/src/components/BackgroundLayer.tsx	2026-11-25 12:49:52.399293078 -0300
+@@ -1,45 +1,19 @@
+-"use client";
+-
+-import React from "react";
+-import { useReducedMotion } from "motion/react";
+-import CakeBackground from "./CakeBackground";
+-import Cubes from "./Cubes";
+-import { FaBirthdayCake } from "react-icons/fa";
+-
+-/**
+- * Site-wide decorative background layer (rendered once in the root layout):
+- * - Festive cake-icon drift (CakeBackground) as the main texture.
+- * - react-bits Cubes 3D accent in the bottom-right corner, small and low
+- *   opacity so it never fights the content.
+- * Decorative only: pointer-events-none + aria-hidden, fixed behind content.
+- * Reduced motion: cake drift is killed by CSS (.animate-drift media query),
+- * Cubes is a pure animation and is not rendered at all.
+- */
+-const BackgroundLayer = () => {
+-  const reducedMotion = useReducedMotion();
+-
+-  return (
+-    <div
+-      aria-hidden="true"
+-      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+-    >
+-      <CakeBackground icon={<FaBirthdayCake />} />
+-      {!reducedMotion && (
+-        <div className="absolute bottom-4 right-4 opacity-40">
+-          <Cubes
+-            gridSize={5}
+-            cubeSize={8}
+-            radius={2}
+-            maxAngle={30}
+-            faceColor="var(--color-cube-face)"
+-            borderStyle="1px solid var(--color-cube-edge)"
+-            autoAnimate
+-            rippleOnClick={false}
+-          />
+-        </div>
+-      )}
+-    </div>
+-  );
+-};
+-
+-export default BackgroundLayer;
++"use client";
++
++import React from "react";
++import CakeBackground from "./CakeBackground";
++import { FaBirthdayCake } from "react-icons/fa";
++
++/**
++ * Site-wide decorative background layer (rendered once in the root layout):
++ * the festive cake drift, printed in the page's one ink at low strength.
++ * Decorative only: pointer-events-none + aria-hidden, fixed behind content.
++ * Reduced motion: the drift is killed by CSS (.animate-drift media query).
++ */
++const BackgroundLayer = () => (
++  <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
++    <CakeBackground icon={<FaBirthdayCake />} />
++  </div>
++);
++
++export default BackgroundLayer;
+diff -ruN src/components/Badge.tsx ../../src/components/Badge.tsx
+--- a/src/components/Badge.tsx	2026-11-25 12:46:59.910917657 -0300
++++ b/src/components/Badge.tsx	2026-11-25 12:55:28.759117566 -0300
+@@ -1,4 +1,3 @@
+-
+ import React, { FC } from 'react'
+ 
+ interface BadgeProps{
+@@ -8,24 +7,13 @@
+ }
+ 
+ /**
+- * Semantic badge colors, tokenized (CP-9 / design-system Badge mapping):
+- * yellow→warning, orange→primary, green→success, dark→neutral, default→info.
+- * Text is always a dark neutral (>= 4.5:1 on the tinted backgrounds); the
+- * semantic color is carried by the tint + border so contrast stays AA.
++ * A chip, printed: a full pill in a 1px ink line on the page stock. Halftone
++ * has one ink, so `color` no longer changes the print; the prop is kept for
++ * callers.
+  */
+-const badgeColors: Record<string, string> = {
+-  warning: "border-warning/60 bg-warning/10 text-neutral-800",
+-  primary: "border-primary-300 bg-primary-50 text-primary-800",
+-  success: "border-success/60 bg-success/10 text-neutral-800",
+-  neutral: "border-neutral-300 bg-neutral-100 text-neutral-700",
+-  info: "border-info/60 bg-info/10 text-neutral-800",
+-};
+-
+-const getColor = (color?: string): string => badgeColors[color || "info"] ?? badgeColors.info;
+-
+-const Badge: FC<BadgeProps> = ({ text, color, className}) => {
++const Badge: FC<BadgeProps> = ({ text, className}) => {
+   return (
+-    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium me-2 ${getColor(color)} ${className || ''}`}>{text}</span>
++    <span className={`inline-flex items-center rounded-full border border-ink bg-paper px-3 py-1 text-sm font-medium text-ink ${className || ''}`}>{text}</span>
+   )
+ }
+ 
+diff -ruN src/components/BlurTextTitle.tsx ../../src/components/BlurTextTitle.tsx
+--- a/src/components/BlurTextTitle.tsx	2026-11-25 12:46:59.910972648 -0300
++++ b/src/components/BlurTextTitle.tsx	2026-11-25 12:50:56.450392650 -0300
+@@ -20,7 +20,8 @@
+  */
+ const BlurTextTitle = ({ text, className, delay = 40 }: BlurTextTitleProps) => {
+   const reducedMotion = useReducedMotion();
+-  const classes = cn("font-display font-bold", className);
++  // Ultra has one weight: never synthesise a bold.
++  const classes = cn("font-display", className);
+ 
+   if (reducedMotion) {
+     return <h1 className={classes}>{text}</h1>;
+diff -ruN src/components/CakeBackground.tsx ../../src/components/CakeBackground.tsx
+--- a/src/components/CakeBackground.tsx	2026-11-25 12:46:59.911022609 -0300
++++ b/src/components/CakeBackground.tsx	2026-11-25 12:53:25.810977025 -0300
+@@ -1,66 +1,60 @@
+-import React, { FC, ReactNode, useMemo } from "react";
+-
+-interface CakeBackgroundProps {
+-  icon: ReactNode;
+-  /** Number of decorative icons (design cap: 18). */
+-  count?: number;
+-}
+-
+-interface DriftItem {
+-  left: string;
+-  top: string;
+-  color: string;
+-  delay: number;
+-  duration: number;
+-}
+-
+-const DRIFT_COLORS = [
+-  "text-primary-600/40",
+-  "text-accent-500/40",
+-  "text-festive-yellow/40",
+-  "text-success/40",
+-  "text-danger/40",
+-  "text-warning/40",
+-];
+-
+-const CakeBackground: FC<CakeBackgroundProps> = ({ icon, count = 18 }) => {
+-  // Positions are generated ONCE at mount: no setState loop, no re-renders,
+-  // no stale-closure teleport interval. Drift is pure CSS (GPU composited).
+-  const items = useMemo<DriftItem[]>(() => {
+-    const generated: DriftItem[] = [];
+-    for (let i = 0; i < count; i += 1) {
+-      generated.push({
+-        left: `${Math.random() * 85}vw`,
+-        top: `${Math.random() * 85}vh`,
+-        color: DRIFT_COLORS[i % DRIFT_COLORS.length],
+-        delay: -(i * 2.4),
+-        duration: 14 + (i % 5) * 2,
+-      });
+-    }
+-    return generated;
+-  }, [count]);
+-
+-  return (
+-    <div
+-      aria-hidden="true"
+-      className="pointer-events-none absolute inset-0 overflow-hidden"
+-    >
+-      {items.map((item, index) => (
+-        <div
+-          key={index}
+-          className={`animate-drift absolute text-5xl ${item.color}`}
+-          style={{
+-            left: item.left,
+-            top: item.top,
+-            animationDelay: `${item.delay}s`,
+-            animationDuration: `${item.duration}s`,
+-          }}
+-        >
+-          {icon}
+-        </div>
+-      ))}
+-    </div>
+-  );
+-};
+-
+-export default CakeBackground;
++import React, { FC, ReactNode, useMemo } from "react";
++
++interface CakeBackgroundProps {
++  icon: ReactNode;
++  /** Number of decorative icons (design cap: 18). */
++  count?: number;
++}
++
++interface DriftItem {
++  left: string;
++  top: string;
++  color: string;
++  size: string;
++  delay: number;
++  duration: number;
++}
++
++/** One ink: the spot and the page's own stocks, never a second colour. */
++const DRIFT_COLORS = ["text-spot/[0.09]", "text-paper-3/70", "text-spot/[0.06]", "text-rule/60", "text-ink/[0.04]", "text-spot/[0.12]"];
++const DRIFT_SIZES = ["text-4xl", "text-5xl", "text-6xl"];
++
++const CakeBackground: FC<CakeBackgroundProps> = ({ icon, count = 18 }) => {
++  // Positions are generated ONCE at mount: no setState loop, no re-renders.
++  // Drift is pure CSS (GPU composited).
++  const items = useMemo<DriftItem[]>(() => {
++    const generated: DriftItem[] = [];
++    for (let i = 0; i < count; i += 1) {
++      generated.push({
++        left: `${Math.random() * 90}%`,
++        top: `${Math.random() * 90}%`,
++        color: DRIFT_COLORS[i % DRIFT_COLORS.length],
++        size: DRIFT_SIZES[i % DRIFT_SIZES.length],
++        delay: -(i * 2.4),
++        duration: 14 + (i % 5) * 2,
++      });
++    }
++    return generated;
++  }, [count]);
++
++  return (
++    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
++      {items.map((item, index) => (
++        <div
++          key={index}
++          className={`animate-drift absolute ${item.size} ${item.color}`}
++          style={{
++            left: item.left,
++            top: item.top,
++            animationDelay: `${item.delay}s`,
++            animationDuration: `${item.duration}s`,
++          }}
++        >
++          {icon}
++        </div>
++      ))}
++    </div>
++  );
++};
++
++export default CakeBackground;
+diff -ruN src/components/Countdown.tsx ../../src/components/Countdown.tsx
+--- a/src/components/Countdown.tsx	2026-11-25 12:46:59.911049889 -0300
++++ b/src/components/Countdown.tsx	2026-11-25 12:50:37.724071173 -0300
+@@ -1,54 +1,78 @@
+-// components/Countdown.tsx
+-import { calculateTimeLeft, TimeLeft } from "@/lib/calculateTimeLeft";
+-import React, { useState, useEffect, useRef } from "react";
+-
+-interface CountdownProps {
+-  targetDate: Date;
+-  onComplete: () => void;
+-}
+-
+-const Countdown: React.FC<CountdownProps> = ({ targetDate, onComplete }) => {
+-  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
+-  const prevOverRef = useRef<boolean | null>(null);
+-  const onCompleteRef = useRef(onComplete);
+-
+-  useEffect(() => {
+-    onCompleteRef.current = onComplete;
+-  }, [onComplete]);
+-
+-  useEffect(() => {
+-    const initial = calculateTimeLeft(targetDate);
+-    prevOverRef.current = initial.isOver;
+-    setTimeLeft(initial);
+-
+-    const timer = setInterval(() => {
+-      const next = calculateTimeLeft(targetDate);
+-      setTimeLeft(next);
+-      // Fire exactly once on the zero-crossing tick (false -> true transition).
+-      if (prevOverRef.current === false && next.isOver) {
+-        onCompleteRef.current();
+-      }
+-      prevOverRef.current = next.isOver;
+-    }, 1000);
+-
+-    return () => {
+-      clearInterval(timer);
+-    };
+-  }, [targetDate]);
+-
+-  const formatNumber = (value: number) => value.toString().padStart(2, "0");
+-
+-  return (
+-    <div className="flex flex-col items-center">
+-      <div className="mb-2 font-display text-3xl font-bold tabular-nums text-neutral-800 md:text-4xl">
+-        {timeLeft === null
+-          ? "00 días 00 horas 00 minutos"
+-          : timeLeft.isOver
+-          ? "La fiesta ya pasó"
+-          : `${formatNumber(timeLeft.days)} días ${formatNumber(timeLeft.hours)} horas ${formatNumber(timeLeft.minutes)} minutos`}
+-      </div>
+-    </div>
+-  );
+-};
+-
+-export default Countdown;
++// components/Countdown.tsx
++import { calculateTimeLeft, TimeLeft } from "@/lib/calculateTimeLeft";
++import { EVENT_DAY, EVENT_HOUR, EVENT_MONTH } from "@/lib/eventDate";
++import React, { useState, useEffect, useRef } from "react";
++
++interface CountdownProps {
++  targetDate: Date;
++  onComplete: () => void;
++}
++
++const MONTHS = [
++  "enero", "febrero", "marzo", "abril", "mayo", "junio",
++  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
++];
++
++/** Built from the constants, not the Date, so server and client print the same line. */
++const EVENT_LINE = `Hasta el ${EVENT_DAY} de ${MONTHS[EVENT_MONTH - 1]} a las ${EVENT_HOUR} h`;
++
++const Countdown: React.FC<CountdownProps> = ({ targetDate, onComplete }) => {
++  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
++  const prevOverRef = useRef<boolean | null>(null);
++  const onCompleteRef = useRef(onComplete);
++
++  useEffect(() => {
++    onCompleteRef.current = onComplete;
++  }, [onComplete]);
++
++  useEffect(() => {
++    const initial = calculateTimeLeft(targetDate);
++    prevOverRef.current = initial.isOver;
++    setTimeLeft(initial);
++
++    const timer = setInterval(() => {
++      const next = calculateTimeLeft(targetDate);
++      setTimeLeft(next);
++      // Fire exactly once on the zero-crossing tick (false -> true transition).
++      if (prevOverRef.current === false && next.isOver) {
++        onCompleteRef.current();
++      }
++      prevOverRef.current = next.isOver;
++    }, 1000);
++
++    return () => {
++      clearInterval(timer);
++    };
++  }, [targetDate]);
++
++  const formatNumber = (value: number) => value.toString().padStart(2, "0");
++
++  if (timeLeft?.isOver) {
++    return <p className="font-display text-section text-ink">La fiesta ya pasó</p>;
++  }
++
++  const units = [
++    { label: "días", value: timeLeft ? formatNumber(timeLeft.days) : "00" },
++    { label: "horas", value: timeLeft ? formatNumber(timeLeft.hours) : "00" },
++    { label: "minutos", value: timeLeft ? formatNumber(timeLeft.minutes) : "00" },
++  ];
++
++  return (
++    <div>
++      {/* The label as a panel: a 3px ink bar, the figures in Ultra, hairlines between. */}
++      <dl aria-label="Cuenta regresiva" className="grid grid-cols-3 divide-x divide-rule border-t-bar border-b border-ink border-b-rule">
++        {units.map((unit) => (
++          <div key={unit.label} className="flex flex-col-reverse gap-1 py-4 pl-4 first:pl-0 md:pl-6">
++            <dt className="text-sm font-medium text-muted">{unit.label}</dt>
++            <dd className="font-display text-[clamp(2.25rem,4vw,3.75rem)] leading-none tabular-nums text-ink">
++              {unit.value}
++            </dd>
++          </div>
++        ))}
++      </dl>
++      <p className="mt-3 text-sm text-muted">{EVENT_LINE}</p>
++    </div>
++  );
++};
++
++export default Countdown;
+diff -ruN src/components/CurvedLoop.tsx ../../src/components/CurvedLoop.tsx
+--- a/src/components/CurvedLoop.tsx	2026-11-25 12:46:59.911114831 -0300
++++ b/src/components/CurvedLoop.tsx	2026-11-25 12:58:56.225047653 -0300
+@@ -53,7 +53,18 @@
+   const ready = spacing > 0;
+ 
+   useEffect(() => {
+-    if (measureRef.current) setSpacing(measureRef.current.getComputedTextLength());
++    const measure = () => {
++      if (measureRef.current) setSpacing(measureRef.current.getComputedTextLength());
++    };
++    measure();
++    // The display face loads async: measure again once it has, or the loop wraps at the fallback's width.
++    let cancelled = false;
++    document.fonts?.ready.then(() => {
++      if (!cancelled) measure();
++    });
++    return () => {
++      cancelled = true;
++    };
+   }, [text, className]);
+ 
+   useEffect(() => {
+@@ -131,25 +142,25 @@
+       <svg
+         role="img"
+         aria-label={label}
+-        className="select-none w-full overflow-visible block aspect-[100/25] text-[6rem] font-bold uppercase leading-none"
++        className="select-none w-full overflow-visible block aspect-[100/25] font-display text-[6rem] uppercase leading-none"
+         viewBox="0 -90 1440 360"
+       >
+         <text ref={measureRef} xmlSpace="preserve" style={{ visibility: 'hidden', opacity: 0, pointerEvents: 'none' }}>
+           {text}
+         </text>
+         <defs>
+-          <path ref={pathRef} id={pathId} d={pathD} fill="none" stroke="transparent" />
++          {/* No stroke here: the <use> below paints the ribbon, and a stroke on the source would override it. */}
++          <path ref={pathRef} id={pathId} d={pathD} fill="none" />
+         </defs>
+         {ready && (
+           <>
+-            {/* Cinta blanca que sigue la misma curva del texto */}
++            {/* Cinta en la tinta de acento que sigue la misma curva del texto (var() solo resuelve en style) */}
+             <use
+               href={`#${pathId}`}
+-              stroke="var(--color-ribbon)"
+               strokeWidth={230}
+               strokeLinecap="round"
+               fill="none"
+-              style={{ filter: 'drop-shadow(0 8px 16px var(--color-ribbon-shadow))' }}
++              style={{ stroke: 'var(--color-ribbon)' }}
+             />
+             <text xmlSpace="preserve" aria-hidden="true" style={{ fill: 'var(--color-marquee-ink)' }}>
+               <textPath ref={textPathRef} href={`#${pathId}`} startOffset={offset + 'px'} xmlSpace="preserve">
+@@ -165,7 +176,7 @@
+           onClick={() => setPaused((p) => !p)}
+           onPointerDown={(e) => e.stopPropagation()}
+           aria-pressed={paused}
+-          className="absolute bottom-0 right-4 z-10 rounded-full bg-card-default px-3 py-1 text-sm text-neutral-700 shadow-md transition-colors duration-base hover:bg-neutral-100 active:bg-neutral-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2"
++          className="absolute right-0 top-full z-10 mt-3 min-h-11 rounded-input border border-ink bg-paper px-4 text-sm font-medium text-ink transition-colors duration-fast hover:bg-paper-2 active:bg-paper-3"
+         >
+           {paused ? 'Reanudar' : 'Pausar'}
+         </button>
+diff -ruN src/components/DesktopInvitations.tsx ../../src/components/DesktopInvitations.tsx
+--- a/src/components/DesktopInvitations.tsx	2026-11-25 12:46:59.911147071 -0300
++++ b/src/components/DesktopInvitations.tsx	2026-11-25 12:55:41.443570646 -0300
+@@ -13,14 +13,16 @@
+   return (
+     <Swiper
+       className="my-4"
++      spaceBetween={32}
+       effect="coverflow"
+       grabCursor={true}
+       centeredSlides={true}
+       slidesPerView={2}
+       coverflowEffect={{
+-        rotate: 50,
++        rotate: 0,
+         stretch: 0,
+-        depth: 100,
++        depth: 0,
++        scale: 0.9,
+         modifier: 1,
+         slideShadows: false,
+       }}
+diff -ruN src/components/Footer.tsx ../../src/components/Footer.tsx
+--- a/src/components/Footer.tsx	2026-11-25 12:46:59.911178652 -0300
++++ b/src/components/Footer.tsx	2026-11-25 12:55:29.175124809 -0300
+@@ -1,41 +1,37 @@
+ import Link from "next/link";
+ import React, { FC } from "react";
+ 
++/** Statement footer: one closing sentence set large under the ink bar, the links beneath. */
+ const Footer: FC = () => {
+   return (
+-    <footer className="-mx-6 mt-12 border-t border-neutral-200 px-6 py-6 md:-mx-8 md:px-8">
+-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+-        <p className="text-sm font-medium text-neutral-500">
+-          El regalo es tu presencia misma!, pero si queres hacerme un regalo
+-          {" "}
+-          <Link className="text-primary-600 hover:text-primary-700" href="/wishlist">
+-            Lista de deseados
+-          </Link>{" "}
+-          👀
+-        </p>
++    <footer className="mt-24 border-t-bar border-ink py-16">
++      <p className="max-w-[22ch] font-display text-section text-ink">
++        ¡El regalo es tu presencia misma!
++      </p>
++      <p className="mt-4 max-w-[60ch] text-lg text-ink-2">
++        Pero si querés hacerme un regalo, está la{" "}
++        <Link className="link" href="/wishlist">
++          Lista de deseados
++        </Link>{" "}
++        👀
++      </p>
+ 
+-        <nav aria-label="Navegación principal">
+-          <ul className="flex flex-wrap items-center gap-4 text-sm font-medium text-neutral-500">
+-            <li>
+-              <Link href="/" className="hover:underline hover:text-neutral-700">
+-                Inicio
+-              </Link>
+-            </li>
+-            <li>
+-              <a
+-                href="https://gomeztomasgonzalo.com.ar"
+-                target="_blank"
+-                rel="noreferrer"
+-                className="hover:underline hover:text-neutral-700"
+-              >
+-                El Cumpleañero
+-              </a>
+-            </li>
+-          </ul>
+-        </nav>
+-      </div>
++      <nav aria-label="Navegación principal" className="mt-10">
++        <ul className="flex flex-wrap items-center gap-6 text-sm font-medium">
++          <li>
++            <Link href="/" className="link">
++              Inicio
++            </Link>
++          </li>
++          <li>
++            <a href="https://gomeztomasgonzalo.com.ar" target="_blank" rel="noreferrer" className="link">
++              El Cumpleañero
++            </a>
++          </li>
++        </ul>
++      </nav>
+     </footer>
+   );
+ };
+ 
+-export default Footer;
+\ No newline at end of file
++export default Footer;
+diff -ruN src/components/GroupedButtons.tsx ../../src/components/GroupedButtons.tsx
+--- a/src/components/GroupedButtons.tsx	2026-11-25 12:46:59.911210432 -0300
++++ b/src/components/GroupedButtons.tsx	2026-11-25 12:54:20.134922811 -0300
+@@ -22,12 +22,13 @@
+   const router = useRouter()
+ 
+   return (
+-    <div className="flex flex-wrap justify-center gap-4 mt-12">
++    <div className="mt-6 flex flex-col items-start gap-4">
+       {!isDrity && (
+         <>
+           <Button
+             variant="success"
+             size="lg"
++            fullWidth
+             loading={onRequestConfirm}
+             disabled={onRequestConfirm || onRequestNoConfirm}
+             onClick={handleConfirm}
+@@ -37,7 +38,7 @@
+ 
+           <Button
+             variant="danger"
+-            size="lg"
++            size="md"
+             loading={onRequestNoConfirm}
+             disabled={onRequestNoConfirm || onRequestConfirm}
+             onClick={handleNoConfirm}
+@@ -51,6 +52,7 @@
+         <Button
+           variant="primary"
+           size="lg"
++          fullWidth
+           onClick={() => router.push(`/${guestData.id}/confirm`)}
+         >
+           Mira las instrucciones
+@@ -58,9 +60,9 @@
+       )}
+ 
+       {isDrity && !isConfirmed && (
+-        <div className="text-center text-neutral-500 py-4">
++        <p className="text-ink-2">
+           No has confirmado tu asistencia.
+-        </div>
++        </p>
+       )}
+     </div>
+   );
+diff -ruN src/components/InvitationInfo.tsx ../../src/components/InvitationInfo.tsx
+--- a/src/components/InvitationInfo.tsx	2026-11-25 12:46:59.911331834 -0300
++++ b/src/components/InvitationInfo.tsx	2026-11-25 13:08:20.661632089 -0300
+@@ -17,31 +17,35 @@
+ const InvitationInfo: FC<InvitationInfoProps> = ({ text, lat, long, loading, description, food }) => {
+ 
+     return (
+-        <div className='my-5 mb-10 px-3'>
+-            <h2 className="font-display text-2xl md:text-3xl mb-3 font-semibold">{text}</h2>
++        <div className="flex h-full flex-col gap-4 sm:gap-6">
++            <h2 className="text-section text-ink">{text}</h2>
+ 
+-            <p className='mb-8'>{description}</p>
+-            <div className="mb-8 flex flex-wrap gap-2">
++            <p className="text-ink-2">{description}</p>
+ 
+-                {food?.map(f => <Badge key={f} text={f} color='dark' />)}
++            {food && food.length > 0 && (
++                <ul aria-label="Qué hay para comer" className="flex flex-wrap gap-2">
++                    {food.map(f => <li key={f}><Badge text={f} /></li>)}
++                </ul>
++            )}
+ 
++            <div>
++                <Button
++                    variant="secondary"
++                    icon={<FaCalendar />}
++                    onClick={() => saveTheDate(text, description)}
++                >
++                    Agendar en calendario
++                </Button>
+             </div>
+-            <Button
+-                variant="secondary"
+-                fullWidth
+-                icon={<FaCalendar />}
+-                className="mb-5"
+-                onClick={() => saveTheDate(text, description)}
+-            >
+-                Agendar en calendario
+-            </Button>
+ 
+-<LocationButton
+-                latitude={lat}
+-                longitude={long}
+-                loading={loading}
+-                locationTitle={text}
+-              />
++            <div className="mt-auto">
++                <LocationButton
++                    latitude={lat}
++                    longitude={long}
++                    loading={loading}
++                    locationTitle={text}
++                />
++            </div>
+         </div>
+     )
+ }
+diff -ruN src/components/InvitationPersonalInfo.tsx ../../src/components/InvitationPersonalInfo.tsx
+--- a/src/components/InvitationPersonalInfo.tsx	2026-11-25 12:46:59.911361325 -0300
++++ b/src/components/InvitationPersonalInfo.tsx	2026-11-25 13:08:20.661720861 -0300
+@@ -1,37 +1,37 @@
+-import React, { useState } from 'react'
+-import RequirementList from './RequirementList';
+-import Button from './ui/Button';
+-import { FaCalendar } from 'react-icons/fa6';
+-import { saveTheDate } from '@/lib/saveTheDate';
+-
+-const InvitationPersonalInfo = () => {
+-
+-  const [requirements] = useState([{name:"Vestimenta", description:"Sport"},{name:"Horario", description:"20hs a 00hs"}])
+-
+-  return (
+-    <div className='px-2 py-4 md:px-5 rounded-md'>
+-      <h2 className='text-3xl mb-5 font-bold'>Invitación Personal</h2>
+-         <div className='mb-10'>
+-            <p>Honestamente, no tengo ni idea de qué hacer.</p>
+-            <p  className="mb-5" >Simplemente quiero pasar el día contigo y ver qué onda, dentro de las posibilidades que tengamos.</p>
+-
+-            <div className="p-4 text-sm text-gray-800 rounded-lg dark:text-gray-300" role="alert">
+-            <span className="font-medium">PD:</span> Seguramente pidamos pizza
+-          </div>
+-         </div>
+-
+-
+-        <RequirementList items={requirements} />
+-        <Button
+-            variant="secondary"
+-            fullWidth
+-            icon={<FaCalendar />}
+-            onClick={() => saveTheDate("", "")}
+-        >
+-            Agendar en calendario
+-        </Button>
+-    </div>
+-  )
+-}
+-
+-export default InvitationPersonalInfo
++import React, { useState } from 'react'
++import RequirementList from './RequirementList';
++import Button from './ui/Button';
++import { FaCalendar } from 'react-icons/fa6';
++import { saveTheDate } from '@/lib/saveTheDate';
++
++const InvitationPersonalInfo = () => {
++
++  const [requirements] = useState([{name:"Vestimenta", description:"Sport"},{name:"Horario", description:"20hs a 00hs"}])
++
++  return (
++    <div className="flex h-full flex-col gap-4 sm:gap-6">
++      <h2 className="text-section text-ink">Invitación Personal</h2>
++
++      <div className="space-y-3 text-ink-2">
++        <p>Honestamente, no tengo ni idea de qué hacer.</p>
++        <p>Simplemente quiero pasar el día contigo y ver qué onda, dentro de las posibilidades que tengamos.</p>
++      </div>
++
++      <p className="font-display text-title text-spot-deep">PD: Seguramente pidamos pizza</p>
++
++      <RequirementList items={requirements} />
++
++      <div className="mt-auto">
++        <Button
++          variant="secondary"
++          icon={<FaCalendar />}
++          onClick={() => saveTheDate("", "")}
++        >
++          Agendar en calendario
++        </Button>
++      </div>
++    </div>
++  )
++}
++
++export default InvitationPersonalInfo
+diff -ruN src/components/InvitationText.tsx ../../src/components/InvitationText.tsx
+--- a/src/components/InvitationText.tsx	2026-11-25 12:46:59.911389455 -0300
++++ b/src/components/InvitationText.tsx	2026-11-25 12:54:19.811917187 -0300
+@@ -1,28 +1,27 @@
+-import { Guest } from "@/types/Guest";
+-import React, { FC } from "react";
+-
+-const InvitationText = () => {
+-  return (
+-    <div className="mb-6 text-gray-700">
+-      <p className="mb-4 text-lg">
+-        La cuenta regresiva ha comenzado y estoy emocionado de invitarte a mi
+-        fiesta de cumpleaños.
+-      </p>
+-      <p className="mb-4 text-lg">
+-        Este año, quiero compartir mi día especial contigo en un ambiente lleno
+-        de alegría y risas.
+-      </p>
+-      <p className="mb-4 text-lg">
+-        Tu presencia hará que esta celebración sea aún más significativa.
+-      </p>
+-      <p className="mb-4 text-lg">
+-        ¡Espero que puedas unirte a mí para festejar juntos!
+-      </p>
+-      <p className="mb-4 text-lg">
+-        ¡Hagamos que mi cumpleaños sea inolvidable!
+-      </p>
+-    </div>
+-  );
+-};
+-
+-export default InvitationText;
++import React from "react";
++
++const InvitationText = () => {
++  return (
++    <div className="max-w-[60ch] space-y-4 text-lg leading-relaxed text-ink-2">
++      <p className="lead text-ink">
++        La cuenta regresiva ha comenzado y estoy emocionado de invitarte a mi
++        fiesta de cumpleaños.
++      </p>
++      <p>
++        Este año, quiero compartir mi día especial contigo en un ambiente lleno
++        de alegría y risas.
++      </p>
++      <p>
++        Tu presencia hará que esta celebración sea aún más significativa.
++      </p>
++      <p>
++        ¡Espero que puedas unirte a mí para festejar juntos!
++      </p>
++      <p>
++        ¡Hagamos que mi cumpleaños sea inolvidable!
++      </p>
++    </div>
++  );
++};
++
++export default InvitationText;
+diff -ruN src/components/Invitation.tsx ../../src/components/Invitation.tsx
+--- a/src/components/Invitation.tsx	2026-11-25 12:46:59.911271193 -0300
++++ b/src/components/Invitation.tsx	2026-11-25 12:53:59.483563268 -0300
+@@ -81,19 +81,26 @@
+   };
+ 
+   return (
+-    <section aria-labelledby={invitationId}>
++    <section aria-labelledby={invitationId} className="grid gap-12 md:grid-cols-12 md:gap-8">
+       <p id={invitationId} className="sr-only">
+         Invitación para {guestData.name}
+       </p>
+-      <BlurTextTitle text={`¡Hola ${guestData.name}!`} className="mb-10 text-4xl md:text-5xl" />
+-      <InvitationText />
+-      <GroupedButtons
+-        handleConfirm={handleConfirm}
+-        onRequestConfirm={onRequestConfirm}
+-        handleNoConfirm={handleNoConfirm}
+-        onRequestNoConfirm={onRequestNoConfirm}
+-        guestData={guestData}
+-      />
++      {/* The letter: the greeting at display size, the words at reading size. */}
++      <div className="min-w-0 md:col-span-7">
++        <BlurTextTitle text={`¡Hola ${guestData.name}!`} className="mb-10 text-display text-ink" />
++        <InvitationText />
++      </div>
++      {/* The answer, in the page's one well, held beside the letter. */}
++      <div className="well self-start p-8 md:sticky md:top-8 md:col-span-4 md:col-start-9">
++        <h2 className="text-title text-ink">¿Venís?</h2>
++        <GroupedButtons
++          handleConfirm={handleConfirm}
++          onRequestConfirm={onRequestConfirm}
++          handleNoConfirm={handleNoConfirm}
++          onRequestNoConfirm={onRequestNoConfirm}
++          guestData={guestData}
++        />
++      </div>
+     </section>
+   );
+ };
+diff -ruN src/components/LocationButton.tsx ../../src/components/LocationButton.tsx
+--- a/src/components/LocationButton.tsx	2026-11-25 12:46:59.911454827 -0300
++++ b/src/components/LocationButton.tsx	2026-11-25 12:55:41.443341452 -0300
+@@ -34,8 +34,8 @@
+   const position: LatLngExpression = [latitude ?? 0, longitude ?? 0];
+ 
+   // Inline SVG pin (icon policy: SVG for interactive, no divIcon emoji).
+-  // primary-700 fill + festive-yellow center, white outline, tip at bottom.
+-  const PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32"><path d="M12 0C5.37 0 0 5.37 0 12c0 8.25 12 20 12 20s12-11.75 12-20C24 5.37 18.63 0 12 0z" fill="#C2410C" stroke="#FFFFFF" stroke-width="1.5"/><circle cx="12" cy="11" r="4.5" fill="#FFEAA7"/></svg>`;
++  // The spot fill with a paper centre and outline, tip at bottom (token colours via style).
++  const PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32"><path d="M12 0C5.37 0 0 5.37 0 12c0 8.25 12 20 12 20s12-11.75 12-20C24 5.37 18.63 0 12 0z" style="fill:var(--color-accent);stroke:var(--color-paper)" stroke-width="1.5"/><circle cx="12" cy="11" r="4.5" style="fill:var(--color-paper)"/></svg>`;
+ 
+   const customIcon = L.divIcon({
+     className: "",
+@@ -51,7 +51,7 @@
+           <div
+             role="application"
+             aria-label={`Mapa interactivo de ${locationTitle}. Desplazamiento y zoom deshabilitados.`}
+-            className="rounded-lg"
++            className="border border-ink"
+             style={{ height: "100%", width: "100%" }}
+           >
+             <MapContainer
+@@ -61,7 +61,7 @@
+               touchZoom={false}
+               scrollWheelZoom={false}
+               doubleClickZoom={false}
+-              className="h-full w-full rounded-lg"
++              className="h-full w-full"
+             >
+               <TileLayer
+                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+diff -ruN src/components/mobile/InvitationDeck.tsx ../../src/components/mobile/InvitationDeck.tsx
+--- a/src/components/mobile/InvitationDeck.tsx	2026-11-25 12:46:59.911521638 -0300
++++ b/src/components/mobile/InvitationDeck.tsx	2026-11-25 12:55:41.444117125 -0300
+@@ -98,7 +98,7 @@
+           <div
+             key={`behind-${slideIndex}`}
+             aria-hidden="true"
+-            className="pointer-events-none absolute inset-x-0 top-0 z-10 rounded-xl shadow-md"
++            className="pointer-events-none absolute inset-x-0 top-0 z-10"
+             style={{ transform: `translateY(${-8 * i}px) scale(${1 - 0.04 * i})` }}
+           >
+             {slides[slideIndex]}
+@@ -108,7 +108,7 @@
+ 
+       {/* Active card: axis-locked drag, rotation from drag offset. */}
+       <motion.div
+-        className="deck-card relative z-20 rounded-xl shadow-lg"
++        className="deck-card relative z-20"
+         drag="x"
+         dragMomentum={false}
+         style={{ x, rotate }}
+@@ -138,7 +138,7 @@
+             aria-current={i === activeIndex ? 'step' : undefined}
+             className={cn(
+               'deck-dot h-2 rounded-full transition-colors duration-base ease-party',
+-              i === activeIndex ? 'w-6 bg-primary-700' : 'w-2 bg-neutral-300'
++              i === activeIndex ? 'w-6 bg-spot' : 'w-2 bg-ink/25'
+             )}
+           />
+         ))}
+diff -ruN src/components/NoInvitation.tsx ../../src/components/NoInvitation.tsx
+--- a/src/components/NoInvitation.tsx	2026-11-25 12:46:59.911654340 -0300
++++ b/src/components/NoInvitation.tsx	2026-11-25 12:54:20.736933292 -0300
+@@ -1,27 +1,31 @@
+-import React from "react";
+-import WhatsAppButton from "./WhatsAppButton";
+-
+-const NoInvitation = () => {
+-  return (
+-    <>
+-      <h1 className="font-display text-4xl font-bold md:text-5xl mb-8">¡Oops! se pico mal.</h1>
+-      <div className="max-w-3xl mb-8">
+-      <p className="text-base mb-4">
+-        Parece que la invitación que intentas acceder no existe o hay algún
+-        error.
+-      </p>
+-      <p className="text-base mb-4">
+-        Por favor, verifica el número de teléfono que cumpla con el siguiente
+-        patron <strong>11XXXXXXXX</strong> o asegúrate de haber sido incluido en
+-        la lista de invitados.
+-      </p>
+-      <p className="text-base mb-4">
+-        Si crees que esto es un error, no dudes en ponerte en contacto conmigo.
+-      </p>
+-      </div>
+-      <WhatsAppButton />
+-    </>
+-  );
+-};
+-
+-export default NoInvitation;
++import React from "react";
++import WhatsAppButton from "./WhatsAppButton";
++
++const NoInvitation = () => {
++  return (
++    <section className="grid gap-12 md:grid-cols-12 md:gap-8">
++      <div className="min-w-0 md:col-span-7">
++        <h1 className="mb-10 text-display text-ink">¡Oops! se picó mal.</h1>
++        <div className="max-w-[60ch] space-y-4 text-lg leading-relaxed text-ink-2">
++          <p className="lead text-ink">
++            Parece que la invitación que intentas acceder no existe o hay algún
++            error.
++          </p>
++          <p>
++            Por favor, verifica el número de teléfono que cumpla con el siguiente
++            patrón <strong className="font-bold text-ink">11XXXXXXXX</strong> o asegúrate de haber sido incluido en
++            la lista de invitados.
++          </p>
++          <p>
++            Si crees que esto es un error, no dudes en ponerte en contacto conmigo.
++          </p>
++        </div>
++      </div>
++      <div className="well self-start p-8 md:col-span-4 md:col-start-9">
++        <WhatsAppButton />
++      </div>
++    </section>
++  );
++};
++
++export default NoInvitation;
+diff -ruN src/components/ProductCard2.tsx ../../src/components/ProductCard2.tsx
+--- a/src/components/ProductCard2.tsx	2026-11-25 12:46:59.911690931 -0300
++++ b/src/components/ProductCard2.tsx	2026-11-25 12:59:53.713238157 -0300
+@@ -1,28 +1,26 @@
+ import React, { FC } from 'react'
+-import Card from './ui/Card'
+ import Button from './ui/Button'
+ 
+-
+ interface ProductCard2Props {
+   name: string;
+   image: string;
+   link: string;
++  /** The first card is likely the LCP: load it eagerly at high priority. */
++  priority?: boolean;
+ }
+ 
+-const ProductCard2: FC<ProductCard2Props> = ({ name, image, link }) => {
++/** A product, printed: the photo square in a 1px ink line on the deeper stock, its name in Ultra, the buy link underlined. */
++const ProductCard2: FC<ProductCard2Props> = ({ name, image, link, priority = false }) => {
+   return (
+-    <Card
+-      variant="elevated"
+-      className="flex flex-col items-center p-0 overflow-hidden md:max-w-xl md:flex-row"
+-    >
+-      <img className="object-cover w-full rounded-t-xl h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-xl" src={image} alt={name} />
+-      <div className="flex flex-col justify-between p-6 leading-normal">
+-        <h2 className="mb-2 text-2xl font-bold tracking-tight text-neutral-900">{name}</h2>
+-        <Button asChild size="sm" className="self-start">
+-          <a href={link} aria-label={`Comprar ${name}`}>Comprar</a>
+-        </Button>
+-      </div>
+-    </Card>
++    <article className="flex min-w-0 flex-col gap-4">
++      <figure className="aspect-square overflow-hidden border border-ink bg-paper-2">
++        <img className="h-full w-full object-contain mix-blend-multiply" src={image} alt={name} loading={priority ? "eager" : "lazy"} fetchPriority={priority ? "high" : "auto"} />
++      </figure>
++      <h2 className="text-title text-ink">{name}</h2>
++      <Button asChild variant="secondary" size="sm" className="self-start">
++        <a href={link} aria-label={`Comprar ${name}`}>Comprar</a>
++      </Button>
++    </article>
+   )
+ }
+ 
+diff -ruN src/components/RequirementList.tsx ../../src/components/RequirementList.tsx
+--- a/src/components/RequirementList.tsx	2026-11-25 12:46:59.911721801 -0300
++++ b/src/components/RequirementList.tsx	2026-11-25 12:55:28.411111507 -0300
+@@ -1,24 +1,27 @@
+-import React, { FC } from 'react'
+-
+-interface RequirementListProps{
+-    items: Array<{
+-        name: string;
+-        description: string ;
+-    }>
+-}
+-
+-const RequirementList: FC<RequirementListProps> = ({items}) => {
+-  return (
+-    <div className='my-10'>
+-        <h2 className="text-3xl font-bold mb-3">Requisitos</h2>
+-        <dl className="max-w-md text-gray-900 divide-x divide-gray-200 flex">
+-           {items.map(item => ( <div className="flex flex-col px-3" key={item.name}>
+-                <dt className="mb-1 text-gray-500 md:text-lg ">{item.name}</dt>
+-                <dd className="text-lg font-semibold">{item.description}</dd>
+-            </div>))}
+-        </dl>
+-    </div>
+-  )
+-}
+-
+-export default RequirementList
+\ No newline at end of file
++import React, { FC } from 'react'
++
++interface RequirementListProps{
++    items: Array<{
++        name: string;
++        description: string ;
++    }>
++}
++
++/** The label as a panel: a 3px ink bar, the name in Chivo, the value in Ultra, hairlines between. */
++const RequirementList: FC<RequirementListProps> = ({items}) => {
++  return (
++    <div>
++        <h3 className="mb-3 text-title text-ink">Requisitos</h3>
++        <dl className="ruled">
++           {items.map(item => (
++            <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-baseline gap-4 py-3" key={item.name}>
++                <dt className="text-sm font-bold text-ink">{item.name}</dt>
++                <dd className="font-display text-title text-ink">{item.description}</dd>
++            </div>
++           ))}
++        </dl>
++    </div>
++  )
++}
++
++export default RequirementList
+diff -ruN src/components/SearchInvitationForm.tsx ../../src/components/SearchInvitationForm.tsx
+--- a/src/components/SearchInvitationForm.tsx	2026-11-25 12:46:59.911798373 -0300
++++ b/src/components/SearchInvitationForm.tsx	2026-11-25 12:50:48.068248753 -0300
+@@ -1,6 +1,5 @@
+ import { useRouter } from 'next/navigation'
+ import React, { FormEvent, useState } from 'react'
+-import { FaPaperPlane } from 'react-icons/fa6'
+ import Button from './ui/Button'
+ 
+ const SearchInvitationForm = () => {
+@@ -17,26 +16,28 @@
+     }
+ 
+     return (
+-        <form onSubmit={handleSubmit} className="w-full max-w-[500px] px-10">
+-            <label htmlFor="search" className="sr-only">Buscar invitación</label>
+-            <div className="relative">
+-                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+-                    <svg className="w-4 h-4 text-neutral-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+-                    </svg>
+-                </div>
+-                <input type="search" id="search" className="block w-full p-4 ps-10 text-base text-neutral-900 border border-neutral-300 rounded-lg bg-neutral-50 placeholder:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2" placeholder="Buscar invitación" required onChange={handleInputChange} value={inviteNumber} />
+-                <Button
+-                    type="submit"
+-                    variant="primary"
+-                    size="sm"
+-                    icon={<FaPaperPlane />}
+-                    aria-label="Buscar invitación"
+-                    className="absolute end-2.5 bottom-2.5"
++        <form onSubmit={handleSubmit} className="w-full max-w-xl">
++            <label htmlFor="search" className="mb-2 block text-sm font-medium text-ink">
++                Tu número de teléfono
++            </label>
++            <div className="flex flex-col gap-3 sm:flex-row">
++                <input
++                    type="search"
++                    id="search"
++                    name="telefono"
++                    inputMode="tel"
++                    autoComplete="tel"
++                    className="h-[3.25rem] min-w-0 flex-1 rounded-input border border-ink bg-paper px-4 text-base text-ink placeholder:text-muted"
++                    placeholder="11XXXXXXXX"
++                    required
++                    onChange={handleInputChange}
++                    value={inviteNumber}
+                 />
++                <Button type="submit" variant="primary" size="lg">
++                    Buscar invitación
++                </Button>
+             </div>
+         </form>
+-
+     )
+ }
+ 
+diff -ruN src/components/SearchInvitation.tsx ../../src/components/SearchInvitation.tsx
+--- a/src/components/SearchInvitation.tsx	2026-11-25 12:46:59.911761372 -0300
++++ b/src/components/SearchInvitation.tsx	2026-11-25 12:50:38.107077748 -0300
+@@ -1,4 +1,3 @@
+-
+ import React, { FC } from 'react'
+ import SearchInvitationForm from './SearchInvitationForm';
+ import { useStore } from '@nanostores/react';
+@@ -23,34 +22,27 @@
+     }
+ 
+   return (
+-    <>
+-    
+-    <p className="text-lg mb-3 px-3">
+-    {isComing ? 'Ingresa tu número de teléfono y podrás ver la invitación al cumpleaños.' : 'Aún no están disponibles las entradas de este año'}
+-        
+-    </p>
+-        
+-    {isComing && (<SearchInvitationForm />)}
+-
+-    {tryDemo && (
+-        <>
+-            <p className="text-base mb-3 mt-8">
+-                Si te interesa saber más del proyecto
+-            </p>
+-
+-            <Button
+-                variant="primary"
+-                size="lg"
+-                loading={loading}
+-                onClick={redirectToDemo}
+-                className="text-xl font-bold"
+-            >
+-                {loading ? 'Cargando…' : 'Demo'}
+-            </Button>
+-        </>
+-    )}
+-        
+-    </>
++    <div className="flex flex-col gap-4">
++      <p className="lead text-ink-2">
++        {isComing ? 'Ingresa tu número de teléfono y podrás ver la invitación al cumpleaños.' : 'Aún no están disponibles las entradas de este año'}
++      </p>
++
++      {isComing && (<SearchInvitationForm />)}
++
++      {tryDemo && (
++        <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-ink-2">
++          Si te interesa saber más del proyecto
++          <Button
++            variant="secondary"
++            size="sm"
++            loading={loading}
++            onClick={redirectToDemo}
++          >
++            {loading ? 'Cargando…' : 'Ver la demo'}
++          </Button>
++        </p>
++      )}
++    </div>
+   );
+ }
+ 
+diff -ruN src/components/ui/Button.tsx ../../src/components/ui/Button.tsx
+--- a/src/components/ui/Button.tsx	2026-11-25 12:46:59.911863734 -0300
++++ b/src/components/ui/Button.tsx	2026-11-25 12:48:57.543351360 -0300
+@@ -16,20 +16,29 @@
+   asChild?: boolean;
+ }
+ 
++/**
++ * Halftone controls: one spot-filled button (primary, and success for
++ * "Confirmar"), and a plain spot underline with no box beside it (secondary,
++ * ghost, danger). A press darkens the spot one step; nothing moves.
++ */
++const filled =
++  "rounded-input bg-spot px-6 text-spot-ink hover:bg-spot-deep active:bg-spot-deep";
++const underline =
++  "rounded-none border-b-bar border-spot bg-transparent px-1 text-ink hover:border-spot-deep hover:text-spot-deep active:text-spot-deep";
++
+ const variantClasses: Record<ButtonVariant, string> = {
+-  primary: "bg-primary-700 text-white hover:bg-primary-800 active:bg-primary-800",
+-  secondary:
+-    "bg-white text-neutral-700 border border-neutral-200 hover:bg-neutral-50 active:bg-neutral-100",
+-  ghost: "bg-transparent text-primary-700 hover:bg-primary-50 active:bg-primary-100",
+-  success: "bg-success text-white hover:bg-success/90 active:bg-success/80",
+-  danger: "bg-danger text-white hover:bg-danger/90 active:bg-danger/80",
++  primary: filled,
++  success: filled,
++  secondary: underline,
++  danger: underline,
++  ghost: underline,
+ };
+ 
+-/** 44 / 48 / 56px min-height — touch targets >= 44x44. */
++/** 44 / 48 / 52px min-height: touch targets of 44px or more. */
+ const sizeClasses: Record<ButtonSize, string> = {
+-  sm: "min-h-11 px-3 text-sm",
+-  md: "min-h-12 px-5 text-base",
+-  lg: "min-h-14 px-6 text-lg",
++  sm: "min-h-11 text-sm",
++  md: "min-h-12 text-base",
++  lg: "min-h-[3.25rem] text-lg",
+ };
+ 
+ const Button = ({
+@@ -49,7 +58,7 @@
+   const isDisabled = disabled || loading;
+ 
+   const classes = cn(
+-    "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-[color,background-color,border-color,transform] duration-base ease-party focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent-500 active:scale-95 disabled:pointer-events-none disabled:opacity-60",
++    "inline-flex items-center justify-center gap-2 whitespace-nowrap font-sans font-bold transition-colors duration-fast ease-party disabled:cursor-not-allowed disabled:opacity-55",
+     variantClasses[variant],
+     sizeClasses[size],
+     fullWidth && "w-full",
+@@ -59,15 +68,9 @@
+   const content = (
+     <>
+       {(loading || (icon && iconPosition === "left")) && (
+-        <span
+-          className="inline-flex w-5 shrink-0 justify-center"
+-          aria-hidden="true"
+-        >
++        <span className="inline-flex w-5 shrink-0 justify-center" aria-hidden="true">
+           {loading ? (
+-            <span
+-              className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-neutral-200 border-t-primary-600"
+-              aria-hidden="true"
+-            />
++            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-t-transparent" />
+           ) : (
+             icon
+           )}
+diff -ruN src/components/ui/Card.tsx ../../src/components/ui/Card.tsx
+--- a/src/components/ui/Card.tsx	2026-11-25 12:46:59.911899404 -0300
++++ b/src/components/ui/Card.tsx	2026-11-25 12:48:57.900357488 -0300
+@@ -10,10 +10,15 @@
+   as?: CardElement;
+ }
+ 
++/**
++ * Halftone has one boxed surface: the well. Square, a 3px ink border, no
++ * shadow. "paper" sits on the deeper stock, "default"/"elevated" on the page
++ * stock, so neighbouring wells read as two printings.
++ */
+ const variantClasses: Record<CardVariant, string> = {
+-  default: "bg-card-default",
+-  paper: "bg-card-paper",
+-  elevated: "bg-card-elevated shadow-md",
++  default: "bg-paper",
++  paper: "bg-paper-2",
++  elevated: "bg-paper",
+ };
+ 
+ const Card = forwardRef<HTMLElement, CardProps>(
+@@ -22,11 +27,7 @@
+     return (
+       <Component
+         ref={ref as React.Ref<any>}
+-        className={cn(
+-          "rounded-xl border border-neutral-200 p-6",
+-          variantClasses[variant],
+-          className
+-        )}
++        className={cn("rounded-card border-bar border-ink p-6 md:p-8", variantClasses[variant], className)}
+         {...rest}
+       >
+         {children}
+@@ -37,4 +38,4 @@
+ 
+ Card.displayName = "Card";
+ 
+-export default Card;
+\ No newline at end of file
++export default Card;
+diff -ruN src/components/WhatsAppButton.tsx ../../src/components/WhatsAppButton.tsx
+--- a/src/components/WhatsAppButton.tsx	2026-11-25 12:46:59.911974226 -0300
++++ b/src/components/WhatsAppButton.tsx	2026-11-25 12:54:21.161940692 -0300
+@@ -15,9 +15,9 @@
+   };
+ 
+   return (
+-    <div className="flex flex-wrap justify-end gap-3">
++    <div className="flex flex-col items-start gap-4">
++      <Button variant="primary" size="lg" fullWidth icon={<FaWhatsapp />} onClick={abrirWhatsApp}>WhatsApp</Button>
+       <Button variant="secondary" onClick={goToHome}>Ir a inicio</Button>
+-      <Button variant="primary" icon={<FaWhatsapp />} onClick={abrirWhatsApp}>WhatsApp</Button>
+     </div>
+   );
+ };
+diff -ruN src/lib/cn.ts ../../src/lib/cn.ts
+--- a/src/lib/cn.ts	2026-11-25 12:46:59.912481445 -0300
++++ b/src/lib/cn.ts	2026-11-25 12:53:00.571537604 -0300
+@@ -1,5 +1,23 @@
+ import { clsx, type ClassValue } from "clsx";
+-import { twMerge } from "tailwind-merge";
++import { extendTailwindMerge } from "tailwind-merge";
++
++/**
++ * tailwind-merge only knows Tailwind's default scale, so it reads the theme's
++ * own sizes (`text-display`) and rule widths (`border-bar`) as colours and
++ * drops them next to `text-ink` / `border-ink`. Register them as what they are.
++ */
++const twMerge = extendTailwindMerge({
++  extend: {
++    classGroups: {
++      "font-size": [{ text: ["display", "display-s", "section", "title", "lead"] }],
++      "border-w": [{ border: ["bar", "hair"] }],
++      "border-w-t": [{ "border-t": ["bar", "hair"] }],
++      "border-w-b": [{ "border-b": ["bar", "hair"] }],
++      "border-w-l": [{ "border-l": ["bar", "hair"] }],
++      "border-w-r": [{ "border-r": ["bar", "hair"] }],
++    },
++  },
++});
+ 
+ /** Merge Tailwind class names, resolving conflicts (last wins). */
+ export function cn(...inputs: ClassValue[]) {
+--- a/tailwind.config.ts	2026-11-25 12:46:59.912929663 -0300
++++ b/tailwind.config.ts	2026-11-25 12:52:43.446456200 -0300
+@@ -1,5 +1,13 @@
+ import type { Config } from 'tailwindcss'
+ 
++/**
++ * Hallmark · Halftone (redesign: full). Every colour is a token declared in
++ * src/app/tokens.css; Tailwind only projects them. `tone()` keeps the `/40`
++ * opacity modifiers working on a var() colour via color-mix.
++ */
++const tone = (token: string) =>
++  `color-mix(in oklab, var(${token}) calc(<alpha-value> * 100%), transparent)`
++
+ const config: Config = {
+   content: [
+     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+@@ -9,71 +17,86 @@
+   theme: {
+     extend: {
+       colors: {
++        // Halftone roles
++        paper: { DEFAULT: tone('--color-paper'), 2: tone('--color-paper-2'), 3: tone('--color-paper-3') },
++        ink: { DEFAULT: tone('--color-ink'), 2: tone('--color-ink-2') },
++        muted: tone('--color-muted'),
++        rule: tone('--color-rule'),
++        spot: { DEFAULT: tone('--color-accent'), deep: tone('--color-accent-deep'), ink: tone('--color-accent-ink') },
++        focus: tone('--color-focus'),
++
++        // Legacy names, re-pointed at the one-ink system (admin and untouched screens)
+         primary: {
+-          50: '#FFF7ED',
+-          100: '#FFEDD5',
+-          200: '#FED7AA',
+-          300: '#FDBA74',
+-          400: '#FB923C',
+-          500: '#F97316',
+-          600: '#EA580C',
+-          700: '#C2410C',
+-          800: '#9A3412',
+-          900: '#7C2D12',
+-        },
+-        accent: {
+-          500: '#6366F1',
+-          600: '#4F46E5',
++          50: tone('--color-paper-2'),
++          100: tone('--color-paper-3'),
++          200: tone('--color-paper-3'),
++          300: tone('--color-rule'),
++          400: tone('--color-accent'),
++          500: tone('--color-accent'),
++          600: tone('--color-accent'),
++          700: tone('--color-accent'),
++          800: tone('--color-accent-deep'),
++          900: tone('--color-accent-deep'),
+         },
++        accent: { 500: tone('--color-focus'), 600: tone('--color-focus') },
+         neutral: {
+-          50: '#F8FAFC',
+-          100: '#F1F5F9',
+-          200: '#E2E8F0',
+-          300: '#CBD5E1',
+-          400: '#94A3B8',
+-          500: '#64748B',
+-          600: '#475569',
+-          700: '#334155',
+-          800: '#1E293B',
+-          900: '#0F172A',
+-        },
+-        festive: {
+-          cream: '#F9EFDB',
+-          yellow: '#FFEAA7',
+-        },
+-        card: {
+-          default: '#ffffff',
+-          paper: '#F9EFDB',
+-          elevated: '#ffffff',
+-        },
+-        success: '#15803D',
+-        danger: '#475569',
+-        info: '#2563EB',
+-        warning: '#F59E0B',
++          50: tone('--color-paper'),
++          100: tone('--color-paper-2'),
++          200: tone('--color-rule'),
++          300: tone('--color-rule'),
++          400: tone('--color-muted'),
++          500: tone('--color-muted'),
++          600: tone('--color-ink-2'),
++          700: tone('--color-ink-2'),
++          800: tone('--color-ink'),
++          900: tone('--color-ink'),
++        },
++        festive: { cream: tone('--color-paper-2'), yellow: tone('--color-paper-3') },
++        card: { default: tone('--color-paper'), paper: tone('--color-paper-2'), elevated: tone('--color-paper') },
++        success: tone('--color-success'),
++        danger: tone('--color-ink-2'),
++        info: tone('--color-ink-2'),
++        warning: tone('--color-accent'),
+       },
+       fontFamily: {
+-        display: ['var(--font-display)', 'Georgia', 'serif'],
+-        sans: ['var(--font-inter)', 'Inter', 'ui-sans-serif', 'system-ui'],
++        display: ['var(--font-display)'],
++        sans: ['var(--font-body)'],
++      },
++      fontSize: {
++        display: ['var(--text-display)', { lineHeight: '1.08' }],
++        'display-s': ['var(--text-display-s)', { lineHeight: '1.08' }],
++        section: ['var(--text-section)', { lineHeight: '1.08' }],
++        title: ['var(--text-title)', { lineHeight: '1.2' }],
++        lead: ['var(--text-lead)', { lineHeight: '1.45' }],
+       },
+       borderRadius: {
+-        sm: '4px',
+-        md: '8px',
+-        lg: '12px',
+-        xl: '16px',
+-        full: '9999px',
++        sm: 'var(--radius-input)',
++        md: 'var(--radius-input)',
++        lg: 'var(--radius-input)',
++        xl: 'var(--radius-card)',
++        input: 'var(--radius-input)',
++        card: 'var(--radius-card)',
++        full: 'var(--radius-pill)',
++      },
++      borderWidth: {
++        bar: 'var(--rule-bar)',
++        hair: 'var(--rule-hair)',
+       },
+       boxShadow: {
+-        sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+-        md: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+-        lg: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
++        sm: 'none',
++        md: 'none',
++        lg: 'none',
++      },
++      maxWidth: {
++        container: 'var(--container)',
+       },
+       transitionDuration: {
+-        fast: '150ms',
+-        base: '250ms',
+-        slow: '300ms',
++        fast: 'var(--dur-micro)',
++        base: 'var(--dur-short)',
++        slow: 'var(--dur-long)',
+       },
+       transitionTimingFunction: {
+-        party: 'cubic-bezier(0.16, 1, 0.3, 1)',
++        party: 'var(--ease-out)',
+       },
+       keyframes: {
+         drift: {
+@@ -87,6 +110,8 @@
+       },
+     },
+   },
++  // base.css owns .container (capped, centred, gutters); Tailwind's would override it
++  corePlugins: { container: false },
+   plugins: [],
+ }
+ export default config

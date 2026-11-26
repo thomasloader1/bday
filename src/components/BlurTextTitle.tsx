@@ -20,7 +20,8 @@ interface BlurTextTitleProps {
  */
 const BlurTextTitle = ({ text, className, delay = 40 }: BlurTextTitleProps) => {
   const reducedMotion = useReducedMotion();
-  const classes = cn("font-display font-bold", className);
+  // Weight comes from the display token (base h1 rule), never a synthesised bold.
+  const classes = cn("font-display", className);
 
   if (reducedMotion) {
     return <h1 className={classes}>{text}</h1>;

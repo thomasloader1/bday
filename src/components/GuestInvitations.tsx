@@ -22,6 +22,14 @@ const GuestInvitations: FC<GuestInvitationsProps> = ({ guestData, guestLoaded })
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
+  if (!guestData.events?.length) {
+    return (
+      <p className="mx-auto max-w-[40ch] py-16 text-center text-lead text-ink-2">
+        Todavía no hay eventos publicados para vos. Volvé a mirar más cerca de la fecha.
+      </p>
+    );
+  }
+
   if (!isDesktop) {
     return <MobileInvitations guestData={guestData} guestLoaded={guestLoaded} />;
   }

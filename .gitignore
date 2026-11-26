@@ -36,3 +36,5 @@ yarn-error.log*
 next-env.d.ts
 .env
 .firebase/*
+# dashboard config (local, edited from /admin)
+/data/

@@ -1,0 +1,35 @@
+services:
+  # Producción: build standalone -> http://localhost:${WEB_PORT:-3000}
+  web:
+    build:
+      context: .
+      target: runner
+    image: next-bday:prod
+    env_file: .env
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    volumes:
+      # Dashboard config (texts, events, guests, gifts); survives rebuilds
+      - bday-data:/app/data
+    restart: unless-stopped
+
+  # Desarrollo con hot-reload -> http://localhost:${WEB_DEV_PORT:-3001}
+  #   docker compose --profile dev up web-dev
+  web-dev:
+    profiles: ["dev"]
+    build:
+      context: .
+      target: dev
+    image: next-bday:dev
+    env_file: .env
+    environment:
+      WATCHPACK_POLLING: "true"
+    ports:
+      - "${WEB_DEV_PORT:-3001}:3000"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      - /app/.next
+
+volumes:
+  bday-data:

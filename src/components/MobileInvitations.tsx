@@ -9,20 +9,15 @@ interface MobileInvitationsProps {
 }
 
 const MobileInvitations: FC<MobileInvitationsProps> = ({ guestData, guestLoaded }) => {
-  const slides = guestData.group.map((groupType, index) => (
-    <InvitationCard
-      key={`${guestData.id}_${index}`}
-      guestData={guestData}
-      groupType={groupType}
-      index={index}
-      guestLoaded={guestLoaded}
-    />
+  const events = guestData.events ?? [];
+  const slides = events.map((event) => (
+    <InvitationCard key={`${guestData.id}_${event.id}`} event={event} guestLoaded={guestLoaded} />
   ));
 
   return (
     <InvitationDeck
       slides={slides}
-      total={guestData.group.length}
+      total={events.length}
       guestName={guestData.name}
     />
   );

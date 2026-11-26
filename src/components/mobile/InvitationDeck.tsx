@@ -98,7 +98,7 @@ const InvitationDeck: FC<InvitationDeckProps> = ({ slides, total, guestName }) =
           <div
             key={`behind-${slideIndex}`}
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 z-10 rounded-xl shadow-md"
+            className="pointer-events-none absolute inset-x-0 top-0 z-10"
             style={{ transform: `translateY(${-8 * i}px) scale(${1 - 0.04 * i})` }}
           >
             {slides[slideIndex]}
@@ -108,7 +108,7 @@ const InvitationDeck: FC<InvitationDeckProps> = ({ slides, total, guestName }) =
 
       {/* Active card: axis-locked drag, rotation from drag offset. */}
       <motion.div
-        className="deck-card relative z-20 rounded-xl shadow-lg"
+        className="deck-card relative z-20"
         drag="x"
         dragMomentum={false}
         style={{ x, rotate }}
@@ -137,8 +137,8 @@ const InvitationDeck: FC<InvitationDeckProps> = ({ slides, total, guestName }) =
             key={i}
             aria-current={i === activeIndex ? 'step' : undefined}
             className={cn(
-              'deck-dot h-2 rounded-full transition-all duration-base ease-party',
-              i === activeIndex ? 'w-6 bg-primary-700' : 'w-2 bg-neutral-300'
+              'deck-dot h-2 rounded-full transition-colors duration-base ease-party',
+              i === activeIndex ? 'w-6 bg-spot' : 'w-2 bg-ink/25'
             )}
           />
         ))}

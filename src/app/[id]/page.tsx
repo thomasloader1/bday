@@ -1,6 +1,5 @@
 "use client";
 import { motion, useReducedMotion } from "motion/react";
-import Card from "@/components/ui/Card";
 import Invitation from "@/components/Invitation";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import NoInvitation from "@/components/NoInvitation";
@@ -20,11 +19,9 @@ export default function Page({ params }: { params: { id: number } }) {
       variants={pageEntrance}
       initial={reducedMotion ? false : "hidden"}
       animate="show"
-      className="flex w-full justify-center py-8 md:items-center"
+      className="py-12 md:py-20"
     >
-      <Card variant="elevated" as="article" className="w-full max-w-2xl">
-        {findGuest ? <Invitation guestData={guestData} /> : <NoInvitation />}
-      </Card>
+      {findGuest ? <Invitation guestData={guestData} /> : <NoInvitation />}
     </motion.div>
   );
 }

@@ -22,12 +22,13 @@ const GroupedButtons: FC<GroupedButtonsProps> = ({
   const router = useRouter()
 
   return (
-    <div className="flex flex-wrap justify-center gap-4 mt-12">
+    <div className="mt-6 flex flex-col items-start gap-4">
       {!isDrity && (
         <>
           <Button
             variant="success"
             size="lg"
+            fullWidth
             loading={onRequestConfirm}
             disabled={onRequestConfirm || onRequestNoConfirm}
             onClick={handleConfirm}
@@ -37,7 +38,7 @@ const GroupedButtons: FC<GroupedButtonsProps> = ({
 
           <Button
             variant="danger"
-            size="lg"
+            size="md"
             loading={onRequestNoConfirm}
             disabled={onRequestNoConfirm || onRequestConfirm}
             onClick={handleNoConfirm}
@@ -51,6 +52,7 @@ const GroupedButtons: FC<GroupedButtonsProps> = ({
         <Button
           variant="primary"
           size="lg"
+          fullWidth
           onClick={() => router.push(`/${guestData.id}/confirm`)}
         >
           Mira las instrucciones
@@ -58,9 +60,9 @@ const GroupedButtons: FC<GroupedButtonsProps> = ({
       )}
 
       {isDrity && !isConfirmed && (
-        <div className="text-center text-neutral-500 py-4">
+        <p className="text-ink-2">
           No has confirmado tu asistencia.
-        </div>
+        </p>
       )}
     </div>
   );

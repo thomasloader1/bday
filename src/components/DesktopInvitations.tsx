@@ -13,28 +13,25 @@ const DesktopInvitations: FC<DesktopInvitationsProps> = ({ guestData, guestLoade
   return (
     <Swiper
       className="my-4"
+      spaceBetween={32}
       effect="coverflow"
       grabCursor={true}
       centeredSlides={true}
       slidesPerView={2}
       coverflowEffect={{
-        rotate: 50,
+        rotate: 0,
         stretch: 0,
-        depth: 100,
+        depth: 0,
+        scale: 0.9,
         modifier: 1,
         slideShadows: false,
       }}
       pagination={true}
       modules={[EffectCoverflow, Pagination]}
     >
-      {guestData.group.map((groupType, index) => (
-        <SwiperSlide className="h-full" key={`${guestData.id}_${index}`}>
-          <InvitationCard
-            guestData={guestData}
-            groupType={groupType}
-            index={index}
-            guestLoaded={guestLoaded}
-          />
+      {(guestData.events ?? []).map((event) => (
+        <SwiperSlide className="h-full" key={`${guestData.id}_${event.id}`}>
+          <InvitationCard event={event} guestLoaded={guestLoaded} />
         </SwiperSlide>
       ))}
     </Swiper>

@@ -7,15 +7,18 @@ interface RequirementListProps{
     }>
 }
 
+/** Requirements as label rows: the name small, the value in the display face, hairlines between. */
 const RequirementList: FC<RequirementListProps> = ({items}) => {
   return (
-    <div className='my-10'>
-        <h2 className="text-3xl font-bold mb-3">Requisitos</h2>
-        <dl className="max-w-md text-gray-900 divide-x divide-gray-200 flex">
-           {items.map(item => ( <div className="flex flex-col px-3" key={item.name}>
-                <dt className="mb-1 text-gray-500 md:text-lg ">{item.name}</dt>
-                <dd className="text-lg font-semibold">{item.description}</dd>
-            </div>))}
+    <div>
+        <h3 className="mb-3 text-title text-ink">Requisitos</h3>
+        <dl className="ruled">
+           {items.map(item => (
+            <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-baseline gap-4 py-3" key={item.name}>
+                <dt className="text-sm font-bold text-ink">{item.name}</dt>
+                <dd className="font-display text-title text-ink">{item.description}</dd>
+            </div>
+           ))}
         </dl>
     </div>
   )

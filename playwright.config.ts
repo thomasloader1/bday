@@ -3,6 +3,10 @@
  */
 import { defineConfig, devices } from '@playwright/test';
 
+// Si PLAYWRIGHT_BASE_URL está seteada (p.ej. contenedor Docker en :3000),
+// se testea contra ese server y no se levanta `npm run dev`.
+const externalBaseURL = process.env.PLAYWRIGHT_BASE_URL;
+
 export default defineConfig({
   testDir: './e2e',
   timeout: 60000,
@@ -18,16 +22,18 @@ export default defineConfig({
   reporter: [['list'], ['html']],
 
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: externalBaseURL ?? 'http://localhost:3000',
     trace: 'on-first-retry',
   },
 
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-  },
+  webServer: externalBaseURL
+    ? undefined
+    : {
+        command: 'npm run dev',
+        url: 'http://localhost:3000',
+        reuseExistingServer: !process.env.CI,
+        timeout: 120000,
+      },
 
   projects: [
     {

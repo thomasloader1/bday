@@ -17,7 +17,8 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
 
   const handleConfirm = async () => {
     setOnRequestConfirm(true);
-    const { id, ...person } = guestData;
+    // Events are derived on the server per request; they never go to Firestore.
+    const { id, events: _events, ...person } = guestData;
 
     const confirmGuest = {
       ...person,
@@ -50,7 +51,8 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
   const handleNoConfirm = async () => {
     setOnRequestNoConfirm(true);
 
-    const { id, ...person } = guestData;
+    // Events are derived on the server per request; they never go to Firestore.
+    const { id, events: _events, ...person } = guestData;
 
     const confirmGuest = {
       ...person,
@@ -81,19 +83,26 @@ const Invitation: FC<InvitationProps> = ({ guestData }) => {
   };
 
   return (
-    <section aria-labelledby={invitationId}>
-      <h1 id={invitationId} className="sr-only">
+    <section aria-labelledby={invitationId} className="grid gap-12 md:grid-cols-12 md:gap-8">
+      <p id={invitationId} className="sr-only">
         Invitación para {guestData.name}
-      </h1>
-      <BlurTextTitle text={`¡Hola ${guestData.name}!`} className="mb-10 text-4xl md:text-5xl" />
-      <InvitationText />
-      <GroupedButtons
-        handleConfirm={handleConfirm}
-        onRequestConfirm={onRequestConfirm}
-        handleNoConfirm={handleNoConfirm}
-        onRequestNoConfirm={onRequestNoConfirm}
-        guestData={guestData}
-      />
+      </p>
+      {/* The letter: the greeting at display size, the words at reading size. */}
+      <div className="min-w-0 md:col-span-7">
+        <BlurTextTitle text={`¡Hola ${guestData.name}!`} className="mb-10 text-display text-ink" />
+        <InvitationText />
+      </div>
+      {/* The answer, in the page's one well, held beside the letter. */}
+      <div className="well self-start p-8 md:sticky md:top-8 md:col-span-4 md:col-start-9">
+        <h2 className="text-title text-ink">¿Venís?</h2>
+        <GroupedButtons
+          handleConfirm={handleConfirm}
+          onRequestConfirm={onRequestConfirm}
+          handleNoConfirm={handleNoConfirm}
+          onRequestNoConfirm={onRequestNoConfirm}
+          guestData={guestData}
+        />
+      </div>
     </section>
   );
 };

@@ -1,47 +1,67 @@
 import React, { FC } from 'react'
 import LocationButton from './LocationButton'
 import Badge from './Badge';
+import RequirementList from './RequirementList';
 import Button from './ui/Button';
 import { FaCalendar } from 'react-icons/fa6';
 import { saveTheDate } from '@/lib/saveTheDate';
+import { eventDateTime } from '@/lib/eventDate';
+import type { GuestEvent } from '@/lib/config/schema';
+import { useParty } from './ConfigProvider';
 
 interface InvitationInfoProps {
-    text: string;
-    lat: number  | undefined;
-    long: number | undefined;
+    event: GuestEvent;
     loading: boolean;
-    description: string;
-    food?: string[];
 }
 
-const InvitationInfo: FC<InvitationInfoProps> = ({ text, lat, long, loading, description, food }) => {
+/** One event card's content; every part but the title and text is optional and only shows when filled in. */
+const InvitationInfo: FC<InvitationInfoProps> = ({ event, loading }) => {
+    const { eventDate: partyDate } = useParty();
+    // No date of its own means the event is the birthday itself.
+    const when = event.date && event.time ? eventDateTime(event.date, event.time) : partyDate;
+    const summary = event.paragraphs.join(' ');
 
     return (
-        <div className='my-5 mb-10 px-3'>
-            <h2 className="font-display text-2xl md:text-3xl mb-3 font-semibold">{text}</h2>
+        <div className="flex h-full flex-col gap-4 sm:gap-6">
+            <h2 className="text-section text-ink">{event.title}</h2>
 
-            <p className='mb-8'>{description}</p>
-            <div className="mb-8 flex flex-wrap gap-2">
-
-                {food?.map(f => <Badge key={f} text={f} color='dark' />)}
-
+            <div className="space-y-3 text-ink-2">
+                {event.paragraphs.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                ))}
             </div>
-            <Button
-                variant="secondary"
-                fullWidth
-                icon={<FaCalendar />}
-                className="mb-5"
-                onClick={() => saveTheDate(text, description)}
-            >
-                Agendar en calendario
-            </Button>
 
-<LocationButton
-                latitude={lat}
-                longitude={long}
-                loading={loading}
-                locationTitle={text}
-              />
+            {event.ps && <p className="font-display text-title text-spot-deep">{event.ps}</p>}
+
+            {event.food.length > 0 && (
+                <ul aria-label="Qué hay para comer" className="flex flex-wrap gap-2">
+                    {event.food.map(f => <li key={f}><Badge text={f} /></li>)}
+                </ul>
+            )}
+
+            {event.requirements.length > 0 && <RequirementList items={event.requirements} />}
+
+            <div>
+                <Button
+                    variant="secondary"
+                    icon={<FaCalendar />}
+                    onClick={() => saveTheDate(event.title, summary, when)}
+                >
+                    Agendar en calendario
+                </Button>
+            </div>
+
+            {event.location && (
+                <div className="mt-auto">
+                    <LocationButton
+                        latitude={event.location.lat}
+                        longitude={event.location.lng}
+                        mapsUrl={event.location.url}
+                        loading={loading}
+                        locationTitle={event.title}
+                    />
+                </div>
+            )}
         </div>
     )
 }

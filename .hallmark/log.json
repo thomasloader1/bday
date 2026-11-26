@@ -1,0 +1,50 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "page",
+  "shape": "Catalogue",
+  "theme": "custom",
+  "axes": "light/high-contrast-serif/warm",
+  "hero": "Banner",
+  "nav": "edge-aligned",
+  "footer": "statement",
+  "imagery": "user-products",
+  "photos": [],
+  "entry": "none",
+  "sections": [
+   "hero-banner",
+   "summary-switcher",
+   "catalogue-grid",
+   "footer"
+  ],
+  "signature": "live guest-only vaquita voting on gift cards",
+  "waived": [],
+  "prompt": "rediseñar la wishlist con mejores cards y votación entre invitados para sumar una parte de cada regalo",
+  "date": "2026-11-25"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "site",
+  "shape": "kept routes recomposed",
+  "theme": "halftone",
+  "axes": "light/slab-serif/warm",
+  "hero": "Counter",
+  "nav": "slab",
+  "footer": "statement",
+  "imagery": "none",
+  "photos": [],
+  "entry": "none",
+  "sections": [
+   "hero-counter",
+   "letter-split",
+   "ribbon-deck",
+   "grid"
+  ],
+  "signature": "the 30 knocked out of the vermilion",
+  "waived": [],
+  "prompt": "invitación a la fiesta de 30: buscar invitación, confirmar, ver eventos, lista de regalos",
+  "date": "2026-11-25"
+ }
+]

@@ -1,0 +1,43 @@
+# syntax=docker/dockerfile:1
+
+# ---- deps: instala dependencias una sola vez (cacheado por package-lock) ----
+FROM node:20-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# ---- dev: next dev con hot-reload (el código se monta por volumen) ----
+FROM node:20-alpine AS dev
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED=1
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+EXPOSE 3000
+CMD ["npm", "run", "dev", "--", "-H", "0.0.0.0"]
+
+# ---- builder: next build (incluye lint + typecheck) ----
+FROM node:20-alpine AS builder
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED=1
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+# ---- runner: imagen mínima con el output standalone ----
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    HOSTNAME=0.0.0.0 \
+    PORT=3000
+RUN addgroup -S -g 1001 nodejs && adduser -S -u 1001 -G nodejs nextjs
+# Dashboard config (config.json) lives here; mounted as a volume by docker-compose.
+RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
+ENV CONFIG_PATH=/app/data/config.json
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+USER nextjs
+EXPOSE 3000
+CMD ["node", "server.js"]

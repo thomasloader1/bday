@@ -8,6 +8,15 @@ interface CurvedLoopProps {
   curveAmount?: number;
   direction?: 'left' | 'right';
   interactive?: boolean;
+  /** Several waves instead of one curve: `count` full waves of `amplitude` (viewBox units). */
+  wave?: { count: number; amplitude: number };
+  /** Ribbon thickness in viewBox units (the viewBox is 1440 wide). */
+  strokeWidth?: number;
+  /** viewBox height for the wavy variant; sets the ribbon's aspect ratio. */
+  viewHeight?: number;
+  /** CSS colours (tokens) for the ribbon and its text. */
+  ribbonColor?: string;
+  inkColor?: string;
 }
 
 const CurvedLoop: FC<CurvedLoopProps> = ({
@@ -16,7 +25,12 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
   className,
   curveAmount = 400,
   direction = 'left',
-  interactive = true
+  interactive = true,
+  wave,
+  strokeWidth = 230,
+  viewHeight = 260,
+  ribbonColor = 'var(--color-ribbon)',
+  inkColor = 'var(--color-marquee-ink)',
 }) => {
   const text = useMemo(() => {
     const hasTrailing = /\s|\u00A0$/.test(marqueeText);
@@ -30,13 +44,24 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
   const [offset, setOffset] = useState(0);
   const uid = useId();
   const pathId = `curve-${uid}`;
-  const pathD = `M-100,40 Q500,${40 + curveAmount} 1540,40`;
+  // One wide curve by default; with `wave`, a sine-like run of quadratic segments centred on y=0.
+  const pathD = wave
+    ? (() => {
+        const halfWave = 1640 / (wave.count * 2);
+        let d = `M-100,0 Q${-100 + halfWave / 2},${wave.amplitude * 2} ${-100 + halfWave},0`;
+        for (let x = -100 + 2 * halfWave; x <= 1540 + halfWave; x += halfWave) d += ` T${x},0`;
+        return d;
+      })()
+    : `M-100,40 Q500,${40 + curveAmount} 1540,40`;
 
   const dragRef = useRef(false);
   const lastXRef = useRef(0);
   const dirRef = useRef<'left' | 'right'>(direction);
   const velRef = useRef(0);
   const reduce = useReducedMotion();
+  // Pausa: hover y foco la detienen mientras duran; reduced motion la deja quieta.
+  const hoverRef = useRef(false);
+  const label = useMemo(() => marqueeText.replace(/✦/g, ' ').replace(/\s+/g, ' ').trim(), [marqueeText]);
 
   const textLength = spacing;
   const totalText = textLength
@@ -47,7 +72,18 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
   const ready = spacing > 0;
 
   useEffect(() => {
-    if (measureRef.current) setSpacing(measureRef.current.getComputedTextLength());
+    const measure = () => {
+      if (measureRef.current) setSpacing(measureRef.current.getComputedTextLength());
+    };
+    measure();
+    // The display face loads async: measure again once it has, or the loop wraps at the fallback's width.
+    let cancelled = false;
+    document.fonts?.ready.then(() => {
+      if (!cancelled) measure();
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [text, className]);
 
   useEffect(() => {
@@ -64,7 +100,7 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
     if (!spacing || !ready || reduce) return;
     let frame = 0;
     const step = () => {
-      if (!dragRef.current && textPathRef.current) {
+      if (!dragRef.current && !hoverRef.current && textPathRef.current) {
         const delta = dirRef.current === 'right' ? speed : -speed;
         const currentOffset = parseFloat(textPathRef.current.getAttribute('startOffset') || '0');
         let newOffset = currentOffset + delta;
@@ -117,30 +153,36 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}
-      onPointerLeave={endDrag}
+      onPointerEnter={() => { hoverRef.current = true; }}
+      onPointerLeave={() => { hoverRef.current = false; endDrag(); }}
+      onFocus={() => { hoverRef.current = true; }}
+      onBlur={() => { hoverRef.current = false; }}
     >
       <svg
-        className="select-none w-full overflow-visible block aspect-[100/25] text-[6rem] font-bold uppercase leading-none"
-        viewBox="0 -90 1440 360"
+        role="img"
+        aria-label={label}
+        className={`select-none w-full overflow-visible block font-display text-[6rem] uppercase leading-none ${wave ? '' : 'aspect-[100/25]'}`}
+        style={wave ? { aspectRatio: `1440 / ${viewHeight}` } : undefined}
+        viewBox={wave ? `0 ${-viewHeight / 2} 1440 ${viewHeight}` : '0 -90 1440 360'}
       >
         <text ref={measureRef} xmlSpace="preserve" style={{ visibility: 'hidden', opacity: 0, pointerEvents: 'none' }}>
           {text}
         </text>
         <defs>
-          <path ref={pathRef} id={pathId} d={pathD} fill="none" stroke="transparent" />
+          {/* No stroke here: the <use> below paints the ribbon, and a stroke on the source would override it. */}
+          <path ref={pathRef} id={pathId} d={pathD} fill="none" />
         </defs>
         {ready && (
           <>
-            {/* Cinta blanca que sigue la misma curva del texto */}
+            {/* Cinta en la tinta de acento que sigue la misma curva del texto (var() solo resuelve en style) */}
             <use
               href={`#${pathId}`}
-              stroke="#ffffff"
-              strokeWidth={230}
+              strokeWidth={strokeWidth}
               strokeLinecap="round"
               fill="none"
-              style={{ filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.15))' }}
+              style={{ stroke: ribbonColor }}
             />
-            <text xmlSpace="preserve" className="fill-black">
+            <text xmlSpace="preserve" aria-hidden="true" dominantBaseline={wave ? 'central' : undefined} style={{ fill: inkColor }}>
               <textPath ref={textPathRef} href={`#${pathId}`} startOffset={offset + 'px'} xmlSpace="preserve">
                 {totalText}
               </textPath>

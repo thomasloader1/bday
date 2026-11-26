@@ -10,10 +10,11 @@ interface CardProps extends React.HTMLAttributes<HTMLElement> {
   as?: CardElement;
 }
 
+/** Light card: warm-white surface, 20px radius, a hairline and one soft shadow. */
 const variantClasses: Record<CardVariant, string> = {
-  default: "bg-card-default",
-  paper: "bg-card-paper",
-  elevated: "bg-card-elevated shadow-md",
+  default: "bg-surface",
+  paper: "bg-surface",
+  elevated: "bg-surface",
 };
 
 const Card = forwardRef<HTMLElement, CardProps>(
@@ -22,11 +23,7 @@ const Card = forwardRef<HTMLElement, CardProps>(
     return (
       <Component
         ref={ref as React.Ref<any>}
-        className={cn(
-          "rounded-xl border border-neutral-200 p-6",
-          variantClasses[variant],
-          className
-        )}
+        className={cn("rounded-card border border-rule p-6 shadow-card md:p-8", variantClasses[variant], className)}
         {...rest}
       >
         {children}

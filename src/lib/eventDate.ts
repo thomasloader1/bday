@@ -1,31 +1,34 @@
-export const EVENT_MONTH = 12; // December
-export const EVENT_DAY = 16;
-export const EVENT_HOUR = 20;
-export const EVENT_MINUTE = 0;
+import type { PartyConfig } from "@/lib/config/schema";
+
+type PartyWhen = Pick<PartyConfig, "month" | "day" | "hour" | "minute">;
 
 /**
  * Next party occurrence strictly after `now`, computed in device-local time.
- * Returns this year's event if it hasn't started yet, otherwise next year's.
+ * The birthday recurs every year, so once it passes the next one is used and
+ * the age moves on with it.
  */
-export const getNextBirthday = (now: Date = new Date()): Date => {
-  const thisYear = new Date(
-    now.getFullYear(),
-    EVENT_MONTH - 1,
-    EVENT_DAY,
-    EVENT_HOUR,
-    EVENT_MINUTE,
-    0,
-    0
-  );
-  return thisYear > now
-    ? thisYear
-    : new Date(
-        now.getFullYear() + 1,
-        EVENT_MONTH - 1,
-        EVENT_DAY,
-        EVENT_HOUR,
-        EVENT_MINUTE,
-        0,
-        0
-      );
+export const getNextBirthday = (party: PartyWhen, now: Date = new Date()): Date => {
+  const at = (year: number) => new Date(year, party.month - 1, party.day, party.hour, party.minute, 0, 0);
+  const thisYear = at(now.getFullYear());
+  return thisYear > now ? thisYear : at(now.getFullYear() + 1);
+};
+
+/** The age turned at the given party date. */
+export const getTurningAge = (party: Pick<PartyConfig, "birthYear">, eventDate: Date): number =>
+  eventDate.getFullYear() - party.birthYear;
+
+const MONTHS = [
+  "enero", "febrero", "marzo", "abril", "mayo", "junio",
+  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+];
+
+/** "Hasta el 16 de diciembre a las 20 h" (built from the fields, so server and client print the same). */
+export const formatPartyLine = (party: PartyWhen): string =>
+  `Hasta el ${party.day} de ${MONTHS[party.month - 1]} a las ${party.hour}${party.minute ? `:${String(party.minute).padStart(2, "0")}` : ""} h`;
+
+/** A local Date from an event's "AAAA-MM-DD" and "HH:MM". */
+export const eventDateTime = (date: string, time: string): Date => {
+  const [y, m, d] = date.split("-").map(Number);
+  const [hh, mm] = time.split(":").map(Number);
+  return new Date(y, m - 1, d, hh, mm, 0, 0);
 };

@@ -16,20 +16,25 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
 
+/** One coral-filled button (primary, and success for "Confirmar") beside a light outlined one (secondary, ghost, danger). */
+const filled =
+  "rounded-input bg-spot px-6 text-spot-ink hover:bg-spot-deep hover:text-surface active:bg-spot-deep active:text-surface";
+const underline =
+  "rounded-input border border-rule bg-surface px-5 text-ink hover:bg-paper-2 active:bg-paper-3";
+
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-primary-700 text-white hover:bg-primary-800 active:bg-primary-800",
-  secondary:
-    "bg-white text-neutral-700 border border-neutral-200 hover:bg-neutral-50 active:bg-neutral-100",
-  ghost: "bg-transparent text-primary-700 hover:bg-primary-50 active:bg-primary-100",
-  success: "bg-success text-white hover:bg-success/90 active:bg-success/80",
-  danger: "bg-danger text-white hover:bg-danger/90 active:bg-danger/80",
+  primary: filled,
+  success: filled,
+  secondary: underline,
+  danger: underline,
+  ghost: underline,
 };
 
-/** 44 / 48 / 56px min-height — touch targets >= 44x44. */
+/** 44 / 48 / 52px min-height: touch targets of 44px or more. */
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "min-h-11 px-3 text-sm",
-  md: "min-h-12 px-5 text-base",
-  lg: "min-h-14 px-6 text-lg",
+  sm: "min-h-11 text-sm",
+  md: "min-h-12 text-base",
+  lg: "min-h-[3.25rem] text-lg",
 };
 
 const Button = ({
@@ -49,7 +54,7 @@ const Button = ({
   const isDisabled = disabled || loading;
 
   const classes = cn(
-    "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-base ease-party focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent-500 active:scale-95 disabled:pointer-events-none disabled:opacity-60",
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap font-sans font-semibold transition-colors duration-fast ease-party disabled:cursor-not-allowed disabled:opacity-55",
     variantClasses[variant],
     sizeClasses[size],
     fullWidth && "w-full",
@@ -59,15 +64,9 @@ const Button = ({
   const content = (
     <>
       {(loading || (icon && iconPosition === "left")) && (
-        <span
-          className="inline-flex w-5 shrink-0 justify-center"
-          aria-hidden="true"
-        >
+        <span className="inline-flex w-5 shrink-0 justify-center" aria-hidden="true">
           {loading ? (
-            <span
-              className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-neutral-200 border-t-primary-600"
-              aria-hidden="true"
-            />
+            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-t-transparent" />
           ) : (
             icon
           )}

@@ -1,0 +1,490 @@
+diff -ruN src/app/admin/dashboard/page.tsx ../../src/app/admin/dashboard/page.tsx
+--- a/src/app/admin/dashboard/page.tsx	2026-11-25 12:27:38.875644617 -0300
++++ b/src/app/admin/dashboard/page.tsx	2026-11-25 12:29:08.175861273 -0300
+@@ -78,18 +78,18 @@
+   if (loading) {
+     return (
+       <div className="min-h-screen flex items-center justify-center">
+-        <p>Loading admin dashboard...</p>
++        <p>Loading admin dashboard…</p>
+       </div>
+     );
+   }
+ 
+   return (
+-    <div className="min-h-screen bg-gray-50">
+-      <nav className="bg-white border-b border-gray-200 p-4 md:p-8">
++    <div className="min-h-screen bg-neutral-50">
++      <nav className="bg-white border-b border-neutral-200 p-4 md:p-8">
+         <div className="max-w-7xl mx-auto flex items-center justify-between">
+           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+           <div className="flex items-center gap-4">
+-            <a href="/admin/logout" className="text-red-600 hoverunderline">
++            <a href="/admin/logout" className="text-primary-800 hover:underline">
+               Logout
+             </a>
+           </div>
+@@ -108,7 +108,7 @@
+                     {guest.name} ({guest.group.join(", ")})
+                   </li>
+                 ))}
+-                {guests.length === 0 && <li className="text-gray-500">No guests found</li>}
++                {guests.length === 0 && <li className="text-neutral-500">No guests found</li>}
+               </ul>
+             </div>
+ 
+@@ -119,10 +119,10 @@
+                 {cards.map((card) => (
+                   <li key={card.id} className="p-3 bg-white rounded-md shadow-sm">
+                     <p className="font-medium">{card.name}</p>
+-                    <p className="text-sm text-gray-500">Title: {card.titleText}</p>
++                    <p className="text-sm text-neutral-500">Title: {card.titleText}</p>
+                   </li>
+                 ))}
+-                {cards.length === 0 && <li className="text-gray-500">No cards found</li>}
++                {cards.length === 0 && <li className="text-neutral-500">No cards found</li>}
+               </ul>
+             </div>
+ 
+@@ -164,7 +164,7 @@
+                 </div>
+                 <button
+                   type="submit"
+-                  className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
++                  className="py-2 px-4 bg-primary-700 text-white rounded-md hover:bg-primary-800"
+                 >
+                   Save Card
+                 </button>
+diff -ruN src/app/admin/layout.tsx ../../src/app/admin/layout.tsx
+--- a/src/app/admin/layout.tsx	2026-11-25 12:27:38.875690278 -0300
++++ b/src/app/admin/layout.tsx	2026-11-25 12:28:57.655678480 -0300
+@@ -8,13 +8,8 @@
+ }: {
+   children: React.ReactNode;
+ }) {
+-  return (
+-    <html lang="es" className="font-sans antialiased">
+-      <body className="font-sans antialiased p-4">
+-        <main className="container mx-auto">{children}</main>
+-      </body>
+-    </html>
+-  );
++  // El root layout ya provee <html>, <body> y <main>; anidarlos rompe la hidratación (React #418/#423).
++  return <div className="p-4">{children}</div>;
+ }
+ 
+ export const metadata: Metadata = {
+diff -ruN src/app/admin/login/page.tsx ../../src/app/admin/login/page.tsx
+--- a/src/app/admin/login/page.tsx	2026-11-25 12:27:38.875742159 -0300
++++ b/src/app/admin/login/page.tsx	2026-11-25 12:29:08.173861238 -0300
+@@ -36,18 +36,18 @@
+   };
+ 
+   return (
+-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-100 p-8 md:p-16">
++    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-neutral-50 via-white to-neutral-100 p-8 md:p-16">
+       {success ? (
+         <div className="text-center mb-8">
+-          <p className="text-2xl text-green-600">Login successful!</p>
+-          <p className="mt-2">Redirecting to dashboard...</p>
++          <p className="text-2xl text-success">Login successful!</p>
++          <p className="mt-2">Redirecting to dashboard…</p>
+         </div>
+       ) : (
+         <div className="max-w-md w-full space-y-6">
+           <h2 className="text-3xl font-bold">Admin Login</h2>
+ 
+           {error && (
+-            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded">
++            <div className="bg-primary-50 border-l-4 border-primary-700 text-primary-800 p-4 rounded">
+               {error}
+             </div>
+           )}
+@@ -63,14 +63,14 @@
+                 value={password}
+                 onChange={(e) => setPassword(e.target.value)}
+                 required
+-                className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
++                className="w-full px-4 py-2 border border-neutral-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                 placeholder="Enter admin password"
+               />
+             </div>
+ 
+             <button
+               type="submit"
+-              className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
++              className="w-full py-2 px-4 bg-primary-700 text-white rounded-md hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+             >
+               Login
+             </button>
+diff -ruN src/app/globals.css ../../src/app/globals.css
+--- a/src/app/globals.css	2026-11-25 12:27:38.876053584 -0300
++++ b/src/app/globals.css	2026-11-25 12:30:45.223419913 -0300
+@@ -1,7 +1,27 @@
++/* Hallmark · polish (audit 2026-11-25) · genre: playful · system: opendesign "Party Suave", kept */
++/* Hallmark · dropped onPointerLeave={endDrag} · CurvedLoop now wraps it so leaving the marquee also releases the hover pause; endDrag still runs */
++/* Hallmark · dismissed 54 · Invitation.tsx sr-only p names the invitation section for screen readers; it is invisible, and a heading there would duplicate the visible h1 */
+ @tailwind base;
+ @tailwind components;
+ @tailwind utilities;
+ 
++:root {
++  /* Decorative surfaces, projected from the Tailwind theme so no literal lives in a component. */
++  --color-cube-face: theme('colors.primary.700');
++  --color-cube-edge: theme('colors.neutral.50 / 40%');
++  --color-ribbon: theme('colors.card.default');
++  --color-ribbon-shadow: theme('colors.neutral.900 / 15%');
++  --color-marquee-ink: theme('colors.neutral.900');
++  /* Swiper reads this for its pagination bullets (default is iOS blue). */
++  --swiper-theme-color: theme('colors.primary.700');
++  --swiper-pagination-bullet-inactive-color: theme('colors.neutral.400');
++}
++
++html,
++body {
++  overflow-x: clip;
++}
++
+ body {
+   @apply bg-neutral-50 text-neutral-900 antialiased;
+ }
+diff -ruN src/app/[id]/confirm/page.tsx ../../src/app/[id]/confirm/page.tsx
+--- a/src/app/[id]/confirm/page.tsx	2026-11-25 12:27:38.876264808 -0300
++++ b/src/app/[id]/confirm/page.tsx	2026-11-25 12:28:11.528877004 -0300
+@@ -5,7 +5,6 @@
+ import LoadingSpinner from "@/components/LoadingSpinner";
+ import { motion, useReducedMotion } from "motion/react";
+ import Footer from "@/components/Footer";
+-import Card from "@/components/ui/Card";
+ import { pageEntrance } from "@/lib/motion";
+ import CurvedLoop from './../../../components/CurvedLoop';
+ import dynamic from "next/dynamic";
+@@ -42,9 +41,10 @@
+         className="flex w-full justify-center overflow-x-clip pt-8 pb-[env(safe-area-inset-bottom)] md:pb-8"
+       >
+        
+-<Card variant="paper" as="section" className="relative w-full border-0 px-0">
++<section className="relative w-full bg-card-paper py-6">
++          <h1 className="sr-only">{`Invitaciones de ${guestData.name}`}</h1>
+             
+-          <div className="relative pt-32 md:pt-56">
++          <div className="relative pt-32 md:pt-56">
+             <CurvedLoop 
+                 marqueeText={`Que✦bien✦que✦vas✦a✦venir✦${guestData.name}✦`}
+                 speed={1}
+@@ -56,7 +56,7 @@
+       
+             <GuestInvitations guestData={guestData} guestLoaded={loading} />
+           </div>
+-        </Card>
++        </section>
+       </motion.div>
+       <Footer />
+     </>
+diff -ruN src/components/BackgroundLayer.tsx ../../src/components/BackgroundLayer.tsx
+--- a/src/components/BackgroundLayer.tsx	2026-11-25 12:27:38.876431211 -0300
++++ b/src/components/BackgroundLayer.tsx	2026-11-25 12:28:00.997797820 -0300
+@@ -31,8 +31,8 @@
+             cubeSize={8}
+             radius={2}
+             maxAngle={30}
+-            faceColor="#C2410C"
+-            borderStyle="1px solid rgba(255,255,255,0.4)"
++            faceColor="var(--color-cube-face)"
++            borderStyle="1px solid var(--color-cube-edge)"
+             autoAnimate
+             rippleOnClick={false}
+           />
+diff -ruN src/components/BlurText.tsx ../../src/components/BlurText.tsx
+--- a/src/components/BlurText.tsx	2026-11-25 12:27:38.876481842 -0300
++++ b/src/components/BlurText.tsx	2026-11-25 12:27:45.291380097 -0300
+@@ -48,7 +48,7 @@
+   stepDuration = 0.35,
+   as = 'p'
+ }) => {
+-  const elements = animateBy === 'words' ? text.split('') : text.split('');
++  const elements = animateBy === 'words' ? text.split(' ') : text.split('');
+   const [inView, setInView] = useState(false);
+   const ref = useRef<HTMLElement>(null);
+ 
+@@ -115,7 +115,7 @@
+         }}
+       >
+         {segment === '' ? '' : segment}
+-        {animateBy === 'words' && index < elements.length - 1 && ''}
++        {animateBy === 'words' && index < elements.length - 1 && '\u00A0'}
+       </motion.span>
+     );
+   });
+diff -ruN src/components/Countdown.tsx ../../src/components/Countdown.tsx
+--- a/src/components/Countdown.tsx	2026-11-25 12:27:38.876573214 -0300
++++ b/src/components/Countdown.tsx	2026-11-25 12:29:18.805554742 -0300
+@@ -42,10 +42,10 @@
+     <div className="flex flex-col items-center">
+       <div className="mb-2 font-display text-3xl font-bold tabular-nums text-neutral-800 md:text-4xl">
+         {timeLeft === null
+-          ? "00 dias 00 horas 00 minutos"
++          ? "00 días 00 horas 00 minutos"
+           : timeLeft.isOver
+           ? "La fiesta ya pasó"
+-          : `${formatNumber(timeLeft.days)} dias ${formatNumber(timeLeft.hours)} horas ${formatNumber(timeLeft.minutes)} minutos`}
++          : `${formatNumber(timeLeft.days)} días ${formatNumber(timeLeft.hours)} horas ${formatNumber(timeLeft.minutes)} minutos`}
+       </div>
+     </div>
+   );
+diff -ruN src/components/CurvedLoop.tsx ../../src/components/CurvedLoop.tsx
+--- a/src/components/CurvedLoop.tsx	2026-11-25 12:27:38.876634685 -0300
++++ b/src/components/CurvedLoop.tsx	2026-11-25 12:28:30.987215103 -0300
+@@ -37,6 +37,12 @@
+   const dirRef = useRef<'left' | 'right'>(direction);
+   const velRef = useRef(0);
+   const reduce = useReducedMotion();
++  // Pausa: hover/foco la detienen temporalmente; el botón la detiene hasta reanudar.
++  const hoverRef = useRef(false);
++  const [paused, setPaused] = useState(false);
++  const pausedRef = useRef(false);
++  pausedRef.current = paused;
++  const label = useMemo(() => marqueeText.replace(/✦/g, ' ').replace(/\s+/g, ' ').trim(), [marqueeText]);
+ 
+   const textLength = spacing;
+   const totalText = textLength
+@@ -64,7 +70,7 @@
+     if (!spacing || !ready || reduce) return;
+     let frame = 0;
+     const step = () => {
+-      if (!dragRef.current && textPathRef.current) {
++      if (!dragRef.current && !hoverRef.current && !pausedRef.current && textPathRef.current) {
+         const delta = dirRef.current === 'right' ? speed : -speed;
+         const currentOffset = parseFloat(textPathRef.current.getAttribute('startOffset') || '0');
+         let newOffset = currentOffset + delta;
+@@ -117,9 +123,14 @@
+       onPointerDown={onPointerDown}
+       onPointerMove={onPointerMove}
+       onPointerUp={endDrag}
+-      onPointerLeave={endDrag}
++      onPointerEnter={() => { hoverRef.current = true; }}
++      onPointerLeave={() => { hoverRef.current = false; endDrag(); }}
++      onFocus={() => { hoverRef.current = true; }}
++      onBlur={() => { hoverRef.current = false; }}
+     >
+       <svg
++        role="img"
++        aria-label={label}
+         className="select-none w-full overflow-visible block aspect-[100/25] text-[6rem] font-bold uppercase leading-none"
+         viewBox="0 -90 1440 360"
+       >
+@@ -134,13 +145,13 @@
+             {/* Cinta blanca que sigue la misma curva del texto */}
+             <use
+               href={`#${pathId}`}
+-              stroke="#ffffff"
++              stroke="var(--color-ribbon)"
+               strokeWidth={230}
+               strokeLinecap="round"
+               fill="none"
+-              style={{ filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.15))' }}
++              style={{ filter: 'drop-shadow(0 8px 16px var(--color-ribbon-shadow))' }}
+             />
+-            <text xmlSpace="preserve" className="fill-black">
++            <text xmlSpace="preserve" aria-hidden="true" style={{ fill: 'var(--color-marquee-ink)' }}>
+               <textPath ref={textPathRef} href={`#${pathId}`} startOffset={offset + 'px'} xmlSpace="preserve">
+                 {totalText}
+               </textPath>
+@@ -148,6 +159,17 @@
+           </>
+         )}
+       </svg>
++      {!reduce && ready && (
++        <button
++          type="button"
++          onClick={() => setPaused((p) => !p)}
++          onPointerDown={(e) => e.stopPropagation()}
++          aria-pressed={paused}
++          className="absolute bottom-0 right-4 z-10 rounded-full bg-card-default px-3 py-1 text-sm text-neutral-700 shadow-md transition-colors duration-base hover:bg-neutral-100 active:bg-neutral-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2"
++        >
++          {paused ? 'Reanudar' : 'Pausar'}
++        </button>
++      )}
+     </div>
+   );
+ };
+diff -ruN src/components/Footer.tsx ../../src/components/Footer.tsx
+--- a/src/components/Footer.tsx	2026-11-25 12:27:38.876692186 -0300
++++ b/src/components/Footer.tsx	2026-11-25 12:29:18.767922788 -0300
+@@ -28,7 +28,7 @@
+                 rel="noreferrer"
+                 className="hover:underline hover:text-neutral-700"
+               >
+-                El Cumplañero
++                El Cumpleañero
+               </a>
+             </li>
+           </ul>
+diff -ruN src/components/InvitationCard.tsx ../../src/components/InvitationCard.tsx
+--- a/src/components/InvitationCard.tsx	2026-11-25 12:27:38.876820538 -0300
++++ b/src/components/InvitationCard.tsx	2026-11-25 12:27:45.291856336 -0300
+@@ -38,8 +38,6 @@
+   if (isCommon) {
+     return (
+       <Card variant="paper" as="article" key={`${guestData.id}_${index}`} className="relative h-full overflow-hidden">
+-        <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-festive-yellow/50 blur-2xl" />
+-        <div aria-hidden="true" className="pointer-events-none absolute -bottom-10 -left-10 h-48 w-48 rounded-full bg-accent-500/10 blur-2xl" />
+         <InvitationInfo
+           text={invitation.title}
+           description={invitation.description}
+@@ -54,7 +52,6 @@
+ 
+   return (
+     <Card variant="default" as="article" key={`${guestData.id}_${index}`} className="relative h-full overflow-hidden">
+-      <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-accent-500/10 blur-2xl" />
+       <InvitationPersonalInfo />
+     </Card>
+   );
+diff -ruN src/components/InvitationPersonalInfo.tsx ../../src/components/InvitationPersonalInfo.tsx
+--- a/src/components/InvitationPersonalInfo.tsx	2026-11-25 12:27:38.876875719 -0300
++++ b/src/components/InvitationPersonalInfo.tsx	2026-11-25 12:29:18.788652449 -0300
+@@ -10,7 +10,7 @@
+ 
+   return (
+     <div className='px-2 py-4 md:px-5 rounded-md'>
+-      <h2 className='text-3xl mb-5 font-bold'>Invitacion Personal</h2>
++      <h2 className='text-3xl mb-5 font-bold'>Invitación Personal</h2>
+          <div className='mb-10'>
+             <p>Honestamente, no tengo ni idea de qué hacer.</p>
+             <p  className="mb-5" >Simplemente quiero pasar el día contigo y ver qué onda, dentro de las posibilidades que tengamos.</p>
+diff -ruN src/components/Invitation.tsx ../../src/components/Invitation.tsx
+--- a/src/components/Invitation.tsx	2026-11-25 12:27:38.876793158 -0300
++++ b/src/components/Invitation.tsx	2026-11-25 12:29:33.082534023 -0300
+@@ -82,9 +82,9 @@
+ 
+   return (
+     <section aria-labelledby={invitationId}>
+-      <h1 id={invitationId} className="sr-only">
++      <p id={invitationId} className="sr-only">
+         Invitación para {guestData.name}
+-      </h1>
++      </p>
+       <BlurTextTitle text={`¡Hola ${guestData.name}!`} className="mb-10 text-4xl md:text-5xl" />
+       <InvitationText />
+       <GroupedButtons
+diff -ruN src/components/mobile/InvitationDeck.tsx ../../src/components/mobile/InvitationDeck.tsx
+--- a/src/components/mobile/InvitationDeck.tsx	2026-11-25 12:27:38.877027192 -0300
++++ b/src/components/mobile/InvitationDeck.tsx	2026-11-25 12:27:45.291585231 -0300
+@@ -137,7 +137,7 @@
+             key={i}
+             aria-current={i === activeIndex ? 'step' : undefined}
+             className={cn(
+-              'deck-dot h-2 rounded-full transition-all duration-base ease-party',
++              'deck-dot h-2 rounded-full transition-colors duration-base ease-party',
+               i === activeIndex ? 'w-6 bg-primary-700' : 'w-2 bg-neutral-300'
+             )}
+           />
+diff -ruN src/components/NoInvitation.tsx ../../src/components/NoInvitation.tsx
+--- a/src/components/NoInvitation.tsx	2026-11-25 12:27:38.877107233 -0300
++++ b/src/components/NoInvitation.tsx	2026-11-25 12:29:18.767722214 -0300
+@@ -11,7 +11,7 @@
+         error.
+       </p>
+       <p className="text-base mb-4">
+-        Por favor, verifica el número de telefono que cumpla con el siguiente
++        Por favor, verifica el número de teléfono que cumpla con el siguiente
+         patron <strong>11XXXXXXXX</strong> o asegúrate de haber sido incluido en
+         la lista de invitados.
+       </p>
+diff -ruN src/components/ProductCard2.tsx ../../src/components/ProductCard2.tsx
+--- a/src/components/ProductCard2.tsx	2026-11-25 12:27:38.877136254 -0300
++++ b/src/components/ProductCard2.tsx	2026-11-25 12:28:49.235561732 -0300
+@@ -1,7 +1,6 @@
+ import React, { FC } from 'react'
+ import Card from './ui/Card'
+ import Button from './ui/Button'
+-import { FaArrowRight } from 'react-icons/fa6'
+ 
+ 
+ interface ProductCard2Props {
+@@ -16,11 +15,11 @@
+       variant="elevated"
+       className="flex flex-col items-center p-0 overflow-hidden md:max-w-xl md:flex-row"
+     >
+-      <img className="object-cover w-full rounded-t-xl h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-xl" src={image} alt="" />
++      <img className="object-cover w-full rounded-t-xl h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-xl" src={image} alt={name} />
+       <div className="flex flex-col justify-between p-6 leading-normal">
+-        <h5 className="mb-2 text-2xl font-bold tracking-tight text-neutral-900">{name}</h5>
+-        <Button asChild size="sm" icon={<FaArrowRight />} iconPosition="right">
+-          <a href={link}>Comprar</a>
++        <h2 className="mb-2 text-2xl font-bold tracking-tight text-neutral-900">{name}</h2>
++        <Button asChild size="sm" className="self-start">
++          <a href={link} aria-label={`Comprar ${name}`}>Comprar</a>
+         </Button>
+       </div>
+     </Card>
+diff -ruN src/components/SearchInvitationForm.tsx ../../src/components/SearchInvitationForm.tsx
+--- a/src/components/SearchInvitationForm.tsx	2026-11-25 12:27:38.877233065 -0300
++++ b/src/components/SearchInvitationForm.tsx	2026-11-25 12:28:49.235259197 -0300
+@@ -18,20 +18,20 @@
+ 
+     return (
+         <form onSubmit={handleSubmit} className="w-full max-w-[500px] px-10">
+-            <label htmlFor="search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Buscar invitacion</label>
++            <label htmlFor="search" className="sr-only">Buscar invitación</label>
+             <div className="relative">
+                 <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+-                    <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
++                    <svg className="w-4 h-4 text-neutral-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                     </svg>
+                 </div>
+-                <input type="search" id="search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Buscar invitacion" required onChange={handleInputChange} value={inviteNumber} />
++                <input type="search" id="search" className="block w-full p-4 ps-10 text-base text-neutral-900 border border-neutral-300 rounded-lg bg-neutral-50 placeholder:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2" placeholder="Buscar invitación" required onChange={handleInputChange} value={inviteNumber} />
+                 <Button
+                     type="submit"
+                     variant="primary"
+                     size="sm"
+                     icon={<FaPaperPlane />}
+-                    aria-label="Buscar invitacion"
++                    aria-label="Buscar invitación"
+                     className="absolute end-2.5 bottom-2.5"
+                 />
+             </div>
+diff -ruN src/components/SearchInvitation.tsx ../../src/components/SearchInvitation.tsx
+--- a/src/components/SearchInvitation.tsx	2026-11-25 12:27:38.877196235 -0300
++++ b/src/components/SearchInvitation.tsx	2026-11-25 12:29:18.788553898 -0300
+@@ -26,7 +26,7 @@
+     <>
+     
+     <p className="text-lg mb-3 px-3">
+-    {isComing ? 'Ingresa tu número de telefono y podras ver la invitación al cumpleaños.' : 'Aun no estan disponibles las entradas de este año'}
++    {isComing ? 'Ingresa tu número de teléfono y podrás ver la invitación al cumpleaños.' : 'Aún no están disponibles las entradas de este año'}
+         
+     </p>
+         
+@@ -35,7 +35,7 @@
+     {tryDemo && (
+         <>
+             <p className="text-base mb-3 mt-8">
+-                Si te interesa saber mas del proyecto
++                Si te interesa saber más del proyecto
+             </p>
+ 
+             <Button
+@@ -45,7 +45,7 @@
+                 onClick={redirectToDemo}
+                 className="text-xl font-bold"
+             >
+-                {loading ? 'Cargando ...' : 'Demo'}
++                {loading ? 'Cargando…' : 'Demo'}
+             </Button>
+         </>
+     )}
+diff -ruN src/components/ui/Button.tsx ../../src/components/ui/Button.tsx
+--- a/src/components/ui/Button.tsx	2026-11-25 12:27:38.877293017 -0300
++++ b/src/components/ui/Button.tsx	2026-11-25 12:27:45.291494630 -0300
+@@ -49,7 +49,7 @@
+   const isDisabled = disabled || loading;
+ 
+   const classes = cn(
+-    "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-base ease-party focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent-500 active:scale-95 disabled:pointer-events-none disabled:opacity-60",
++    "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-[color,background-color,border-color,transform] duration-base ease-party focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent-500 active:scale-95 disabled:pointer-events-none disabled:opacity-60",
+     variantClasses[variant],
+     sizeClasses[size],
+     fullWidth && "w-full",

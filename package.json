@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@nanostores/react": "^0.7.1",
@@ -24,9 +25,11 @@
     "react-icons": "^4.12.0",
     "react-leaflet": "^4.2.1",
     "swiper": "^11.0.5",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.1",
     "@types/leaflet": "^1.9.8",
     "@types/node": "^20",
     "@types/react": "^18",

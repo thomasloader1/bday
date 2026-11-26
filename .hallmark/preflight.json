@@ -1,0 +1,25 @@
+{
+  "target": "/wishlist",
+  "files": [
+    "src/app/wishlist/page.tsx",
+    "src/components/ProductCard2.tsx"
+  ],
+  "scope": "page",
+  "mode": "redesign",
+  "genre": "playful",
+  "designMd": null,
+  "preserved": {
+    "palette": "src/app/tokens.css:12-18 (warm white --color-paper, near-black --color-ink, coral --color-accent, lime --color-lime)",
+    "fonts": "src/app/layout.tsx:19-31 & src/app/tokens.css:20 (Fraunces display, Inter body)",
+    "chrome": "src/app/layout.tsx:66-77 (edge-aligned header + BackgroundLayer)",
+    "data": "readConfig().gifts from src/lib/config/store.ts (GiftSchema: name, image, link)",
+    "framework": "Next.js 14.0.3 App Router, Tailwind CSS 3.3.0"
+  },
+  "before": {
+    "fail": 0,
+    "reflex": 2,
+    "warn": 0,
+    "renderSkipped": "no puppeteer-core / missing libatk-1.0.so.0 for headless chromium",
+    "recordedLinks": 2
+  }
+}

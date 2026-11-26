@@ -1,0 +1,45 @@
+/* Hallmark · polish (audit 2026-11-25) · genre: playful · system: opendesign "Party Suave", kept */
+/* Hallmark · dropped onPointerLeave={endDrag} · CurvedLoop now wraps it so leaving the marquee also releases the hover pause; endDrag still runs */
+/* Hallmark · dismissed 54 · Invitation.tsx sr-only p names the invitation section for screen readers; it is invisible, and a heading there would duplicate the visible h1 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Decorative surfaces, projected from the Tailwind theme so no literal lives in a component. */
+  --color-cube-face: theme('colors.primary.700');
+  --color-cube-edge: theme('colors.neutral.50 / 40%');
+  --color-ribbon: theme('colors.card.default');
+  --color-ribbon-shadow: theme('colors.neutral.900 / 15%');
+  --color-marquee-ink: theme('colors.neutral.900');
+  /* Swiper reads this for its pagination bullets (default is iOS blue). */
+  --swiper-theme-color: theme('colors.primary.700');
+  --swiper-pagination-bullet-inactive-color: theme('colors.neutral.400');
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+body {
+  @apply bg-neutral-50 text-neutral-900 antialiased;
+}
+
+.swiper {
+  width: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @apply rounded-xl;
+}
+
+/* Reduced motion: kill non-essential decoration (cake drift). */
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift {
+    animation: none !important;
+  }
+}

@@ -1,8 +1,7 @@
-
 import React, { FC } from 'react'
 import SearchInvitationForm from './SearchInvitationForm';
 import { useStore } from '@nanostores/react';
-import { $time } from '@/store/timeStore';
+import { useParty } from './ConfigProvider';
 import Button from './ui/Button';
 import { useRouter } from 'next/navigation';
 import { $fetch, setOnRequest } from '@/store/fetchingStore';
@@ -13,7 +12,7 @@ interface SearchInvitationProps{
 
 const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo}) => {
     const router = useRouter();
-    const { eventDate } = useStore($time)
+    const { party, eventDate } = useParty()
     const { loading } = useStore($fetch)
     const isComing = eventDate.getTime() - Date.now() <= 30 * 86400000;
     const redirectToDemo = () =>{
@@ -23,34 +22,27 @@ const SearchInvitation: FC<SearchInvitationProps> = ({ tryDemo}) => {
     }
 
   return (
-    <>
-    
-    <p className="text-lg mb-3 px-3">
-    {isComing ? 'Ingresa tu número de telefono y podras ver la invitación al cumpleaños.' : 'Aun no estan disponibles las entradas de este año'}
-        
-    </p>
-        
-    {isComing && (<SearchInvitationForm />)}
+    <div className="flex flex-col gap-4">
+      <p className="lead text-ink-2">
+        {isComing ? party.homeLead : party.closedLead}
+      </p>
 
-    {tryDemo && (
-        <>
-            <p className="text-base mb-3 mt-8">
-                Si te interesa saber mas del proyecto
-            </p>
+      {isComing && (<SearchInvitationForm />)}
 
-            <Button
-                variant="primary"
-                size="lg"
-                loading={loading}
-                onClick={redirectToDemo}
-                className="text-xl font-bold"
-            >
-                {loading ? 'Cargando ...' : 'Demo'}
-            </Button>
-        </>
-    )}
-        
-    </>
+      {tryDemo && (
+        <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-ink-2">
+          Si te interesa saber más del proyecto
+          <Button
+            variant="secondary"
+            size="sm"
+            loading={loading}
+            onClick={redirectToDemo}
+          >
+            {loading ? 'Cargando…' : 'Ver la demo'}
+          </Button>
+        </p>
+      )}
+    </div>
   );
 }
 

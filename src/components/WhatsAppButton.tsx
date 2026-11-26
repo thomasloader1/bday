@@ -15,9 +15,9 @@ const WhatsAppButton = () => {
   };
 
   return (
-    <div className="flex flex-wrap justify-end gap-3">
+    <div className="flex flex-col items-start gap-4">
+      <Button variant="primary" size="lg" fullWidth icon={<FaWhatsapp />} onClick={abrirWhatsApp}>WhatsApp</Button>
       <Button variant="secondary" onClick={goToHome}>Ir a inicio</Button>
-      <Button variant="primary" icon={<FaWhatsapp />} onClick={abrirWhatsApp}>WhatsApp</Button>
     </div>
   );
 };
